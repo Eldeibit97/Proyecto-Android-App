@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,18 +30,20 @@ fun RegisterCard(){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-            Text(text = "Únete a nuestra familia")
-            Spacer(modifier = Modifier.padding(3.dp))
+            Text(text = "Únete a nuestra familia",
+                fontSize = 18.sp)
+            Spacer(modifier = Modifier.padding(6.dp))
             Text(text = "Crea tu cuenta para utilizar los servicios de los albergues",
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp)
-            Spacer(modifier = Modifier.padding(5.dp))
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.padding(8.dp))
             Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center){
                 Text(text = "Nombre Completo",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp)
+                    fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
@@ -49,16 +52,16 @@ fun RegisterCard(){
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Número de telefono",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp)
+                    fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="", fontSize = 12.sp)},
+                    placeholder = {Text(text="Telefono", fontSize = 12.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Correo Electronico",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp)
+                    fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
@@ -67,7 +70,7 @@ fun RegisterCard(){
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Contraseña",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp)
+                    fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),

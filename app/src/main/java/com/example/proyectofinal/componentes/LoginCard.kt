@@ -29,31 +29,32 @@ fun LoginCard(){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-            Text(text = "Acceso Seguro")
-            Spacer(modifier = Modifier.padding(3.dp))
+            Text(text = "Acceso Seguro",
+                fontSize = 18.sp)
+            Spacer(modifier = Modifier.padding(5.dp))
             Text(text = "Ingrese sus credenciales para acceder a su cuenta",
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp)
-            Spacer(modifier = Modifier.padding(5.dp))
+                fontSize = 14.sp)
+            Spacer(modifier = Modifier.padding(8.dp))
             Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center){
                 Text(text = "Correo Electrónico",
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp)
+                fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 12.sp)},
+                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 13.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Contraseña",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp)
+                    fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Contraseña", fontSize = 12.sp)},
+                    placeholder = {Text(text="Contraseña", fontSize = 13.sp)},
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
             }
@@ -71,6 +72,11 @@ fun LoginCard(){
             {
                 Text(text = "Iniciar Sesión")
             }
+            Spacer(modifier = Modifier.padding(5.dp))
+            Text(text = "¿Olvidaste tu contraseña?",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = Color(0xFF367BD0))
         }
     }
 }
