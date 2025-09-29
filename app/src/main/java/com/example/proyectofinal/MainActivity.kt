@@ -45,6 +45,7 @@ fun App(modifier: Modifier = Modifier){
         }
         composable(route = ScreenNames.Home.route){
             HomeScreen()
+
         }
     }
 }

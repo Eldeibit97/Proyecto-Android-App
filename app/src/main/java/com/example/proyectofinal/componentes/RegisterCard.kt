@@ -78,7 +78,7 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Mail,
-                        contentDescription = "Mail",
+                        contentDescription = "Correo",
                         modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 15.sp)},

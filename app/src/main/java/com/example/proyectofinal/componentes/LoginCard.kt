@@ -65,7 +65,7 @@ fun LoginCard(avanzar: () -> Unit = {}){
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Mail,
-                        contentDescription = "Correo",
+                        contentDescription = "Mail",
                         modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 15.sp)},
