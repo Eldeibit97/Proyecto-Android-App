@@ -1,15 +1,23 @@
 package com.example.proyectofinal.componentes
 
+import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,13 +32,25 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun LoginCard(){
+fun LoginCard(avanzar: () -> Unit = {}){
     Card (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth()){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-            Text(text = "Acceso Seguro",
-                fontSize = 18.sp)
+            Row(modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center){
+                Icon(imageVector = Icons.Outlined.VerifiedUser,
+                    contentDescription = "Icono de Seguridad",
+                    modifier = Modifier.size(20.dp),
+                    tint = Color(0xFF40C23F)
+                )
+                Text(
+                    text = "Acceso Seguro",
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    fontSize = 20.sp
+                )
+            }
             Spacer(modifier = Modifier.padding(5.dp))
             Text(text = "Ingrese sus credenciales para acceder a su cuenta",
                 fontWeight = FontWeight.Bold,
@@ -44,8 +64,11 @@ fun LoginCard(){
                 fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Mail,
+                        contentDescription = "Correo",
+                        modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 13.sp)},
+                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Contraseña",
@@ -53,13 +76,16 @@ fun LoginCard(){
                     fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Lock,
+                        contentDescription = "Contraseña",
+                        modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Contraseña", fontSize = 13.sp)},
+                    placeholder = {Text(text="Contraseña", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Button(onClick = {},
+            Button(onClick = {avanzar},
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

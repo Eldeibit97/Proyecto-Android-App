@@ -5,11 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +32,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterCard(){
+fun RegisterCard(avanzar : () -> Unit =  {}){
     Card (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth()){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,7 +54,10 @@ fun RegisterCard(){
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Nombre Completo", fontSize = 12.sp)},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
+                        contentDescription = "Usuario",
+                        modifier = Modifier.size(17.dp))},
+                    placeholder = {Text(text="Nombre Completo", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Número de telefono",
@@ -55,8 +65,11 @@ fun RegisterCard(){
                     fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Phone,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Telefono", fontSize = 12.sp)},
+                    placeholder = {Text(text="Telefono", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Correo Electronico",
@@ -64,8 +77,11 @@ fun RegisterCard(){
                     fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Mail,
+                        contentDescription = "Mail",
+                        modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 12.sp)},
+                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Contraseña",
@@ -74,12 +90,15 @@ fun RegisterCard(){
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Contraseña", fontSize = 12.sp)},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Lock,
+                        contentDescription = "Contraseña",
+                        modifier = Modifier.size(17.dp))},
+                    placeholder = {Text(text="Contraseña", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Button(onClick = {},
+            Button(onClick = {avanzar},
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

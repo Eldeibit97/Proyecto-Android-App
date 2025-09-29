@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinal.navegacion.ScreenNames
+import com.example.proyectofinal.pantallas.HomeScreen
 import com.example.proyectofinal.pantallas.LoginScreen
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
@@ -40,7 +41,10 @@ fun App(modifier: Modifier = Modifier){
 
     NavHost(navController = nav, startDestination = ScreenNames.Login.route){
         composable(route = ScreenNames.Login.route) {
-            LoginScreen()
+            LoginScreen(aHome = {nav.navigate(ScreenNames.Home.route)})
+        }
+        composable(route = ScreenNames.Home.route){
+            HomeScreen()
         }
     }
 }

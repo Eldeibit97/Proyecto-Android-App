@@ -1,6 +1,5 @@
 package com.example.proyectofinal.pantallas
 
-import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,14 +13,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,7 +36,7 @@ import com.example.proyectofinal.componentes.RegisterCard
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(aHome:() -> Unit = {}) {
 
     var section by rememberSaveable { mutableStateOf(value = "") }
     var enableB by rememberSaveable { mutableStateOf(value = false) }
@@ -100,9 +97,9 @@ fun LoginScreen() {
             }
         }
         if(section == "register"){
-            RegisterCard()
+            RegisterCard(avanzar = aHome)
         }else{
-            LoginCard()
+            LoginCard(avanzar = aHome)
         }
         Spacer(modifier = Modifier.padding(15.dp))
         Text(text = "Al continuar, aceptas los términos de uso del servicio y politica de privacidad de Caritas de Monterrey.",
