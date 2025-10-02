@@ -1,5 +1,6 @@
 package com.example.proyectofinal.componentes
 
+import android.R.attr.enabled
 import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +35,7 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true)
 @Composable
 fun LoginCard(avanzar: () -> Unit = {}){
-    Card (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth()){
+    Card (modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
@@ -54,7 +56,8 @@ fun LoginCard(avanzar: () -> Unit = {}){
             Spacer(modifier = Modifier.padding(5.dp))
             Text(text = "Ingrese sus credenciales para acceder a su cuenta",
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp)
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.padding(8.dp))
             Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
@@ -85,7 +88,7 @@ fun LoginCard(avanzar: () -> Unit = {}){
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Button(onClick = {avanzar},
+            Button(onClick = avanzar,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

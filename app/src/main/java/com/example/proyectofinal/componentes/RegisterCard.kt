@@ -1,7 +1,9 @@
 package com.example.proyectofinal.componentes
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,8 +20,13 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +40,10 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true)
 @Composable
 fun RegisterCard(avanzar : () -> Unit =  {}){
-    Card (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth()){
+
+    var selGenero by rememberSaveable { mutableStateOf("") }
+
+    Card (modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
@@ -48,17 +58,58 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
             Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center){
-                Text(text = "Nombre Completo",
+                Text(text = "Nombre",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
                 OutlinedTextField(value = "",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
-                        contentDescription = "Usuario",
+                        contentDescription = "Nombre",
                         modifier = Modifier.size(17.dp))},
-                    placeholder = {Text(text="Nombre Completo", fontSize = 15.sp)},
+                    placeholder = {Text(text="Nombre", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                Text(text = "Apellido",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp)
+                OutlinedTextField(value = "",
+                    onValueChange = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
+                        contentDescription = "Apellido",
+                        modifier = Modifier.size(17.dp))},
+                    placeholder = {Text(text="Apellido", fontSize = 15.sp)},
+                    shape = RoundedCornerShape(10.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
+                Text(text = "Género",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp)
+                Row(modifier = Modifier.fillMaxWidth()
+                    .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(modifier = Modifier.padding(4.dp)
+                        .clickable(onClick = {selGenero = "Masculino"}),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = when(selGenero) {
+                            "Masculino" -> true
+                            else -> false
+                        }, onClick = null)
+                        Spacer(modifier = Modifier.padding(5.dp))
+                        Text(text = "Masculino")
+                    }
+                    Row(modifier = Modifier.padding(4.dp)
+                        .clickable(onClick = {selGenero = "Femenino"}),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = when(selGenero) {
+                            "Femenino" -> true
+                            else -> false
+                        }, onClick = null)
+                        Spacer(modifier = Modifier.padding(5.dp))
+                        Text(text = "Femenino")
+                    }
+                }
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Número de telefono",
                     fontWeight = FontWeight.Bold,
@@ -98,7 +149,7 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Button(onClick = {avanzar},
+            Button(onClick = avanzar,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

@@ -17,7 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.OverscrollEffect
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -40,8 +45,10 @@ fun LoginScreen(aHome:() -> Unit = {}) {
 
     var section by rememberSaveable { mutableStateOf(value = "") }
     var enableB by rememberSaveable { mutableStateOf(value = false) }
+    val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(modifier = Modifier.fillMaxSize()
+        .verticalScroll(state= scrollState),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         Image(painter = painterResource(id = R.drawable.cmlogo),
@@ -55,7 +62,7 @@ fun LoginScreen(aHome:() -> Unit = {}) {
             fontSize = 14.sp)
         Spacer(modifier = Modifier.padding(15.dp))
         Card(modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = 10.dp)
+            .padding(horizontal = 15.dp)
             .height(35.dp),
             shape = RoundedCornerShape(30.dp),) {
             Row(
