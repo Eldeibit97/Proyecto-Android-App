@@ -103,6 +103,7 @@ fun LoginScreen(aHome:() -> Unit = {}) {
                 }
             }
         }
+        Spacer(modifier = Modifier.padding(4.dp))
         if(section == "register"){
             RegisterCard(avanzar = aHome)
         }else{

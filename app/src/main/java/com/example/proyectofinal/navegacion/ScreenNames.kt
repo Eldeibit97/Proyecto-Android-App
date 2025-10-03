@@ -6,6 +6,8 @@ sealed class ScreenNames(val route : String) {
         fun createRoute(id: Int) = "home/$id"
     }
     object Reservation : ScreenNames("reservation")
+    object Location : ScreenNames("location")
+    object TransportRequest : ScreenNames("transport")
     object Profile : ScreenNames("profile")
     object News : ScreenNames("news")
 }
