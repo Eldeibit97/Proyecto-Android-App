@@ -20,8 +20,7 @@ import com.example.proyectofinal.modelos.getAlbergues
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(/*aTransport: () -> Unit*/){
-    /*val transport = aTransport*/
+fun HomeScreen(aTransport: () -> Unit = {}){
     val albergues = getAlbergues()
     Column(modifier = Modifier.fillMaxSize()){
         MapsCard()
@@ -36,7 +35,7 @@ fun HomeScreen(/*aTransport: () -> Unit*/){
         }
         LazyColumn(){
             items(items = albergues){
-                albergue -> AlbergueInfoCard(albergue/*avanzar = transport */)
+                albergue -> AlbergueInfoCard(albergue, avanzar = aTransport )
             }
         }
     }

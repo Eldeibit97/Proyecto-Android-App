@@ -44,11 +44,10 @@ fun App(modifier: Modifier = Modifier){
             LoginScreen(aHome = {nav.navigate(ScreenNames.Home.route)})
         }
         composable(route = ScreenNames.Home.route){
-            HomeScreen(/*aTransport = { nav.navigate(ScreenNames.TransportRequest.route)}*/)
-
+            HomeScreen(aTransport = { nav.navigate(ScreenNames.TransportRequest.route)})
         }
-        composable(route = ScreenNames.Home.route){
-
+        composable(route = ScreenNames.TransportRequest.route){
+            ReservaTransporteScreen()
         }
     }
 }
