@@ -18,6 +18,7 @@ import com.example.proyectofinal.navegacion.ScreenNames
 import com.example.proyectofinal.pantallas.HomeScreen
 import com.example.proyectofinal.pantallas.LoginScreen
 import com.example.proyectofinal.pantallas.ReservaTransporteScreen
+import com.example.proyectofinal.pantallas.ReservationRequestScreen
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,10 +45,14 @@ fun App(modifier: Modifier = Modifier){
             LoginScreen(aHome = {nav.navigate(ScreenNames.Home.route)})
         }
         composable(route = ScreenNames.Home.route){
-            HomeScreen(aTransport = { nav.navigate(ScreenNames.TransportRequest.route)})
+            HomeScreen(aTransport = { nav.navigate(ScreenNames.TransportRequest.route)},
+                aReservation = {nav.navigate(ScreenNames.Reservation.route) })
         }
         composable(route = ScreenNames.TransportRequest.route){
             ReservaTransporteScreen()
+        }
+        composable(route = ScreenNames.Reservation.route){
+            ReservationRequestScreen()
         }
     }
 }

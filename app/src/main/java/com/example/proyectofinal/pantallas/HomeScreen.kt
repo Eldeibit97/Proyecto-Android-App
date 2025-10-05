@@ -1,5 +1,6 @@
 package com.example.proyectofinal.pantallas
 
+import android.net.wifi.WifiManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +21,7 @@ import com.example.proyectofinal.modelos.getAlbergues
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(aTransport: () -> Unit = {}){
+fun HomeScreen(aTransport: () -> Unit = {}, aReservation: () -> Unit = {}){
     val albergues = getAlbergues()
     Column(modifier = Modifier.fillMaxSize()){
         MapsCard()
@@ -34,8 +35,11 @@ fun HomeScreen(aTransport: () -> Unit = {}){
                 fontSize = 20.sp)
         }
         LazyColumn(){
-            items(items = albergues){
-                albergue -> AlbergueInfoCard(albergue, avanzar = aTransport )
+            items(items = albergues){ albergue ->
+                AlbergueInfoCard(
+                    albergue,
+                    avanzar = aTransport,
+                    reservar = aReservation)
             }
         }
     }

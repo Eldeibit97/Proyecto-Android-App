@@ -42,7 +42,9 @@ import com.example.proyectofinal.navegacion.ScreenNames
 
 @Preview(showBackground = true)
 @Composable
-fun AlbergueInfoCard(albergue: Albergue = Albergue(),avanzar: () -> Unit = {}){
+fun AlbergueInfoCard(albergue: Albergue = Albergue(),
+                     avanzar: () -> Unit = {},
+                     reservar: () -> Unit = {}){
     Card(modifier = Modifier.fillMaxWidth().padding(15.dp)){
         Row(modifier = Modifier.fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 8.dp),
@@ -138,7 +140,7 @@ fun AlbergueInfoCard(albergue: Albergue = Albergue(),avanzar: () -> Unit = {}){
                         fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.padding(all = 5.dp))
-            Button(onClick = {},
+            Button(onClick = reservar,
                 modifier = Modifier.width(width = 180.dp),
                 colors = ButtonColors(Color(color = 0xFF1F67F5),
                     Color(color = 0xFFFFFFFF),
