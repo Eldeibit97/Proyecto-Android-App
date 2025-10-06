@@ -46,7 +46,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
@@ -87,6 +89,15 @@ fun TransportCard(avanzar: () -> Unit = {}){
         shape = MaterialTheme.shapes.medium,
 
         ) {
+        Image(
+            painter = painterResource(id = R.drawable.taxi),
+            contentDescription = "Foto del taxi",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(140.dp)
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+            contentScale = ContentScale.Crop
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,60 +106,9 @@ fun TransportCard(avanzar: () -> Unit = {}){
 
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "Información Personal",
-                fontSize = 18.sp)
-            Spacer(modifier = Modifier.padding(8.dp))
-            Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center) {
-                Text(
-                    text = "Nombre Completo",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Person,
-                            contentDescription = "Nombre",
-                            modifier = Modifier.size(17.dp)
-                        )
-                    },
-                    placeholder = { Text(text = "Juan Pérez", fontSize = 15.sp) },
-                    shape = RoundedCornerShape(10.dp)
-                )
-                Spacer(modifier = Modifier.padding(8.dp))
-                Text(
-                    text = "Número de telefono",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Phone,
-                            contentDescription = "Celular",
-                            modifier = Modifier.size(17.dp)
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text(text = "+52 555 555 5555", fontSize = 15.sp) },
-                    shape = RoundedCornerShape(10.dp)
-                )
-            }
-            Spacer(modifier = Modifier.padding(8.dp))
-
-            Text(text = "Detalles del viaje",
-                fontSize = 18.sp)
-
-            Spacer(modifier = Modifier.padding(8.dp))
-            Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
-
+            Column (modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .fillMaxWidth(),
                 verticalArrangement = Arrangement.Center) {
 
                 Text(text = "Punto de origen",
@@ -267,7 +227,7 @@ fun TransportCard(avanzar: () -> Unit = {}){
                 // Botones de acción (Enviar / Limpiar)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(onClick = {
@@ -278,7 +238,10 @@ fun TransportCard(avanzar: () -> Unit = {}){
                         destino = ""
                         notas = ""
                     }) {
-                        Text(text = "Limpiar")
+                        Text(text = "Limpiar",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = Color(0xFF367BD0))
                     }
 
                     Button(
@@ -292,7 +255,7 @@ fun TransportCard(avanzar: () -> Unit = {}){
                         enabled = true,
                         shape = RoundedCornerShape(5.dp),
                         colors = ButtonColors(
-                            containerColor = Color(0xFF3CB93A),
+                            containerColor = Color(0xFFEF3F3F),
                             contentColor = Color(0xFFFFFFFF),
                             disabledContainerColor = Color(0xFF9A9A9A),
                             disabledContentColor = Color(0xFFFFFFFF)

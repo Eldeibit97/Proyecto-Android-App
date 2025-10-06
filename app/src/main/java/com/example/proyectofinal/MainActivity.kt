@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinal.navegacion.ScreenNames
 import com.example.proyectofinal.pantallas.HomeScreen
+import com.example.proyectofinal.pantallas.LocationScreen
 import com.example.proyectofinal.pantallas.LoginScreen
 import com.example.proyectofinal.pantallas.ReservaTransporteScreen
 import com.example.proyectofinal.pantallas.ReservationRequestScreen
@@ -45,7 +46,7 @@ fun App(modifier: Modifier = Modifier){
             LoginScreen(aHome = {nav.navigate(ScreenNames.Home.route)})
         }
         composable(route = ScreenNames.Home.route){
-            HomeScreen(aTransport = { nav.navigate(ScreenNames.TransportRequest.route)},
+            HomeScreen(aTransport = { nav.navigate(ScreenNames.Location.route)},
                 aReservation = {nav.navigate(ScreenNames.Reservation.route) })
         }
         composable(route = ScreenNames.TransportRequest.route){
@@ -53,6 +54,9 @@ fun App(modifier: Modifier = Modifier){
         }
         composable(route = ScreenNames.Reservation.route){
             ReservationRequestScreen()
+        }
+        composable(route = ScreenNames.Location.route){
+            LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
         }
     }
 }

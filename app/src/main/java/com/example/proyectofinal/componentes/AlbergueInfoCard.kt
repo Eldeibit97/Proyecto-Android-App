@@ -142,13 +142,14 @@ fun AlbergueInfoCard(albergue: Albergue = Albergue(),
             Spacer(modifier = Modifier.padding(all = 5.dp))
             Button(onClick = reservar,
                 modifier = Modifier.width(width = 180.dp),
-                colors = ButtonColors(Color(color = 0xFF1F67F5),
-                    Color(color = 0xFFFFFFFF),
-                    Color(color = 0xFFBBBBBB),
-                    Color(color = 0xFFFFFFFF)
+                colors = ButtonColors(
+                    containerColor = Color(0xFFEF3F3F),
+                    contentColor = Color(0xFFFFFFFF),
+                    disabledContainerColor = Color(0xFF9A9A9A),
+                    disabledContentColor = Color(0xFFFFFFFF)
                 ),
                 contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),
-                shape = RoundedCornerShape(size = 8.dp)){
+                shape = RoundedCornerShape(size = 5.dp)){
                 Icon(imageVector = Icons.Filled.CalendarToday,
                     contentDescription = "Hacer reserva",
                     modifier = Modifier.size(size = 20.dp))

@@ -74,25 +74,23 @@ fun ReservaTransporteScreen(avanzar: () -> Unit = {}) {
         
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.car_icon),
-            contentDescription = "Logo de carro",
-            modifier = Modifier.size(100.dp)
-        )
+        Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = "Solicitar Transporte",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.Start)
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "Servicio gratuito de Cáritas - Completa el formulario para solicitar transporte",
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            text = "*Servicio gratuito de Cáritas - Completa el formulario para solicitar transporte",
+            fontSize = 11.sp,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .align(Alignment.Start)
         )
-        Spacer(modifier = Modifier.height(14.dp))
-
+        Spacer(modifier = Modifier.height(6.dp))
         // Card que contiene el formulario
         TransportCard( )
 

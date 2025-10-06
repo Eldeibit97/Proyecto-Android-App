@@ -2,8 +2,10 @@ package com.example.proyectofinal.pantallas
 
 import android.net.wifi.WifiManager
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,13 +28,14 @@ fun HomeScreen(aTransport: () -> Unit = {}, aReservation: () -> Unit = {}){
     Column(modifier = Modifier.fillMaxSize()){
         MapsCard()
         Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 2.dp)){
-            Text(text = "Ubicaciones disponibles ()",
+            Text(text = "Ubicaciones disponibles (3)",
                 modifier = Modifier.padding(5.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp)
             Text(text = "Selecciona una ubicación para realizar una reserva",
                 modifier = Modifier.padding(5.dp),
-                fontSize = 20.sp)
+                fontSize = 15.sp)
+            Spacer(modifier = Modifier.height(4.dp))
         }
         LazyColumn(){
             items(items = albergues){ albergue ->
