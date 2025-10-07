@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "324635812073",
+    "project_id": "appcaritas-tec",
+    "storage_bucket": "appcaritas-tec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324635812073:android:7d35b9da45286313c09078",
+        "android_client_info": {
+          "package_name": "com.example.proyectofinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNR5elZmB4FAzmKdasHsJjfGrcTH8S1XY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
