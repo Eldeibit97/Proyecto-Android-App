@@ -1,7 +1,5 @@
 package com.example.proyectofinal.componentes
 
-import android.R.attr.enabled
-import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -22,11 +18,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +34,9 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true)
 @Composable
 fun LoginCard(avanzar: () -> Unit = {}){
+
+    var celular by remember { mutableStateOf("") }
+
     Card (modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,7 +56,7 @@ fun LoginCard(avanzar: () -> Unit = {}){
                 )
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Text(text = "Ingrese sus credenciales para acceder a su cuenta",
+            Text(text = "Ingrese su número de celular para acceder a su cuenta",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center)
@@ -62,30 +64,17 @@ fun LoginCard(avanzar: () -> Unit = {}){
             Column (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center){
-                Text(text = "Correo Electrónico",
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
-                    leadingIcon = {Icon(imageVector = Icons.Outlined.Mail,
-                        contentDescription = "Mail",
-                        modifier = Modifier.size(17.dp))},
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 15.sp)},
-                    shape = RoundedCornerShape(10.dp))
-                Spacer(modifier = Modifier.padding(5.dp))
-                Text(text = "Contraseña",
+                Text(text = "Número de telefono",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
-                    leadingIcon = {Icon(imageVector = Icons.Outlined.Lock,
-                        contentDescription = "Contraseña",
+                OutlinedTextField(value = celular,
+                    onValueChange = {celular = it},
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.Phone,
+                        contentDescription = "Celular",
                         modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Contraseña", fontSize = 15.sp)},
-                    shape = RoundedCornerShape(10.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
+                    placeholder = {Text(text="Telefono", fontSize = 15.sp)},
+                    shape = RoundedCornerShape(10.dp))
             }
             Spacer(modifier = Modifier.padding(5.dp))
             Button(onClick = avanzar,
@@ -101,11 +90,6 @@ fun LoginCard(avanzar: () -> Unit = {}){
             {
                 Text(text = "Iniciar Sesión")
             }
-            Spacer(modifier = Modifier.padding(5.dp))
-            Text(text = "¿Olvidaste tu contraseña?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = Color(0xFF367BD0))
         }
     }
 }
