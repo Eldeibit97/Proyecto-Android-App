@@ -17,13 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.OverscrollEffect
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,6 +40,11 @@ import com.example.proyectofinal.componentes.RegisterCard
 @Preview(showBackground = true)
 @Composable
 fun LoginScreen(aHome:() -> Unit = {}) {
+    var celular by remember { mutableStateOf("") }
+    var nombre by remember { mutableStateOf("") }
+    var apellidos by remember { mutableStateOf("") }
+    var nacimiento by remember { mutableStateOf("") }
+    var genero by remember { mutableStateOf("") }
 
     var section by rememberSaveable { mutableStateOf(value = "") }
     var enableB by rememberSaveable { mutableStateOf(value = false) }
@@ -105,7 +108,8 @@ fun LoginScreen(aHome:() -> Unit = {}) {
         }
         Spacer(modifier = Modifier.padding(4.dp))
         if(section == "register"){
-            RegisterCard(avanzar = aHome)
+            RegisterCard(avanzar = aHome, celular = {celular = it.toString()}, nombre = {nombre = it},
+                apellido = {apellidos = it}, nacimiento = {nacimiento = it}, genero = {genero = it})
         }else{
             LoginCard(avanzar = aHome)
         }

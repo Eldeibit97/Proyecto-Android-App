@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun LoginCard(avanzar: () -> Unit = {}){
+fun LoginCard(avanzar: () -> Unit = {}, celular: (Long) -> Unit = {}){
 
     var celular by remember { mutableStateOf("") }
 
@@ -56,7 +56,7 @@ fun LoginCard(avanzar: () -> Unit = {}){
                 )
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Text(text = "Ingrese su número de celular para acceder a su cuenta",
+            Text(text = "Ingrese su número de telefono para acceder a su cuenta",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center)
@@ -68,12 +68,13 @@ fun LoginCard(avanzar: () -> Unit = {}){
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
                 OutlinedTextField(value = celular,
-                    onValueChange = {celular = it},
+                    onValueChange = {celular = it; celular(it.toLong())},
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Phone,
                         contentDescription = "Celular",
                         modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Telefono", fontSize = 15.sp)},
+                    label = { Text(text = "Telefono") },
+                    placeholder = {Text(text="ej. 5212345678", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
             }
             Spacer(modifier = Modifier.padding(5.dp))

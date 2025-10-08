@@ -1,10 +1,10 @@
 package com.example.proyectofinal.modelos
 
 data class Albergue(
-    val nombre : String = "",
-    val celular : Long = 100000000,
-    val capacidad : Int = 1,
-    val direccion : String = ""
+    val nombre : String = "Caritas de Monterrey",
+    val celular : Long = 6442810392,
+    val capacidad : Int = 25,
+    val direccion : String = "Av. Eugenio Garza Sada, Tecnologico, Monterrey"
 )
 
 fun getAlbergues(): List<Albergue> = listOf<Albergue>(

@@ -36,7 +36,8 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterCard(avanzar : () -> Unit =  {}){
+fun RegisterCard(avanzar : () -> Unit =  {}, celular: (Long) -> Unit = {}, nombre: (String) -> Unit = {},
+                 apellido: (String) -> Unit = {}, nacimiento: (String) -> Unit = {}, genero: (String) -> Unit = {}){
 
     var nombre by rememberSaveable { mutableStateOf("") }
     var apellido by rememberSaveable { mutableStateOf("") }
@@ -63,35 +64,38 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
                 OutlinedTextField(value = nombre,
-                    onValueChange = {nombre = it},
+                    onValueChange = {nombre = it; nombre(it)},
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
                         contentDescription = "Nombre",
                         modifier = Modifier.size(17.dp))},
-                    placeholder = {Text(text="Nombre", fontSize = 15.sp)},
+                    label = { Text(text = "Nombre") },
+                    placeholder = {Text(text="", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Apellido",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
                 OutlinedTextField(value = apellido,
-                    onValueChange = {apellido = it},
+                    onValueChange = {apellido = it; apellido(it)},
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
                         contentDescription = "Apellido",
                         modifier = Modifier.size(17.dp))},
-                    placeholder = {Text(text="Apellido", fontSize = 15.sp)},
+                    label = { Text(text = "Apellido") },
+                    placeholder = {Text(text="", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Fecha de nacimiento",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
                 OutlinedTextField(value = nacimiento,
-                    onValueChange = {nacimiento = it},
+                    onValueChange = {nacimiento = it; nacimiento(it)},
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = {Icon(imageVector = Icons.Outlined.CalendarMonth,
                         contentDescription = "Fecha de nacimiento",
                         modifier = Modifier.size(17.dp))},
+                    label = { Text(text = "Fecha de Nacimiento") },
                     placeholder = {Text(text="dd/mm/aaaa", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -102,7 +106,7 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                     .padding(10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween) {
                     Row(modifier = Modifier.padding(4.dp)
-                        .clickable(onClick = {selGenero = "Masculino"}),
+                        .clickable(onClick = {selGenero = "Masculino"; genero("Masculino")}),
                         verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(selected = when(selGenero) {
                             "Masculino" -> true
@@ -112,7 +116,7 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                         Text(text = "Masculino")
                     }
                     Row(modifier = Modifier.padding(4.dp)
-                        .clickable(onClick = {selGenero = "Femenino"}),
+                        .clickable(onClick = {selGenero = "Femenino"; genero("Femenino")}),
                         verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(selected = when(selGenero) {
                             "Femenino" -> true
@@ -127,12 +131,13 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
                 OutlinedTextField(value = celular,
-                    onValueChange = {celular = it},
+                    onValueChange = {celular = it; celular(it.toLong())},
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Phone,
                         contentDescription = "Celular",
                         modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="Telefono", fontSize = 15.sp)},
+                    label = { Text(text = "Telefono") },
+                    placeholder = {Text(text="ej. 5212345678", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
             }
             Spacer(modifier = Modifier.padding(5.dp))

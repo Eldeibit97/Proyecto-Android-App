@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.proyectofinal.modelos.Albergue
 import com.example.proyectofinal.navegacion.ScreenNames
 import com.example.proyectofinal.pantallas.HomeScreen
 import com.example.proyectofinal.pantallas.LocationScreen
@@ -49,10 +48,13 @@ fun App(modifier: Modifier = Modifier){
                 aReservation = {nav.navigate(ScreenNames.Reservation.route) })
         }
         composable(route = ScreenNames.TransportRequest.route){
-            ReservaTransporteScreen()
+            ReservaTransporteScreen(avanzar = {})
         }
         composable(route = ScreenNames.Reservation.route){
-            ReservationRequestScreen(onRegresar = {nav.popBackStack()})
+            ReservationRequestScreen(onRegresar = {nav.popBackStack()},
+                aHome = {nav.popBackStack()},
+                aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
+                aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
