@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
@@ -31,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +38,11 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun RegisterCard(avanzar : () -> Unit =  {}){
 
+    var nombre by rememberSaveable { mutableStateOf("") }
+    var apellido by rememberSaveable { mutableStateOf("") }
+    var nacimiento by rememberSaveable { mutableStateOf("") }
     var selGenero by rememberSaveable { mutableStateOf("") }
+    var celular by rememberSaveable { mutableStateOf("") }
 
     Card (modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()){
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
@@ -61,8 +62,8 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                 Text(text = "Nombre",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
+                OutlinedTextField(value = nombre,
+                    onValueChange = {nombre = it},
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
                         contentDescription = "Nombre",
@@ -70,17 +71,28 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                     placeholder = {Text(text="Nombre", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
-
                 Text(text = "Apellido",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
+                OutlinedTextField(value = apellido,
+                    onValueChange = {apellido = it},
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Person,
                         contentDescription = "Apellido",
                         modifier = Modifier.size(17.dp))},
                     placeholder = {Text(text="Apellido", fontSize = 15.sp)},
+                    shape = RoundedCornerShape(10.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
+                Text(text = "Fecha de nacimiento",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp)
+                OutlinedTextField(value = nacimiento,
+                    onValueChange = {nacimiento = it},
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = {Icon(imageVector = Icons.Outlined.CalendarMonth,
+                        contentDescription = "Fecha de nacimiento",
+                        modifier = Modifier.size(17.dp))},
+                    placeholder = {Text(text="dd/mm/aaaa", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Género",
@@ -114,39 +126,14 @@ fun RegisterCard(avanzar : () -> Unit =  {}){
                 Text(text = "Número de telefono",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
+                OutlinedTextField(value = celular,
+                    onValueChange = {celular = it},
                     leadingIcon = {Icon(imageVector = Icons.Outlined.Phone,
                         contentDescription = "Celular",
                         modifier = Modifier.size(17.dp))},
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = {Text(text="Telefono", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
-                Spacer(modifier = Modifier.padding(5.dp))
-                Text(text = "Correo Electronico",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
-                    leadingIcon = {Icon(imageVector = Icons.Outlined.Mail,
-                        contentDescription = "Correo",
-                        modifier = Modifier.size(17.dp))},
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = {Text(text="ejemploCorreo@gmail.com", fontSize = 15.sp)},
-                    shape = RoundedCornerShape(10.dp))
-                Spacer(modifier = Modifier.padding(5.dp))
-                Text(text = "Contraseña",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp)
-                OutlinedTextField(value = "",
-                    onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {Icon(imageVector = Icons.Outlined.Lock,
-                        contentDescription = "Contraseña",
-                        modifier = Modifier.size(17.dp))},
-                    placeholder = {Text(text="Contraseña", fontSize = 15.sp)},
-                    shape = RoundedCornerShape(10.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
             }
             Spacer(modifier = Modifier.padding(5.dp))
             Button(onClick = avanzar,

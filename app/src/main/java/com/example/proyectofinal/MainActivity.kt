@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.proyectofinal.modelos.Albergue
 import com.example.proyectofinal.navegacion.ScreenNames
 import com.example.proyectofinal.pantallas.HomeScreen
 import com.example.proyectofinal.pantallas.LocationScreen
@@ -51,7 +52,7 @@ fun App(modifier: Modifier = Modifier){
             ReservaTransporteScreen()
         }
         composable(route = ScreenNames.Reservation.route){
-            ReservationRequestScreen()
+            ReservationRequestScreen(onRegresar = {nav.popBackStack()})
         }
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})

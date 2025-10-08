@@ -143,7 +143,7 @@ fun AlbergueInfoCard(albergue: Albergue = Albergue(),
             Button(onClick = reservar,
                 modifier = Modifier.width(width = 180.dp),
                 colors = ButtonColors(
-                    containerColor = Color(0xFFEF3F3F),
+                    containerColor = Color(0xFF3F9DEF),
                     contentColor = Color(0xFFFFFFFF),
                     disabledContainerColor = Color(0xFF9A9A9A),
                     disabledContentColor = Color(0xFFFFFFFF)
