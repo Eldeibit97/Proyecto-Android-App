@@ -135,8 +135,10 @@ fun ReservationRequestScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(onDrawerClick: () -> Unit){
-    TopAppBar(title = {Text("Reserva")},
+fun TopBar(onDrawerClick: () -> Unit,
+           title: String = "Reserva"){
+    TopAppBar(
+        title = {Text(title)},
         navigationIcon = {
             IconButton(onClick = onDrawerClick) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")

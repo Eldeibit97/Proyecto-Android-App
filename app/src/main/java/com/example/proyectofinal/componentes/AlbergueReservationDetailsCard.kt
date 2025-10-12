@@ -34,10 +34,10 @@ import com.example.proyectofinal.modelos.Albergue
 @Composable
 fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
     Card(modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(0.dp),) {
+        shape = RoundedCornerShape(12.dp),) {
         Row(
             modifier = Modifier.fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 8.dp),
+                .padding(vertical = 5.dp, horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
