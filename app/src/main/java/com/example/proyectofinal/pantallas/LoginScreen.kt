@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,8 +50,9 @@ fun LoginScreen(aHome:() -> Unit = {}) {
 
     Column(modifier = Modifier.fillMaxSize()
         .verticalScroll(state= scrollState),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.padding(35.dp))
         Image(painter = painterResource(id = R.drawable.cmlogo),
             modifier = Modifier.size(180.dp),
             contentDescription = "Logo de caritas")
@@ -77,12 +76,6 @@ fun LoginScreen(aHome:() -> Unit = {}) {
                 Button(
                     onClick = {section = "login"; enableB = false},
                     enabled = enableB,
-                    colors = ButtonColors(
-                        containerColor = Color(0xFFC5C5C5),
-                        contentColor = Color(0xFF000000),
-                        disabledContainerColor = Color(0xFFF1F1F1),
-                        disabledContentColor = Color(0xFF000000)
-                    ),
                     contentPadding = PaddingValues(horizontal = 45.dp, vertical = 2.dp)
                 ) {
                     Text(
@@ -92,12 +85,6 @@ fun LoginScreen(aHome:() -> Unit = {}) {
                 Button(
                     onClick = {section = "register"; enableB = true},
                     enabled = !enableB,
-                    colors = ButtonColors(
-                        containerColor = Color(0xFFC5C5C5),
-                        contentColor = Color(0xFF000000),
-                        disabledContainerColor = Color(0xFFF1F1F1),
-                        disabledContentColor = Color(0xFF000000)
-                    ),
                     contentPadding = PaddingValues(horizontal = 45.dp, vertical = 2.dp)
                 ) {
                     Text(
@@ -111,17 +98,13 @@ fun LoginScreen(aHome:() -> Unit = {}) {
             RegisterCard(avanzar = aHome, celular = {celular = it.toString()}, nombre = {nombre = it},
                 apellido = {apellidos = it}, nacimiento = {nacimiento = it}, genero = {genero = it})
         }else{
-            LoginCard(avanzar = aHome)
+            LoginCard(avanzar = aHome, celular = {celular = it.toString()})
         }
-        Spacer(modifier = Modifier.padding(15.dp))
-        Text(text = "Al continuar, aceptas los términos de uso del servicio y politica de privacidad de Caritas de Monterrey.",
+        Spacer(modifier = Modifier.padding(18.dp))
+        Text(text = "©2025 Caritas de Monterrey - Transformando vidas",
             modifier = Modifier.padding(horizontal = 10.dp),
             fontSize = 14.sp,
             textAlign = TextAlign.Center)
-        Spacer(modifier = Modifier.padding(8.dp))
-        Text(text = "©2025 Caritas de Monterrey - Transformando vidas",
-            modifier = Modifier.padding(horizontal = 10.dp),
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.padding(70.dp))
     }
 }

@@ -140,6 +140,11 @@ fun RegisterCard(avanzar : () -> Unit =  {}, celular: (Long) -> Unit = {}, nombr
                     placeholder = {Text(text="ej. 5212345678", fontSize = 15.sp)},
                     shape = RoundedCornerShape(10.dp))
             }
+            Spacer(modifier = Modifier.padding(10.dp))
+            Text(text = "Al continuar, aceptas los términos de uso del servicio y politica de privacidad de Caritas de Monterrey.",
+                modifier = Modifier.padding(horizontal = 10.dp),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.padding(5.dp))
             Button(onClick = avanzar,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
