@@ -38,13 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.R
 import com.example.proyectofinal.modelos.Albergue
-import com.example.proyectofinal.navegacion.ScreenNames
+import com.example.proyectofinal.modelos.getAlbergues
 
 @Preview(showBackground = true)
 @Composable
-fun AlbergueInfoCard(albergue: Albergue = Albergue(),
+fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                      avanzar: () -> Unit = {},
-                     reservar: () -> Unit = {}){
+                     reservar: (Albergue) -> Unit = {}){
     Card(modifier = Modifier.fillMaxWidth().padding(15.dp)){
         Row(modifier = Modifier.fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 8.dp),
@@ -100,7 +100,7 @@ fun AlbergueInfoCard(albergue: Albergue = Albergue(),
                 Icon(imageVector = Icons.Outlined.WatchLater,
                     contentDescription = "Horario",
                     modifier = Modifier.size(15.dp))
-                Text(text = "Lunes a viernes 8:00 AM - 6:00 PM",
+                Text(text = "Todos los dias, a cualquier hora.",
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 6.dp))
             }
@@ -110,7 +110,7 @@ fun AlbergueInfoCard(albergue: Albergue = Albergue(),
                 Icon(imageVector = Icons.Outlined.People,
                     contentDescription = "Cupo",
                     modifier = Modifier.size(15.dp))
-                Text(text = "${albergue.capacidad}/60 personas",
+                Text(text = "${albergue.disponibilidad}/${albergue.capacidad}",
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 6.dp))
             }
@@ -140,14 +140,8 @@ fun AlbergueInfoCard(albergue: Albergue = Albergue(),
                         fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.padding(all = 5.dp))
-            Button(onClick = reservar,
+            Button(onClick = {reservar(albergue)},
                 modifier = Modifier.width(width = 180.dp),
-                colors = ButtonColors(
-                    containerColor = Color(0xFF3F9DEF),
-                    contentColor = Color(0xFFFFFFFF),
-                    disabledContainerColor = Color(0xFF9A9A9A),
-                    disabledContentColor = Color(0xFFFFFFFF)
-                ),
                 contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),
                 shape = RoundedCornerShape(size = 5.dp)){
                 Icon(imageVector = Icons.Filled.CalendarToday,

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,12 +31,11 @@ import kotlinx.coroutines.launch
 @Preview(showBackground = true)
 @Composable
 fun ReservationRequestScreen(
-    albergue: Albergue = Albergue(), onRegresar: () -> Unit = {},
+    albergue: Albergue? = Albergue(), onRegresar: () -> Unit = {},
     onReservar: () -> Unit = {}, aViaje: () -> Unit = {},
     aHome: () -> Unit = {}, aLogin: () -> Unit = {}
 ) {
-    var hombres by remember { mutableStateOf("") }
-    var mujeres by remember { mutableStateOf("") }
+    var totalPersonas by remember { mutableIntStateOf(0) }
     var llegada by remember { mutableStateOf<Long?>(null) }
     var salida by remember { mutableStateOf<Long?>(null) }
 
@@ -79,8 +79,8 @@ fun ReservationRequestScreen(
             ) {
                 AlbergueReservationDetailsCard(albergue)
                 Spacer(modifier = Modifier.height(12.dp))
-                ReservaDetailsCard(llegada = {llegada = it}, salida = {salida = it},
-                    hombres = {hombres = it}, mujeres = {mujeres = it})
+                ReservaDetailsCard(albergue = albergue,llegada = {llegada = it}, salida = {salida = it},
+                    total = {totalPersonas = it})
                 Spacer(modifier = Modifier.padding(8.dp))
                 Row(
                     modifier = Modifier
@@ -112,13 +112,7 @@ fun ReservationRequestScreen(
                         onClick = onReservar,
                         modifier = Modifier,
                         enabled = true,
-                        shape = RoundedCornerShape(5.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF03A9F4),
-                            contentColor = Color(0xFFFFFFFF),
-                            disabledContainerColor = Color(0xFF9A9A9A),
-                            disabledContentColor = Color(0xFFFFFFFF)
-                        )
+                        shape = RoundedCornerShape(5.dp)
                     ) {
                         Text(
                             text = "Realizar reservar",

@@ -32,7 +32,7 @@ import com.example.proyectofinal.modelos.Albergue
 
 @Preview(showBackground = true)
 @Composable
-fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
+fun AlbergueReservationDetailsCard(albergue : Albergue? = Albergue()){
     Card(modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),) {
         Row(
@@ -41,7 +41,7 @@ fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = albergue.nombre,
+                text = albergue?.nombre ?: "",
                 modifier = Modifier.padding(vertical = 3.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
@@ -72,7 +72,7 @@ fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
                     modifier = Modifier.size(15.dp)
                 )
                 Text(
-                    text = albergue.direccion,
+                    text = albergue?.direccion ?: "",
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 6.dp)
                 )
@@ -88,7 +88,7 @@ fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
                     modifier = Modifier.size(15.dp)
                 )
                 Text(
-                    text = "+52 ${albergue.celular}",
+                    text = "+52 ${albergue?.celular ?: 0}",
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 6.dp)
                 )
@@ -104,7 +104,7 @@ fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
                     modifier = Modifier.size(15.dp)
                 )
                 Text(
-                    text = "Lunes a viernes 8:00 AM - 6:00 PM",
+                    text = "Todos los dias, a cualquier hora.",
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 6.dp)
                 )
@@ -120,7 +120,7 @@ fun AlbergueReservationDetailsCard(albergue : Albergue = Albergue()){
                     modifier = Modifier.size(15.dp)
                 )
                 Text(
-                    text = "${albergue.capacidad}/60 personas",
+                    text = "${albergue?.disponibilidad ?: 0}/${albergue?.capacidad ?: 60}",
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 6.dp)
                 )

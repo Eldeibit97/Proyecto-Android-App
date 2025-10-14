@@ -1,9 +1,12 @@
 package com.example.proyectofinal.componentes
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,24 +26,30 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinal.modelos.Albergue
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
@@ -48,21 +57,30 @@ import java.util.TimeZone
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ReservaDetailsCard(llegada: (Long?) -> Unit = {}, salida: (Long?) -> Unit = {}, hombres: (String) -> Unit = {}, mujeres: (String) -> Unit = {}){
-    var personasHombres by rememberSaveable { mutableStateOf("") }
-    var personasMujeres by rememberSaveable { mutableStateOf("") }
+fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Unit = {}, salida: (Long?) -> Unit = {}, total: (Int) -> Unit = {}){
+    var personasHombres by rememberSaveable { mutableIntStateOf(0) }
+    var personasMujeres by rememberSaveable { mutableIntStateOf(0) }
     var fechaLlegada by remember { mutableStateOf<Long?>(null) }
     var fechaSalida by remember { mutableStateOf<Long?>(null) }
+    var tipoSalida by remember { mutableStateOf(false) }
+    var tipoReserva by remember { mutableStateOf(true) }
     var showDatePickerLlegada by remember { mutableStateOf(false) }
     var showDatePickerSalida by remember { mutableStateOf(false) }
     val datePickerStateLlegada = rememberDatePickerState()
     val datePickerStateSalida = rememberDatePickerState()
-    val personasTotal by remember { derivedStateOf { ValidarTotal(personasHombres.toIntOrNull(), personasMujeres.toIntOrNull()) }}
+    val validarTotalPersonas by remember { derivedStateOf { when(tipoReserva){
+        false -> ValidarTotal(albergue = albergue,hombres = personasHombres, mujeres = personasMujeres)
+        else -> false
+    } }}
+    if(validarTotalPersonas){
+        total(personasHombres + personasMujeres)
+    }else{
+        total(1)
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 15.dp),
-        shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column(modifier = Modifier
@@ -123,7 +141,6 @@ fun ReservaDetailsCard(llegada: (Long?) -> Unit = {}, salida: (Long?) -> Unit = 
                         DatePicker(state = datePickerStateSalida)
                     }
                 }
-
                 OutlinedTextField(
                     value = fechaLlegada?.let {formatDateString(it)} ?: "",
                     onValueChange = {},
@@ -151,93 +168,138 @@ fun ReservaDetailsCard(llegada: (Long?) -> Unit = {}, salida: (Long?) -> Unit = 
                     shape = RoundedCornerShape(10.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = fechaSalida?.let {formatDateString(it)} ?: "",
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .pointerInput(fechaSalida) {
-                            awaitEachGesture {
-                                awaitFirstDown(pass = PointerEventPass.Initial)
-                                val upEvent =
-                                    waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                                if (upEvent != null) {
-                                    showDatePickerSalida = true
+                if(!tipoSalida) {
+                    OutlinedTextField(
+                        value = fechaSalida?.let { formatDateString(it) } ?: "",
+                        onValueChange = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .pointerInput(fechaSalida) {
+                                awaitEachGesture {
+                                    awaitFirstDown(pass = PointerEventPass.Initial)
+                                    val upEvent =
+                                        waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                                    if (upEvent != null) {
+                                        showDatePickerSalida = true
+                                    }
                                 }
-                            }
+                            },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.CalendarMonth,
+                                contentDescription = "Fecha salida",
+                                modifier = Modifier.size(17.dp)
+                            )
                         },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.CalendarMonth,
-                            contentDescription = "Fecha salida",
-                            modifier = Modifier.size(17.dp)
-                        )
-                    },
-                    label = { Text(text = "Fecha de salida")},
-                    placeholder = { Text(text = "DD/MM/AAAA", fontSize = 15.sp) },
-                    shape = RoundedCornerShape(10.dp)
-                )
+                        label = { Text(text = "Fecha de salida") },
+                        placeholder = { Text(text = "DD/MM/AAAA", fontSize = 15.sp) },
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                }
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically){
+                    Text(text = "Salida indefinida",
+                        modifier = Modifier.padding(horizontal = 6.dp),
+                        fontSize = 14.sp)
+                    Switch(checked = tipoSalida, onCheckedChange = { tipoSalida = it })
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Cantidad de personas",
+                    text = "Tipo de Reserva",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-                if(personasTotal){
-                    Text(text = "El total de personas por reserva es de maximo 10",
-                        modifier = Modifier.padding(6.dp),
-                        fontSize = 16.sp,
-                        color = Color.Red)
+                Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween){
+                    Row(modifier = Modifier.padding(horizontal = 14.dp)
+                        .clickable(onClick = { tipoReserva = true}),
+                        verticalAlignment = Alignment.CenterVertically){
+                        RadioButton(selected = tipoReserva, onClick = null)
+                        Text(text = "Individual",
+                            modifier = Modifier.padding(horizontal = 6.dp),
+                            fontSize = 14.sp)
+                    }
+                    Row(modifier = Modifier.padding(horizontal = 14.dp)
+                        .clickable(onClick = { tipoReserva = false}),
+                        verticalAlignment = Alignment.CenterVertically){
+                        RadioButton(selected = !tipoReserva, onClick = null)
+                        Text(text = "Grupal",
+                            modifier = Modifier.padding(horizontal = 6.dp),
+                            fontSize = 14.sp)
+                    }
                 }
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = "Hombres",
-                    fontSize = 14.sp
-                )
-                OutlinedTextField(
-                    value = personasHombres,
-                    isError = personasTotal,
-                    onValueChange = { personasHombres = it; hombres(it)},
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Person,
-                            contentDescription = "Personas",
-                            modifier = Modifier.size(17.dp)
+                Spacer(modifier = Modifier.height(2.dp))
+                if(!tipoReserva) {
+                    Text(
+                        text = "Cantidad de personas",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+                    if (validarTotalPersonas) {
+                        Text(
+                            text = "El total de personas excede la capacidad disponible del albergue. Total (${(albergue?.capacidad ?: 60) - (albergue?.disponibilidad ?: 0)})",
+                            modifier = Modifier.padding(6.dp),
+                            fontSize = 16.sp,
+                            color = Color.Red
                         )
-                    },
-                    label = { Text(text = "¿Cuántos hombres?") },
-                    placeholder = { Text(text = "", fontSize = 15.sp) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Mujeres",
-                    fontSize = 14.sp
-                )
-                OutlinedTextField(
-                    value = personasMujeres,
-                    onValueChange = { personasMujeres = it; mujeres(it)},
-                    isError = personasTotal,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Person,
-                            contentDescription = "Personas",
-                            modifier = Modifier.size(17.dp)
-                        )
-                    },
-                    label = { Text( text = "¿Cuántas mujeres?" ) },
-                    placeholder = { Text(text = "", fontSize = 15.sp) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.padding(8.dp))
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = "Hombres",
+                        fontSize = 14.sp
+                    )
+                    OutlinedTextField(
+                        value = when(personasHombres){
+                            0 -> ""
+                            else -> personasHombres.toString()
+                        },
+                        isError = validarTotalPersonas,
+                        onValueChange = { personasHombres = it.toIntOrNull() ?: 0 },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Person,
+                                contentDescription = "Personas",
+                                modifier = Modifier.size(17.dp)
+                            )
+                        },
+                        label = { Text(text = "¿Cuántos hombres?") },
+                        placeholder = { Text(text = "", fontSize = 15.sp) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Mujeres",
+                        fontSize = 14.sp
+                    )
+                    OutlinedTextField(
+                        value = when(personasMujeres){
+                            0 -> ""
+                            else -> personasMujeres.toString()
+                        },
+                        onValueChange = { personasMujeres = it.toIntOrNull() ?: 0},
+                        isError = validarTotalPersonas,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Person,
+                                contentDescription = "Personas",
+                                modifier = Modifier.size(17.dp)
+                            )
+                        },
+                        label = { Text(text = "¿Cuántas mujeres?") },
+                        placeholder = { Text(text = "", fontSize = 15.sp) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                Spacer(modifier = Modifier.padding(6.dp))
                 Text(
                     text = "Las fechas de reserva pueden ajustarse según la disponibilidad del albergue. Consulte los términos en recepción.",
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    textAlign = TextAlign.Justify,
                     fontSize = 13.sp
                 )
             }
@@ -245,12 +307,10 @@ fun ReservaDetailsCard(llegada: (Long?) -> Unit = {}, salida: (Long?) -> Unit = 
     }
 }
 
-private fun ValidarTotal(hombres: Int?, mujeres: Int?) : Boolean{
-    val numHombres = hombres ?: 0
-    val numMujeres = mujeres ?: 0
-    if(numHombres < 0 && numMujeres < 0) return false
-    val total = numHombres + numMujeres
-    return total !in 0..10
+private fun ValidarTotal(albergue: Albergue? = Albergue(),hombres: Int, mujeres: Int) : Boolean{
+    if(hombres < 0 && mujeres < 0) return false
+    val total = hombres + mujeres
+    return total !in 0..((albergue?.capacidad ?: 60)-(albergue?.disponibilidad ?: 0))
 }
 
 private fun formatDateString(millis: Long): String {

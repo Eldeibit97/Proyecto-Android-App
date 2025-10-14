@@ -2,10 +2,10 @@ package com.example.proyectofinal.navegacion
 
 sealed class ScreenNames(val route : String) {
     object Login : ScreenNames("login")
-    object Home : ScreenNames("home/{id}") {
-        fun createRoute(id: Int) = "home/$id"
+    object Home : ScreenNames("home")
+    object Reservation : ScreenNames("reservation/{Albergueid}") {
+        fun createRoute(albergueId: Int) = "reservation/$albergueId"
     }
-    object Reservation : ScreenNames("reservation")
     object ViewReservation : ScreenNames("viewreservation")
     object Location : ScreenNames("location")
     object TransportRequest : ScreenNames("transport")
