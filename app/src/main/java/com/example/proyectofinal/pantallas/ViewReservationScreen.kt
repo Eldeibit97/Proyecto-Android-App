@@ -1,13 +1,11 @@
 package com.example.proyectofinal.pantallas
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarToday
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.PeopleAlt
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
@@ -21,32 +19,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyectofinal.R
 import com.example.proyectofinal.componentes.AlbergueReservationDetailsCard
 import com.example.proyectofinal.modelos.Albergue
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationConfirmationScreen(
     albergue: Albergue = Albergue(), onRegresar: () -> Unit = {},
-    onReservar: () -> Unit = {}, aViaje: () -> Unit = {},
-    aHome: () -> Unit = {}, aLogin: () -> Unit = {},
+    aViaje: () -> Unit = {}, aHome: () -> Unit = {},
+    aLogin: () -> Unit = {}, aReservas: () -> Unit = {}
 ) {
-    // dropdown participantes
     var hombres by rememberSaveable { mutableStateOf("2 personas") }
     var mujeres by rememberSaveable { mutableStateOf("1 persona") }
     var fechaLlegada by rememberSaveable { mutableStateOf("08/10/2025") } // ejemplo
@@ -75,7 +64,11 @@ fun ReservationConfirmationScreen(
                     selected = false,
                     onClick = { aViaje() }
                 )
-
+                NavigationDrawerItem(
+                    label = { Text(text = "Reservas") },
+                    selected = true,
+                    onClick = { aReservas() }
+                )
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },
                     selected = false,
@@ -93,25 +86,21 @@ fun ReservationConfirmationScreen(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 16.dp, vertical = 5.dp),
+                    .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AlbergueReservationDetailsCard(albergue)
                 Spacer(modifier = Modifier.height(12.dp))
-                // Card principal con detalle de reservación
                 Card(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
                     shape = RoundedCornerShape(12.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
-
                         Spacer(modifier = Modifier.height(4.dp))
-
                         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)) {
-                            // --- Sección UI: Información personal ---
                             Text("Información personal", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                             Spacer(Modifier.height(8.dp))
 
@@ -138,7 +127,7 @@ fun ReservationConfirmationScreen(
                                         }
                                     }
 
-                                    Divider(Modifier.padding(vertical = 8.dp))
+                                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                                     // Fila: Apellido
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -157,7 +146,7 @@ fun ReservationConfirmationScreen(
                                         }
                                     }
 
-                                    Divider(Modifier.padding(vertical = 8.dp))
+                                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                                     // Fila: Teléfono
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -207,7 +196,7 @@ fun ReservationConfirmationScreen(
                                         }
                                     }
 
-                                    Divider(Modifier.padding(vertical = 8.dp))
+                                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                                     // Fila: Salida
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -256,7 +245,7 @@ fun ReservationConfirmationScreen(
                                         }
                                     }
 
-                                    Divider(Modifier.padding(vertical = 8.dp))
+                                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                                     // Fila: Mujeres
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -280,17 +269,13 @@ fun ReservationConfirmationScreen(
                         }
                     }
                 }
-                // Botón de acción (Regresar)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     Button(
-                        onClick = {
-
-                        },
+                        onClick = onRegresar,
                         modifier = Modifier,
                         enabled = true,
                         shape = RoundedCornerShape(5.dp),

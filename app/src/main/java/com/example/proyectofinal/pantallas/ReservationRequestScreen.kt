@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 fun ReservationRequestScreen(
     albergue: Albergue? = Albergue(), onRegresar: () -> Unit = {},
     onReservar: () -> Unit = {}, aViaje: () -> Unit = {},
-    aHome: () -> Unit = {}, aLogin: () -> Unit = {}
+    aHome: () -> Unit = {}, aLogin: () -> Unit = {},
+    aReservas: () -> Unit = {}
 ) {
     var totalPersonas by remember { mutableIntStateOf(0) }
     var llegada by remember { mutableStateOf<Long?>(null) }
@@ -56,7 +57,11 @@ fun ReservationRequestScreen(
                     selected = false,
                     onClick = { aViaje() }
                 )
-
+                NavigationDrawerItem(
+                 label = { Text(text = "Reservas") },
+                 selected = false,
+                 onClick = { aReservas() }
+                )
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },
                     selected = false,

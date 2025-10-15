@@ -21,6 +21,7 @@ import com.example.proyectofinal.pantallas.LoginScreen
 import com.example.proyectofinal.pantallas.ReservaTransporteScreen
 import com.example.proyectofinal.pantallas.ReservationRequestScreen
 import com.example.proyectofinal.modelos.getAlbergues
+import com.example.proyectofinal.pantallas.ReservationConfirmationScreen
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,22 +50,35 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.Home.route){
             HomeScreen(albergue = getAlbergues(),
                 aTransport = { nav.navigate(ScreenNames.Location.route)},
-                aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) })
+                aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) },
+                aViaje = { nav.navigate(ScreenNames.TransportRequest.route) },
+                aLogin = { nav.navigate(ScreenNames.Login.route) },
+                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) })
         }
         composable(route = ScreenNames.TransportRequest.route){
-            ReservaTransporteScreen(avanzar = {})
+            ReservaTransporteScreen(onAvanzar = {},
+                aHome = { nav.navigate(ScreenNames.Home.route) },
+                aLogin = { nav.navigate(ScreenNames.Login.route) },
+                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) })
         }
         composable(route = ScreenNames.Reservation.route,
-            arguments = listOf(navArgument("id"){type = NavType.IntType})){
-            val id = it.arguments?.getInt("id") ?: 0
+            arguments = listOf(navArgument("albergueId"){type = NavType.IntType})){
+            val id = it.arguments?.getInt("albergueId") ?: 0
             val albergue = getAlbergues().firstOrNull(){it.id == id}
             ReservationRequestScreen(albergue = albergue,
                 onRegresar = {nav.popBackStack()},
                 aHome = {nav.popBackStack()},
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
+                aReservas = {nav.navigate(ScreenNames.ViewReservation.route)},
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
-        composable(route = ScreenNames.ViewReservation.route){}
+        composable(route = ScreenNames.ViewReservation.route){
+            ReservationConfirmationScreen(
+                onRegresar = {nav.popBackStack()},
+                aHome = { nav.navigate(ScreenNames.Home.route) },
+                aViaje = { nav.navigate(ScreenNames.TransportRequest.route) },
+                aLogin = { nav.navigate(ScreenNames.Login.route) })
+        }
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
         }
@@ -72,4 +86,3 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.Profile.route){}
     }
 }
-

@@ -3,7 +3,7 @@ package com.example.proyectofinal.navegacion
 sealed class ScreenNames(val route : String) {
     object Login : ScreenNames("login")
     object Home : ScreenNames("home")
-    object Reservation : ScreenNames("reservation/{Albergueid}") {
+    object Reservation : ScreenNames("reservation/{albergueId}") {
         fun createRoute(albergueId: Int) = "reservation/$albergueId"
     }
     object ViewReservation : ScreenNames("viewreservation")
