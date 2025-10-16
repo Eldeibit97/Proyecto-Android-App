@@ -288,9 +288,7 @@ fun ReservationConfirmationScreen(
                 ) {
 
                     Button(
-                        onClick = {
-
-                        },
+                        onClick = onRegresar,
                         modifier = Modifier,
                         enabled = true,
                         shape = RoundedCornerShape(5.dp),

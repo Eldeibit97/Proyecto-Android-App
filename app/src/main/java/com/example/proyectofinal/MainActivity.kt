@@ -21,6 +21,7 @@ import com.example.proyectofinal.pantallas.LoginScreen
 import com.example.proyectofinal.pantallas.ReservaTransporteScreen
 import com.example.proyectofinal.pantallas.ReservationRequestScreen
 import com.example.proyectofinal.modelos.getAlbergues
+import com.example.proyectofinal.pantallas.ReservationConfirmationScreen
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -62,9 +63,14 @@ fun App(modifier: Modifier = Modifier){
                 onRegresar = {nav.popBackStack()},
                 aHome = {nav.popBackStack()},
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
-                aLogin = {nav.navigate(ScreenNames.Login.route)})
+                aLogin = {nav.navigate(ScreenNames.Login.route)},
+                onReservar = {nav.navigate(ScreenNames.ViewReservation.route)})
         }
-        composable(route = ScreenNames.ViewReservation.route){}
+        composable(route = ScreenNames.ViewReservation.route){
+            ReservationConfirmationScreen(
+                onRegresar = {nav.navigate(ScreenNames.Home.route)}
+            )
+        }
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
         }
