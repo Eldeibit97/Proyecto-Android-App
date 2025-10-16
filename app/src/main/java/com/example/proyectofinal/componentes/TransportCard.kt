@@ -1,23 +1,33 @@
 package com.example.proyectofinal.componentes
 
+import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Notes
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -40,7 +50,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +63,7 @@ import com.example.proyectofinal.R
 @Preview(showBackground = true)
 @Composable
 
-fun TransportCard(onAvanzar: () -> Unit = {}){
+fun TransportCard(avanzar: () -> Unit = {}){
     var nombre by rememberSaveable { mutableStateOf("") }
     var telefono by rememberSaveable { mutableStateOf("") }
     var origen by rememberSaveable { mutableStateOf("") }
@@ -164,7 +177,7 @@ fun TransportCard(onAvanzar: () -> Unit = {}){
                 ) {
                     OutlinedTextField(
                         value = if (personas.isBlank()) "¿Cuántas personas?" else personas,
-                        onValueChange = {},
+                        onValueChange = { },
                         readOnly = true,
                         leadingIcon = {
                             Icon(
@@ -232,7 +245,12 @@ fun TransportCard(onAvanzar: () -> Unit = {}){
                     }
 
                     Button(
-                        onClick = onAvanzar,
+                        onClick = {
+                            // Aquí va la lógica para enviar la solicitud:
+                            // validar campos y llamar a tu backend / ViewModel
+                            // por ahora llamamos al callback avanzar para integrarlo en la navegación
+                            avanzar()
+                        },
                         modifier = Modifier,
                         enabled = true,
                         shape = RoundedCornerShape(5.dp),
