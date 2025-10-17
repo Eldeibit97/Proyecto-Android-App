@@ -74,7 +74,9 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
         }
-        composable(route = ScreenNames.News.route){}
+        composable(route = ScreenNames.News.route){
+
+        }
         composable(route = ScreenNames.Profile.route){}
     }
 }

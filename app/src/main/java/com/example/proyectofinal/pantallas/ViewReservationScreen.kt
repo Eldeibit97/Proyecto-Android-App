@@ -125,7 +125,6 @@ fun ReservationConfirmationScreen(
                                             )
                                         }
                                     }
-
                                     HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                                     // Fila: Apellido
@@ -144,10 +143,7 @@ fun ReservationConfirmationScreen(
                                             )
                                         }
                                     }
-
                                     HorizontalDivider(Modifier.padding(vertical = 8.dp))
-
-                                    // Fila: Teléfono
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Outlined.Phone, // requiere material-icons-extended
@@ -166,9 +162,6 @@ fun ReservationConfirmationScreen(
                                 }
                             }
                             Spacer(Modifier.height(8.dp))
-
-                            // Resumen de fechas
-                            // --- Sección UI: Fechas (pégala donde la necesites dentro del Column/Card) ---
                             Text("Fechas", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                             Spacer(Modifier.height(8.dp))
 
@@ -177,8 +170,6 @@ fun ReservationConfirmationScreen(
                                 shape = RoundedCornerShape(10.dp)
                             ) {
                                 Column(Modifier.padding(12.dp)) {
-
-                                    // Fila: Llegada
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Outlined.CalendarToday,
@@ -194,10 +185,7 @@ fun ReservationConfirmationScreen(
                                             )
                                         }
                                     }
-
                                     HorizontalDivider(Modifier.padding(vertical = 8.dp))
-
-                                    // Fila: Salida
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Outlined.CalendarToday,
@@ -216,8 +204,6 @@ fun ReservationConfirmationScreen(
                                 }
                             }
                             Spacer(Modifier.height(10.dp))
-
-                            // --- Sección UI: Cantidad de personas ---
                             Text("Cantidad de personas", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                             Spacer(Modifier.height(8.dp))
 
@@ -226,8 +212,6 @@ fun ReservationConfirmationScreen(
                                 shape = RoundedCornerShape(10.dp)
                             ) {
                                 Column(Modifier.padding(12.dp)) {
-
-                                    // Fila: Hombres
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Outlined.PeopleAlt,

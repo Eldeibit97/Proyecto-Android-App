@@ -45,11 +45,10 @@ fun ReservationRequestScreen(
     var totalPersonas by remember { mutableIntStateOf(0) }
     var llegada by remember { mutableStateOf<Long?>(null) }
     var salida by remember { mutableStateOf<Long?>(null) }
-
     var cardOriginalVisible by remember { mutableStateOf(true) }
     var pos by remember { mutableFloatStateOf(0f) }
-    val persistentCardScale by animateFloatAsState(if (cardOriginalVisible) 0f else 1f, label = "scale")
 
+    val persistentCardScale by animateFloatAsState(if (cardOriginalVisible) 0f else 1f, label = "scale")
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(

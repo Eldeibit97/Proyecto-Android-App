@@ -11,4 +11,5 @@ sealed class ScreenNames(val route : String) {
     object TransportRequest : ScreenNames("transport")
     object Profile : ScreenNames("profile")
     object News : ScreenNames("news")
+
 }

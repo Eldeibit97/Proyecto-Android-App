@@ -26,8 +26,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun UsuarioReservationDetailsCard(nombre: String = "Ejemplo", telefono: Long = 100000000){
     Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 15.dp)) {
+        .fillMaxWidth().padding(horizontal = 15.dp)) {
         Column(
             modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,

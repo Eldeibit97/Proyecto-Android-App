@@ -33,7 +33,8 @@ import com.example.proyectofinal.modelos.Albergue
 
 @Preview(showBackground = true)
 @Composable
-fun AlbergueReservationDetailsCard(modifier: Modifier = Modifier, albergue: Albergue? = Albergue(),
+fun AlbergueReservationDetailsCard(modifier: Modifier = Modifier,
+                                   albergue: Albergue? = Albergue(),
                                    expand: Boolean = true){
     Card(modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),) {
