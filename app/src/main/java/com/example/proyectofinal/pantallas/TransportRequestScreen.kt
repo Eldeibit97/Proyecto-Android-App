@@ -86,7 +86,7 @@ fun ReservaTransporteScreen(onAvanzar: () -> Unit = {}, aHome: () -> Unit = {},
                         .align(Alignment.Start)
                 )
                 Spacer(modifier = Modifier.height(6.dp))
-                TransportCard(onAvanzar = onAvanzar)
+                TransportCard(avanzar = onAvanzar)
             }
         }
     }

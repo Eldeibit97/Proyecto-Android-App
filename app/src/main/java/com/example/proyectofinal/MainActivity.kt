@@ -50,16 +50,10 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.Home.route){
             HomeScreen(albergue = getAlbergues(),
                 aTransport = { nav.navigate(ScreenNames.Location.route)},
-                aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) },
-                aViaje = { nav.navigate(ScreenNames.TransportRequest.route) },
-                aLogin = { nav.navigate(ScreenNames.Login.route) },
-                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) })
+                aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) })
         }
         composable(route = ScreenNames.TransportRequest.route){
-            ReservaTransporteScreen(onAvanzar = {},
-                aHome = { nav.navigate(ScreenNames.Home.route) },
-                aLogin = { nav.navigate(ScreenNames.Login.route) },
-                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) })
+            ReservaTransporteScreen(onAvanzar = {})
         }
         composable(route = ScreenNames.Reservation.route,
             arguments = listOf(navArgument("id"){type = NavType.IntType})){
@@ -69,15 +63,13 @@ fun App(modifier: Modifier = Modifier){
                 onRegresar = {nav.popBackStack()},
                 aHome = {nav.popBackStack()},
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
-                aReservas = {nav.navigate(ScreenNames.ViewReservation.route)},
-                aLogin = {nav.navigate(ScreenNames.Login.route)})
+                aLogin = {nav.navigate(ScreenNames.Login.route)},
+                onReservar = {nav.navigate(ScreenNames.ViewReservation.route)})
         }
         composable(route = ScreenNames.ViewReservation.route){
             ReservationConfirmationScreen(
-                onRegresar = {nav.popBackStack()},
-                aHome = { nav.navigate(ScreenNames.Home.route) },
-                aViaje = { nav.navigate(ScreenNames.TransportRequest.route) },
-                aLogin = { nav.navigate(ScreenNames.Login.route) })
+                onRegresar = {nav.navigate(ScreenNames.Home.route)}
+            )
         }
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
@@ -86,3 +78,4 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.Profile.route){}
     }
 }
+
