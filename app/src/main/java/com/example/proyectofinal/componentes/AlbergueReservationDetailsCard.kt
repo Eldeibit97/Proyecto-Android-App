@@ -1,5 +1,6 @@
 package com.example.proyectofinal.componentes
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,8 +33,9 @@ import com.example.proyectofinal.modelos.Albergue
 
 @Preview(showBackground = true)
 @Composable
-fun AlbergueReservationDetailsCard(albergue : Albergue? = Albergue()){
-    Card(modifier = Modifier.fillMaxWidth(),
+fun AlbergueReservationDetailsCard(modifier: Modifier = Modifier, albergue: Albergue? = Albergue(),
+                                   expand: Boolean = true){
+    Card(modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -48,91 +50,93 @@ fun AlbergueReservationDetailsCard(albergue : Albergue? = Albergue()){
                 textAlign = TextAlign.Center
             )
         }
-        Column(
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 15.dp, vertical = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.pdp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width(width = 200.dp)
-                    .clip(shape = RoundedCornerShape(10.dp)),
-                contentDescription = "Foto del albergue"
-            )
-            Row(
+        AnimatedVisibility(visible = expand) {
+            Column(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 5.dp, top = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(horizontal = 15.dp, vertical = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.LocationOn,
-                    contentDescription = "Direccion",
-                    modifier = Modifier.size(15.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.pdp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .width(width = 200.dp)
+                        .clip(shape = RoundedCornerShape(10.dp)),
+                    contentDescription = "Foto del albergue"
                 )
-                Text(
-                    text = albergue?.direccion ?: "",
+                Row(
                     modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 6.dp)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Phone,
-                    contentDescription = "Celular",
-                    modifier = Modifier.size(15.dp)
-                )
-                Text(
-                    text = "+52 ${albergue?.celular ?: 0}",
+                        .padding(bottom = 5.dp, top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.LocationOn,
+                        contentDescription = "Direccion",
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Text(
+                        text = albergue?.direccion ?: "",
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 6.dp)
+                    )
+                }
+                Row(
                     modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 6.dp)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.WatchLater,
-                    contentDescription = "Horario",
-                    modifier = Modifier.size(15.dp)
-                )
-                Text(
-                    text = "Todos los dias, a cualquier hora.",
+                        .padding(bottom = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Phone,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Text(
+                        text = "+52 ${albergue?.celular ?: 0}",
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 6.dp)
+                    )
+                }
+                Row(
                     modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 6.dp)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.People,
-                    contentDescription = "Cupo",
-                    modifier = Modifier.size(15.dp)
-                )
-                Text(
-                    text = "${albergue?.disponibilidad ?: 0}/${albergue?.capacidad ?: 60}",
+                        .padding(bottom = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.WatchLater,
+                        contentDescription = "Horario",
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Text(
+                        text = "Todos los dias, a cualquier hora.",
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 6.dp)
+                    )
+                }
+                Row(
                     modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 6.dp)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Servicios:",
-                    modifier = Modifier.fillMaxWidth()
-                )
+                        .padding(bottom = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.People,
+                        contentDescription = "Cupo",
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Text(
+                        text = "${albergue?.disponibilidad ?: 0}/${albergue?.capacidad ?: 60}",
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 6.dp)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Servicios:",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }

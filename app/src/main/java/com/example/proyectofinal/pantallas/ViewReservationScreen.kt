@@ -48,7 +48,6 @@ fun ReservationConfirmationScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -89,7 +88,7 @@ fun ReservationConfirmationScreen(
                     .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AlbergueReservationDetailsCard(albergue)
+                AlbergueReservationDetailsCard(albergue = albergue)
                 Spacer(modifier = Modifier.height(12.dp))
                 Card(
                     modifier = Modifier
@@ -246,8 +245,6 @@ fun ReservationConfirmationScreen(
                                     }
 
                                     HorizontalDivider(Modifier.padding(vertical = 8.dp))
-
-                                    // Fila: Mujeres
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Outlined.PeopleAlt,

@@ -62,8 +62,8 @@ fun App(modifier: Modifier = Modifier){
                 aReservas = { nav.navigate(ScreenNames.ViewReservation.route) })
         }
         composable(route = ScreenNames.Reservation.route,
-            arguments = listOf(navArgument("albergueId"){type = NavType.IntType})){
-            val id = it.arguments?.getInt("albergueId") ?: 0
+            arguments = listOf(navArgument("id"){type = NavType.IntType})){
+            val id = it.arguments?.getInt("id") ?: 0
             val albergue = getAlbergues().firstOrNull(){it.id == id}
             ReservationRequestScreen(albergue = albergue,
                 onRegresar = {nav.popBackStack()},
