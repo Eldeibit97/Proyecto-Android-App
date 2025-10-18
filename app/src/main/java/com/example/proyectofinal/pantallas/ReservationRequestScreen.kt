@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.componentes.AlbergueReservationDetailsCard
+import com.example.proyectofinal.componentes.PrecioServicioCard
 import com.example.proyectofinal.componentes.ReservaDetailsCard
 import com.example.proyectofinal.componentes.UsuarioReservationDetailsCard
 import com.example.proyectofinal.modelos.Albergue
@@ -46,7 +46,6 @@ fun ReservationRequestScreen(
     var llegada by remember { mutableStateOf<Long?>(null) }
     var salida by remember { mutableStateOf<Long?>(null) }
     var cardOriginalVisible by remember { mutableStateOf(true) }
-    var pos by remember { mutableFloatStateOf(0f) }
 
     val persistentCardScale by animateFloatAsState(if (cardOriginalVisible) 0f else 1f, label = "scale")
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -67,9 +66,9 @@ fun ReservationRequestScreen(
                     onClick = { aViaje() }
                 )
                 NavigationDrawerItem(
-                 label = { Text(text = "Reservas") },
-                 selected = false,
-                 onClick = { aReservas() }
+                    label = { Text(text = "Reservas") },
+                    selected = false,
+                    onClick = { aReservas() }
                 )
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },
@@ -92,8 +91,7 @@ fun ReservationRequestScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AlbergueReservationDetailsCard(modifier = Modifier.onGloballyPositioned{ layoutCoordinates ->
-                        cardOriginalVisible = layoutCoordinates.positionInRoot().y >= -150
-                        pos = layoutCoordinates.positionInRoot().y
+                        cardOriginalVisible = layoutCoordinates.positionInRoot().y >= -125
                     }, albergue = albergue, expand = cardOriginalVisible)
                     Spacer(modifier = Modifier.height(12.dp))
                     UsuarioReservationDetailsCard()
@@ -103,6 +101,8 @@ fun ReservationRequestScreen(
                         llegada = { llegada = it },
                         salida = { salida = it },
                         total = { totalPersonas = it })
+                    Spacer(modifier = Modifier.height(12.dp))
+                    PrecioServicioCard(albergue = albergue)
                     Spacer(modifier = Modifier.padding(8.dp))
                     Row(
                         modifier = Modifier

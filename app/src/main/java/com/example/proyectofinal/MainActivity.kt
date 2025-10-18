@@ -50,10 +50,16 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.Home.route){
             HomeScreen(albergue = getAlbergues(),
                 aTransport = { nav.navigate(ScreenNames.Location.route)},
-                aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) })
+                aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) },
+                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
+                aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
+                aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.TransportRequest.route){
-            ReservaTransporteScreen(onAvanzar = {})
+            ReservaTransporteScreen(onAvanzar = {},
+                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
+                aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
+                aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.Reservation.route,
             arguments = listOf(navArgument("id"){type = NavType.IntType})){
@@ -61,14 +67,17 @@ fun App(modifier: Modifier = Modifier){
             val albergue = getAlbergues().firstOrNull(){it.id == id}
             ReservationRequestScreen(albergue = albergue,
                 onRegresar = {nav.popBackStack()},
-                aHome = {nav.popBackStack()},
+                aHome = {nav.navigate(ScreenNames.Home.route)},
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
                 aLogin = {nav.navigate(ScreenNames.Login.route)},
                 onReservar = {nav.navigate(ScreenNames.ViewReservation.route)})
         }
         composable(route = ScreenNames.ViewReservation.route){
             ReservationConfirmationScreen(
-                onRegresar = {nav.navigate(ScreenNames.Home.route)}
+                onRegresar = {nav.navigate(ScreenNames.Home.route)},
+                aHome = {nav.navigate(ScreenNames.Home.route)},
+                aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
+                aLogin = {nav.navigate(ScreenNames.Login.route)}
             )
         }
         composable(route = ScreenNames.Location.route){

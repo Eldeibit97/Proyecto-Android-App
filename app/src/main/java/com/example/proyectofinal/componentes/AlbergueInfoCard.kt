@@ -1,5 +1,6 @@
 package com.example.proyectofinal.componentes
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,11 +20,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material.icons.outlined.ArrowCircleRight
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.People
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.WatchLater
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,8 +48,11 @@ import com.example.proyectofinal.modelos.getAlbergues
 fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                      avanzar: () -> Unit = {},
                      reservar: (Albergue) -> Unit = {}){
-    Card(modifier = Modifier.fillMaxWidth().padding(15.dp)){
-        Row(modifier = Modifier.fillMaxWidth()
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(15.dp)){
+        Row(modifier = Modifier
+            .fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
             Text(text = albergue.nombre,
@@ -65,7 +71,8 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                     fontSize = 16.sp)
             }
         }
-        Column(modifier = Modifier.fillMaxWidth()
+        Column(modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally){
             Image(painter = painterResource(id = R.drawable.pdp),
@@ -74,44 +81,52 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                     .width(width = 200.dp)
                     .clip(shape = RoundedCornerShape(10.dp)),
                 contentDescription = "Foto del albergue")
-            Row(modifier = Modifier.fillMaxWidth()
+            Row(modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 5.dp, top = 10.dp),
                 verticalAlignment = Alignment.CenterVertically){
                 Icon(imageVector = Icons.Outlined.LocationOn,
                     contentDescription = "Direccion",
                     modifier = Modifier.size(15.dp))
                 Text(text = albergue.direccion,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 6.dp))
             }
-            Row(modifier = Modifier.fillMaxWidth()
+            Row(modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 5.dp),
                 verticalAlignment = Alignment.CenterVertically){
                 Icon(imageVector = Icons.Outlined.Phone,
                     contentDescription = "Celular",
                     modifier = Modifier.size(15.dp))
                 Text(text = "+52 ${albergue.celular}",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 6.dp))
             }
-            Row(modifier = Modifier.fillMaxWidth()
+            Row(modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 5.dp),
                 verticalAlignment = Alignment.CenterVertically){
                 Icon(imageVector = Icons.Outlined.WatchLater,
                     contentDescription = "Horario",
                     modifier = Modifier.size(15.dp))
                 Text(text = "Todos los dias, a cualquier hora.",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 6.dp))
             }
-            Row(modifier = Modifier.fillMaxWidth()
+            Row(modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 5.dp),
                 verticalAlignment = Alignment.CenterVertically){
                 Icon(imageVector = Icons.Outlined.People,
                     contentDescription = "Cupo",
                     modifier = Modifier.size(15.dp))
                 Text(text = "${albergue.disponibilidad}/${albergue.capacidad}",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 6.dp))
             }
             Row(modifier = Modifier.fillMaxWidth(),
@@ -119,8 +134,28 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                 Text(text = "Servicios:",
                     modifier = Modifier.fillMaxWidth())
             }
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                albergue.servicios.forEach { servicio ->
+                    Card(modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
+                        shape = RoundedCornerShape(size = 6.dp),
+                        colors = CardColors(MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.onBackground,
+                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.onBackground),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground)){
+                        Text(text = servicio.nombre,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold)
+                    }
+                }
+            }
         }
-        Row(modifier = Modifier.fillMaxWidth()
+        Row(modifier = Modifier
+            .fillMaxWidth()
             .padding(vertical = 6.dp, horizontal = 8.dp)
             .height(height = 35.dp),
             horizontalArrangement = Arrangement.Center){

@@ -33,8 +33,8 @@ fun UsuarioReservationDetailsCard(nombre: String = "Ejemplo", telefono: Long = 1
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Datos del responsable de la reservación",
-                fontSize = 18.sp,
+                text = "Responsable de la reservación",
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.padding(4.dp))
