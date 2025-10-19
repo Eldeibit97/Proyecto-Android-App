@@ -6,7 +6,7 @@ sealed class ScreenNames(val route : String) {
     object Reservation : ScreenNames(route = "reservation/{id}") {
         fun createRoute(id: Int) = "reservation/$id"
     }
-    object ViewReservation : ScreenNames(route = "viewreservation")
+    object ViewReservation : ScreenNames(route = "viewreservation)")
     object ViewAllResevations : ScreenNames(route = "viewallreservations")
     object Location : ScreenNames(route = "location")
     object TransportRequest : ScreenNames(route = "transport")

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.componentes.AlbergueReservationDetailsCard
 import com.example.proyectofinal.componentes.PrecioServicioCard
 import com.example.proyectofinal.componentes.ReservaDetailsCard
+import com.example.proyectofinal.componentes.TopBar
 import com.example.proyectofinal.componentes.UsuarioReservationDetailsCard
 import com.example.proyectofinal.modelos.Albergue
 import kotlinx.coroutines.launch
@@ -40,14 +39,17 @@ fun ReservationRequestScreen(
     albergue: Albergue? = Albergue(), onRegresar: () -> Unit = {},
     onReservar: () -> Unit = {}, aViaje: () -> Unit = {},
     aHome: () -> Unit = {}, aLogin: () -> Unit = {},
-    aReservas: () -> Unit = {}
+    aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
     var totalPersonas by remember { mutableIntStateOf(0) }
     var llegada by remember { mutableStateOf<Long?>(null) }
     var salida by remember { mutableStateOf<Long?>(null) }
     var cardOriginalVisible by remember { mutableStateOf(true) }
 
-    val persistentCardScale by animateFloatAsState(if (cardOriginalVisible) 0f else 1f, label = "scale")
+    val persistentCardScale by animateFloatAsState(
+        if (cardOriginalVisible) 0f else 1f,
+        label = "scale"
+    )
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -71,6 +73,11 @@ fun ReservationRequestScreen(
                     onClick = { aReservas() }
                 )
                 NavigationDrawerItem(
+                    label = { Text("Noticias") },
+                    selected = false,
+                    onClick = { aNoticias() }
+                )
+                NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },
                     selected = false,
                     onClick = { aLogin() }
@@ -79,9 +86,10 @@ fun ReservationRequestScreen(
         }
     ) {
         Scaffold(
-            topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }) }
+            topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Reserva") }
         ) { innerPadding ->
-            Box(modifier = Modifier.padding(innerPadding).fillMaxSize()
+            Box(
+                modifier = Modifier.padding(innerPadding).fillMaxSize()
             ) {
                 val scrollState = rememberScrollState()
                 Column(
@@ -90,7 +98,7 @@ fun ReservationRequestScreen(
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AlbergueReservationDetailsCard(modifier = Modifier.onGloballyPositioned{ layoutCoordinates ->
+                    AlbergueReservationDetailsCard(modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
                         cardOriginalVisible = layoutCoordinates.positionInRoot().y >= -125
                     }, albergue = albergue, expand = cardOriginalVisible)
                     Spacer(modifier = Modifier.height(12.dp))
@@ -145,9 +153,10 @@ fun ReservationRequestScreen(
                         }
                     }
                 }
-                AlbergueReservationDetailsCard(modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .graphicsLayer{
+                AlbergueReservationDetailsCard(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .graphicsLayer {
                             scaleX = persistentCardScale
                             scaleY = persistentCardScale
                         },
@@ -156,18 +165,4 @@ fun ReservationRequestScreen(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(onDrawerClick: () -> Unit,
-           title: String = "Reserva"){
-    TopAppBar(
-        title = {Text(title)},
-        navigationIcon = {
-            IconButton(onClick = onDrawerClick) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-            }
-        }
-    )
 }

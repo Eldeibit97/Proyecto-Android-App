@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinal.componentes.TopBar
 import com.example.proyectofinal.componentes.TransportCard
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReservaTransporteScreen(onAvanzar: () -> Unit = {}, aHome: () -> Unit = {},
                             aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
-                            aReservas: () -> Unit = {}) {
+                            aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
 
     val scrollState = rememberScrollState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -56,6 +57,11 @@ fun ReservaTransporteScreen(onAvanzar: () -> Unit = {}, aHome: () -> Unit = {},
                     label = { Text(text = "Reservas") },
                     selected = false,
                     onClick = { aReservas() }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Noticias") },
+                    selected = false,
+                    onClick = { aNoticias() }
                 )
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },

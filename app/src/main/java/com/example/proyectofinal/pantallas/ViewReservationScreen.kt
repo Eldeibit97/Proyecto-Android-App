@@ -11,12 +11,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,24 +22,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.componentes.AlbergueReservationDetailsCard
 import com.example.proyectofinal.modelos.Albergue
+import com.example.proyectofinal.modelos.Reserva
+import com.example.proyectofinal.modelos.getReservas
+import com.example.proyectofinal.componentes.TopBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationConfirmationScreen(
-    albergue: Albergue = Albergue(), onRegresar: () -> Unit = {},
+    albergue: Albergue = Albergue(), reserva: Reserva = getReservas()[1], onRegresar: () -> Unit = {},
     aViaje: () -> Unit = {}, aHome: () -> Unit = {},
-    aLogin: () -> Unit = {}, aReservas: () -> Unit = {}
+    aLogin: () -> Unit = {}, aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
-    var hombres by rememberSaveable { mutableStateOf("2 personas") }
-    var mujeres by rememberSaveable { mutableStateOf("1 persona") }
-    var fechaLlegada by rememberSaveable { mutableStateOf("08/10/2025") } // ejemplo
-    var fechaSalida  by rememberSaveable { mutableStateOf("12/10/2025") } // ejemplovar salidaIndefinida by remember { mutableStateOf(false) }
-    var showDatePicker by remember { mutableStateOf(false) }
-    var aceptarTerminos by remember { mutableStateOf(false) }
-    var nombre by rememberSaveable { mutableStateOf("Jesús Alberto") }
-    var apellido by rememberSaveable { mutableStateOf("Jiménez Paz") }
-    var telefono by rememberSaveable { mutableStateOf("+52 81 1234 5678") }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -108,8 +97,6 @@ fun ReservationConfirmationScreen(
                                 shape = RoundedCornerShape(10.dp)
                             ) {
                                 Column(Modifier.padding(12.dp)) {
-
-                                    // Fila: Nombre
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Outlined.Person,
@@ -120,7 +107,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Nombre", fontSize = 15.sp, color = Color.Gray,fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = if (nombre.isBlank()) "—" else nombre,
+                                                text = reserva.nombreResponsable,
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -138,7 +125,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Apellido", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = if (apellido.isBlank()) "—" else apellido,
+                                                text = reserva.apellidoResponsable,
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -154,7 +141,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Teléfono", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = if (telefono.isBlank()) "—" else telefono,
+                                                text = reserva.celular.toString(),
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -180,7 +167,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Llegada", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = if (fechaLlegada.isBlank()) "—" else fechaLlegada,
+                                                text = reserva.fechaLlegada,
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -196,7 +183,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Salida", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = if (fechaSalida.isBlank()) "Indefinida" else fechaSalida,
+                                                text = reserva.fechaSalida,
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -220,26 +207,8 @@ fun ReservationConfirmationScreen(
                                         )
                                         Spacer(Modifier.width(10.dp))
                                         Column {
-                                            Text("Hombres", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = if (hombres.isBlank()) "—" else hombres,
-                                                fontSize = 20.sp
-                                            )
-                                        }
-                                    }
-
-                                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.PeopleAlt,
-                                            contentDescription = null,
-                                            modifier = Modifier.size(18.dp)
-                                        )
-                                        Spacer(Modifier.width(10.dp))
-                                        Column {
-                                            Text("Mujeres", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
-                                            Text(
-                                                text = if (mujeres.isBlank()) "—" else mujeres,
+                                                text = reserva.numPersonas.toString(),
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -250,27 +219,18 @@ fun ReservationConfirmationScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.padding(6.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(
-                        onClick = onRegresar,
-                        modifier = Modifier,
+                    Button(onClick = onRegresar,
+                        modifier = Modifier.fillMaxWidth(0.5f),
                         enabled = true,
-                        shape = RoundedCornerShape(5.dp),
-                        colors = ButtonColors(
-                            containerColor = Color(0xFFEF3F3F),
-                            contentColor = Color(0xFFFFFFFF),
-                            disabledContainerColor = Color(0xFF9A9A9A),
-                            disabledContentColor = Color(0xFFFFFFFF)
-                        )
-
-                    ) {
+                        shape = RoundedCornerShape(5.dp)) {
                         Text(text = "Regresar")
                     }
-
                 }
             }
         }
