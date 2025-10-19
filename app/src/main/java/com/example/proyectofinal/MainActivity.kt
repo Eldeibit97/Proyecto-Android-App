@@ -80,6 +80,9 @@ fun App(modifier: Modifier = Modifier){
                 aLogin = {nav.navigate(ScreenNames.Login.route)}
             )
         }
+        composable(route = ScreenNames.ViewAllResevations.route){
+
+        }
         composable(route = ScreenNames.Location.route){
             LocationScreen(aTaxi = { nav.navigate(ScreenNames.TransportRequest.route)})
         }

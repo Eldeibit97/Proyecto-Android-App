@@ -37,7 +37,8 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true)
 @Composable
 fun RegisterCard(avanzar : () -> Unit =  {}, celular: (Long) -> Unit = {}, nombre: (String) -> Unit = {},
-                 apellido: (String) -> Unit = {}, nacimiento: (String) -> Unit = {}, genero: (String) -> Unit = {}){
+                 apellido: (String) -> Unit = {}, nacimiento: (String) -> Unit = {}, genero: (String) -> Unit = {},
+                 respuesta: (Boolean) -> Unit = {}){
 
     var nombre by rememberSaveable { mutableStateOf("") }
     var apellido by rememberSaveable { mutableStateOf("") }
@@ -141,11 +142,8 @@ fun RegisterCard(avanzar : () -> Unit =  {}, celular: (Long) -> Unit = {}, nombr
                     shape = RoundedCornerShape(10.dp))
             }
             Spacer(modifier = Modifier.padding(10.dp))
-            Text(text = "Al continuar, aceptas los términos de uso del servicio y politica de privacidad de Caritas de Monterrey.",
-                modifier = Modifier.padding(horizontal = 10.dp),
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center)
-            Spacer(modifier = Modifier.padding(5.dp))
+            AvisoPrivacidadModal(respuesta = respuesta)
+            Spacer(modifier = Modifier.padding(6.dp))
             Button(onClick = avanzar,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 enabled = true,

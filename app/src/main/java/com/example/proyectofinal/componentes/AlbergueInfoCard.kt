@@ -132,7 +132,8 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
             Row(modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically){
                 Text(text = "Servicios:",
-                    modifier = Modifier.fillMaxWidth())
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold)
             }
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -156,17 +157,17 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
         }
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 8.dp)
+            .padding(vertical = 12.dp, horizontal = 8.dp)
             .height(height = 35.dp),
             horizontalArrangement = Arrangement.Center){
             Button(onClick = avanzar,
                 modifier = Modifier.width(width = 180.dp),
-                colors = ButtonColors(Color(color = 0xFFFFFFFF),
-                    Color(0xFF000000),
-                    Color(color = 0xFFFFFFFF),
-                    Color(color = 0xFF000000)),
+                colors = ButtonColors(MaterialTheme.colorScheme.background,
+                    MaterialTheme.colorScheme.onBackground,
+                    MaterialTheme.colorScheme.background,
+                    MaterialTheme.colorScheme.onBackground),
                 contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),
-                shape = RoundedCornerShape(8.dp)){
+                shape = RoundedCornerShape(5.dp)){
                 Icon(imageVector = Icons.Outlined.ArrowCircleRight,
                     contentDescription = "Cómo llegar",
                     modifier = Modifier.size(20.dp))
@@ -174,7 +175,7 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                 Text(text = "Cómo llegar",
                         fontSize = 18.sp)
             }
-            Spacer(modifier = Modifier.padding(all = 5.dp))
+            Spacer(modifier = Modifier.padding(all = 2.dp))
             Button(onClick = {reservar(albergue)},
                 modifier = Modifier.width(width = 180.dp),
                 contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),

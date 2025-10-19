@@ -43,6 +43,7 @@ fun LoginScreen(aHome:() -> Unit = {}) {
     var apellidos by remember { mutableStateOf("") }
     var nacimiento by remember { mutableStateOf("") }
     var genero by remember { mutableStateOf("") }
+    var apRespuesta by remember { mutableStateOf(false) }
 
     var section by rememberSaveable { mutableStateOf(value = "") }
     var enableB by rememberSaveable { mutableStateOf(value = false) }
@@ -96,7 +97,8 @@ fun LoginScreen(aHome:() -> Unit = {}) {
         Spacer(modifier = Modifier.padding(4.dp))
         if(section == "register"){
             RegisterCard(avanzar = aHome, celular = {celular = it.toString()}, nombre = {nombre = it},
-                apellido = {apellidos = it}, nacimiento = {nacimiento = it}, genero = {genero = it})
+                apellido = {apellidos = it}, nacimiento = {nacimiento = it}, genero = {genero = it},
+                respuesta = {apRespuesta = it})
         }else{
             LoginCard(avanzar = aHome, celular = {celular = it.toString()})
         }
