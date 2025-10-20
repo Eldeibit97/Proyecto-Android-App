@@ -246,9 +246,6 @@ fun TransportCard(avanzar: () -> Unit = {}){
 
                     Button(
                         onClick = {
-                            // Aquí va la lógica para enviar la solicitud:
-                            // validar campos y llamar a tu backend / ViewModel
-                            // por ahora llamamos al callback avanzar para integrarlo en la navegación
                             avanzar()
                         },
                         modifier = Modifier,

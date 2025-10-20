@@ -10,6 +10,8 @@ sealed class ScreenNames(val route : String) {
     object ViewAllResevations : ScreenNames(route = "viewallreservations")
     object Location : ScreenNames(route = "location")
     object TransportRequest : ScreenNames(route = "transport")
+
+    object ViewTransport : ScreenNames(route = "transportView")
     object Profile : ScreenNames(route = "profile")
     object News : ScreenNames(route = "news")
 

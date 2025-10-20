@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReservaTransporteScreen(onAvanzar: () -> Unit = {}, aHome: () -> Unit = {},
                             aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
-                            aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
+                            aReservas: () -> Unit = {}, aNoticias: () -> Unit = {},
+                            aViewViaje: () -> Unit = {}) {
 
     val scrollState = rememberScrollState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

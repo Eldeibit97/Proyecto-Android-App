@@ -23,6 +23,7 @@ import com.example.proyectofinal.pantallas.ReservationRequestScreen
 import com.example.proyectofinal.modelos.getAlbergues
 import com.example.proyectofinal.pantallas.NewsScreen
 import com.example.proyectofinal.pantallas.ReservationConfirmationScreen
+import com.example.proyectofinal.pantallas.ViewTransportation
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -58,7 +59,7 @@ fun App(modifier: Modifier = Modifier){
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.TransportRequest.route){
-            ReservaTransporteScreen(onAvanzar = {},
+            ReservaTransporteScreen(onAvanzar = {nav.navigate(ScreenNames.ViewTransport.route)},
                 aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
                 aNoticias = { nav.navigate(ScreenNames.News.route) },
@@ -96,6 +97,9 @@ fun App(modifier: Modifier = Modifier){
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.Profile.route){}
+        composable(route = ScreenNames.ViewTransport.route){
+            ViewTransportation()
+        }
     }
 }
 
