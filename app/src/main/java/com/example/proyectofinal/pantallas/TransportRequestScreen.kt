@@ -93,7 +93,7 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, avanzar: () -> Unit = {},
 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "*Servicio gratuito de Cáritas - Completa el formulario para solicitar transporte",
                     fontSize = 11.sp,
