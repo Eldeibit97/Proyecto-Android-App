@@ -59,7 +59,7 @@ fun App(modifier: Modifier = Modifier){
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.TransportRequest.route){
-            ReservaTransporteScreen(onAvanzar = {nav.navigate(ScreenNames.ViewTransport.route)},
+            ReservaTransporteScreen(avanzar = {nav.navigate(ScreenNames.ViewTransport.route)},
                 aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
                 aNoticias = { nav.navigate(ScreenNames.News.route) },
@@ -98,7 +98,7 @@ fun App(modifier: Modifier = Modifier){
         }
         composable(route = ScreenNames.Profile.route){}
         composable(route = ScreenNames.ViewTransport.route){
-            ViewTransportation()
+            ViewTransportation(onRegresar = {nav.navigate(ScreenNames.Home.route)})
         }
     }
 }

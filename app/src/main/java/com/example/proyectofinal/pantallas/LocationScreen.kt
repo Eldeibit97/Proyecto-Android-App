@@ -61,22 +61,18 @@ fun LocationScreen(aTaxi: () -> Unit = {}){
             .height(height = 50.dp)
             .width(width = 10.dp),
             horizontalArrangement = Arrangement.Start) {
-            Button(onClick = aTaxi,
-                modifier = Modifier.width(width = 150.dp),
-                colors = ButtonColors(
-                    containerColor = Color(0xFFEF3F3F),
-                    contentColor = Color(0xFFFFFFFF),
-                    disabledContainerColor = Color(0xFF9A9A9A),
-                    disabledContentColor = Color(0xFFFFFFFF)
-                ),
-                contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),
-                shape = RoundedCornerShape(8.dp)){
-                Icon(imageVector = Icons.Outlined.DirectionsCar,
-                    contentDescription = "transporte",
-                    modifier = Modifier.size(20.dp))
-                Spacer(modifier = Modifier.padding(5.dp))
-                Text(text = "Solicitar transporte",
-                    fontSize = 18.sp)
+            Button(
+                onClick = aTaxi,
+                modifier = Modifier,
+                enabled = true,
+                shape = RoundedCornerShape(5.dp)
+            ) {
+                Text(
+                    text = "Solicitar transporte",
+                    modifier = Modifier.padding(vertical = 3.dp, horizontal = 5.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
             }
         }
 

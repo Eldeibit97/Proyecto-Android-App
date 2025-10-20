@@ -63,7 +63,7 @@ import com.example.proyectofinal.R
 @Preview(showBackground = true)
 @Composable
 
-fun TransportCard(avanzar: () -> Unit = {}){
+fun TransportCard(){
     var nombre by rememberSaveable { mutableStateOf("") }
     var telefono by rememberSaveable { mutableStateOf("") }
     var origen by rememberSaveable { mutableStateOf("") }
@@ -223,46 +223,6 @@ fun TransportCard(avanzar: () -> Unit = {}){
                     shape = RoundedCornerShape(10.dp))
 
                 Spacer(modifier = Modifier.height(6.dp))
-
-                // Botones de acción (Enviar / Limpiar)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextButton(onClick = {
-                        // limpiar campos
-                        nombre = ""
-                        telefono = ""
-                        origen = ""
-                        destino = ""
-                        notas = ""
-                    }) {
-                        Text(text = "Limpiar",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = Color(0xFF367BD0))
-                    }
-
-                    Button(
-                        onClick = {
-                            avanzar()
-                        },
-                        modifier = Modifier,
-                        enabled = true,
-                        shape = RoundedCornerShape(5.dp),
-                        colors = ButtonColors(
-                            containerColor = Color(0xFFEF3F3F),
-                            contentColor = Color(0xFFFFFFFF),
-                            disabledContainerColor = Color(0xFF9A9A9A),
-                            disabledContentColor = Color(0xFFFFFFFF)
-                        )
-
-                    ) {
-                        Text(text = "Enviar Solicitud")
-                    }
-
-                }
             }
         }
     }

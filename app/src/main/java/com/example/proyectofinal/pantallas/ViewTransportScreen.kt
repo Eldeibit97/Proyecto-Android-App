@@ -42,6 +42,7 @@ data class PersonalInfo(
 @Composable
 fun ViewTransportation(
     info: PersonalInfo = PersonalInfo(),
+    onRegresar: () -> Unit = {},
     onOpenDrawer: () -> Unit = {},
     title: String = "Detalles del viaje"
 ) {
@@ -334,6 +335,18 @@ fun ViewTransportation(
                             }
                         }
                     }
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = onRegresar,
+                    modifier = Modifier.fillMaxWidth(0.5f),
+                    enabled = true,
+                    shape = RoundedCornerShape(5.dp)) {
+                    Text(text = "Regresar")
                 }
             }
         }

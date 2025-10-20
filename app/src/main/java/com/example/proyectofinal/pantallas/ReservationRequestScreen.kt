@@ -145,7 +145,7 @@ fun ReservationRequestScreen(
                             shape = RoundedCornerShape(5.dp)
                         ) {
                             Text(
-                                text = "Realizar reservar",
+                                text = "Realizar reserva",
                                 modifier = Modifier.padding(vertical = 3.dp, horizontal = 5.dp),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp
