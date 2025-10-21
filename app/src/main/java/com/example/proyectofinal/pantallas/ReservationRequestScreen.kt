@@ -41,6 +41,8 @@ fun ReservationRequestScreen(
     var totalPersonas by remember { mutableIntStateOf(0) }
     var llegada by remember { mutableStateOf<Long?>(null) }
     var salida by remember { mutableStateOf<Long?>(null) }
+    var hombres by remember { mutableIntStateOf(0) }   // ✅ ahora dentro del Composable
+    var mujeres by remember { mutableIntStateOf(0) }   // ✅
     var cardOriginalVisible by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
@@ -72,7 +74,11 @@ fun ReservationRequestScreen(
         Scaffold(
             topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Reserva") }
         ) { innerPadding ->
-            Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ) {
                 val scrollState = rememberScrollState()
                 Column(
                     modifier = Modifier
@@ -91,17 +97,19 @@ fun ReservationRequestScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Datos del usuario (aquí podrías conectar con datos de usuario autenticado)
+                    // Datos del usuario (podrían venir de Firebase)
                     UsuarioReservationDetailsCard()
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Detalles de reserva
+                    // Tarjeta de detalles de reserva
                     ReservaDetailsCard(
                         albergue = albergue,
                         llegada = { llegada = it },
                         salida = { salida = it },
-                        total = { totalPersonas = it }
+                        total = { totalPersonas = it },
+                        hombresCallback = { hombres = it },
+                        mujeresCallback = { mujeres = it }
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -119,8 +127,6 @@ fun ReservationRequestScreen(
                         // Botón cancelar
                         Button(
                             onClick = onRegresar,
-                            modifier = Modifier,
-                            enabled = true,
                             shape = RoundedCornerShape(5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFFFFFFFF),
@@ -142,17 +148,18 @@ fun ReservationRequestScreen(
                             onClick = {
                                 if (albergue != null) {
                                     val nombreAlbergue = albergue.nombre ?: "Sin nombre"
-                                    val fechaLlegada = llegada?.toString() ?: "No especificada"
-                                    val fechaSalida = salida?.toString() ?: "No especificada"
 
                                     saveReservation(
                                         nombre = nombre,
                                         apellido = apellido,
                                         celular = celular,
                                         albergueNombre = nombreAlbergue,
-                                        fechaLlegada = fechaLlegada,
-                                        fechaSalida = fechaSalida,
+                                        fechaLlegada = llegada,
+                                        fechaSalida = salida,
                                         numPersonas = totalPersonas,
+                                        hombres = hombres,
+                                        mujeres = mujeres,
+                                        uid = "sin_usuario",
                                         onSuccess = {
                                             Toast.makeText(context, "Reserva guardada ✅", Toast.LENGTH_SHORT).show()
                                             onReservar()
@@ -165,8 +172,6 @@ fun ReservationRequestScreen(
                                     Toast.makeText(context, "Error: No se encontró el albergue", Toast.LENGTH_LONG).show()
                                 }
                             },
-                            modifier = Modifier,
-                            enabled = true,
                             shape = RoundedCornerShape(5.dp)
                         ) {
                             Text(
@@ -179,7 +184,7 @@ fun ReservationRequestScreen(
                     }
                 }
 
-                // Tarjeta fija superior
+                // Tarjeta superior animada
                 AlbergueReservationDetailsCard(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -195,28 +200,35 @@ fun ReservationRequestScreen(
     }
 }
 
-// 🔧 FUNCIÓN: Guarda la reserva en Firestore
+// 🔧 Guarda la reserva en Firestore
 fun saveReservation(
     nombre: String,
     apellido: String,
     celular: String,
     albergueNombre: String,
-    fechaLlegada: String,
-    fechaSalida: String,
+    fechaLlegada: Long?,
+    fechaSalida: Long?,
     numPersonas: Int,
+    hombres: Int,
+    mujeres: Int,
+    uid: String = "sin_usuario",
     onSuccess: () -> Unit,
     onError: (String) -> Unit
 ) {
     val db = FirebaseUtils.db
+
     val reserva = hashMapOf(
-        "nombre" to nombre,
+        "albergue" to albergueNombre,
         "apellido" to apellido,
         "celular" to celular,
-        "albergue" to albergueNombre,
-        "fechaLlegada" to fechaLlegada,
-        "fechaSalida" to fechaSalida,
+        "fechaLlegada" to (fechaLlegada ?: "No especificada"),
+        "fechaSalida" to (fechaSalida ?: "No especificada"),
+        "hombres" to hombres,
+        "mujeres" to mujeres,
+        "nombre" to nombre,
         "numPersonas" to numPersonas,
-        "timestamp" to System.currentTimeMillis()
+        "timestamp" to System.currentTimeMillis(),
+        "uid" to uid
     )
 
     db.collection("reservations")
