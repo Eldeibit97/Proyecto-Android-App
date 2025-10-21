@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material.icons.outlined.ArrowCircleRight
 import androidx.compose.material.icons.outlined.LocationOn
@@ -29,16 +30,22 @@ import androidx.compose.material.icons.outlined.WatchLater
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.proyectofinal.R
 import com.example.proyectofinal.modelos.Albergue
 import com.example.proyectofinal.modelos.getAlbergues
@@ -46,8 +53,44 @@ import com.example.proyectofinal.modelos.getAlbergues
 @Preview(showBackground = true)
 @Composable
 fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
-                     avanzar: () -> Unit = {},
-                     reservar: (Albergue) -> Unit = {}){
+                     aSolicitarViaje: () -> Unit = {},
+                     aReservar: (Albergue) -> Unit = {}){
+    var showDialog by remember { mutableStateOf(false) }
+    if (showDialog) {
+        Dialog(onDismissRequest = { showDialog = false }) {
+            Card(shape = RoundedCornerShape(16.dp)) {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp, top = 15.dp)
+                ) {
+                    Image(painter = painterResource(id = R.drawable.location),
+                        contentDescription = "Foto del mapa",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                Row(modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 15.dp, vertical = 8.dp)
+                    .height(height = 50.dp)
+                    .width(width = 10.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(onClick = aSolicitarViaje,
+                        enabled = true,
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(text = "Solicitar transporte",
+                            modifier = Modifier.padding(vertical = 3.dp, horizontal = 5.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(15.dp)){
@@ -142,9 +185,9 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                 albergue.servicios.forEach { servicio ->
                     Card(modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
                         shape = RoundedCornerShape(size = 6.dp),
-                        colors = CardColors(MaterialTheme.colorScheme.background,
+                        colors = CardColors(MaterialTheme.colorScheme.onTertiary,
                             MaterialTheme.colorScheme.onBackground,
-                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.onTertiary,
                             MaterialTheme.colorScheme.onBackground),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground)){
                         Text(text = servicio.nombre,
@@ -160,11 +203,11 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
             .padding(vertical = 12.dp, horizontal = 8.dp)
             .height(height = 35.dp),
             horizontalArrangement = Arrangement.Center){
-            Button(onClick = avanzar,
+            Button(onClick = { showDialog = true },
                 modifier = Modifier.width(width = 180.dp),
-                colors = ButtonColors(MaterialTheme.colorScheme.background,
+                colors = ButtonColors(MaterialTheme.colorScheme.onTertiary,
                     MaterialTheme.colorScheme.onBackground,
-                    MaterialTheme.colorScheme.background,
+                    MaterialTheme.colorScheme.onTertiary,
                     MaterialTheme.colorScheme.onBackground),
                 contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),
                 shape = RoundedCornerShape(5.dp)){
@@ -176,7 +219,7 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                         fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.padding(all = 2.dp))
-            Button(onClick = {reservar(albergue)},
+            Button(onClick = { aReservar(albergue) },
                 modifier = Modifier.width(width = 180.dp),
                 contentPadding = PaddingValues(horizontal = 10.dp,vertical = 2.dp),
                 shape = RoundedCornerShape(size = 5.dp)){

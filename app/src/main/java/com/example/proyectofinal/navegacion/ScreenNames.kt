@@ -8,7 +8,6 @@ sealed class ScreenNames(val route : String) {
     }
     object ViewReservation : ScreenNames(route = "viewreservation)")
     object ViewAllResevations : ScreenNames(route = "viewallreservations")
-    object Location : ScreenNames(route = "location")
     object TransportRequest : ScreenNames(route = "transport")
 
     object ViewTransport : ScreenNames(route = "transportView")
