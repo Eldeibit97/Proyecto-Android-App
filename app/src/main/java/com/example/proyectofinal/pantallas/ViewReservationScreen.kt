@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReservationConfirmationScreen(
     albergue: Albergue = Albergue(), reserva: Reserva = getReservas()[1], onRegresar: () -> Unit = {},
-    aViaje: () -> Unit = {}, aHome: () -> Unit = {},
+    aViaje: () -> Unit = {}, aHome: () -> Unit = {}, id: Int,
     aLogin: () -> Unit = {}, aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -251,7 +251,7 @@ fun ResumenItem(icon: ImageVector, titulo: String, valor: String) {
 @Composable
 fun PreviewReservationConfirmationScreen() {
     ReservationConfirmationScreen(
-
+        id = 1
     )
 }
 

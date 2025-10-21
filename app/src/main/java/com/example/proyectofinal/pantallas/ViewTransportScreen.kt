@@ -34,7 +34,7 @@ fun ViewTransportationScreen(
     info: PersonalInfo = PersonalInfo(),aHome: () -> Unit = {},
     aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
     aReservas: () -> Unit = {}, aNoticias: () -> Unit = {},
-    onRegresar: () -> Unit = {}
+    onRegresar: () -> Unit = {}, id: Int
 ) {
     val scroll = rememberScrollState()
     val personas = 3
@@ -393,6 +393,6 @@ fun ViewTransportationScreen(
 @Composable
 fun PreviewViewTransportation() {
     MaterialTheme {
-        ViewTransportationScreen()
+        ViewTransportationScreen(id = 1)
     }
 }

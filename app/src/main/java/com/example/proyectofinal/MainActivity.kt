@@ -22,6 +22,7 @@ import com.example.proyectofinal.pantallas.ReservationRequestScreen
 import com.example.proyectofinal.modelos.getAlbergues
 import com.example.proyectofinal.pantallas.NewsScreen
 import com.example.proyectofinal.pantallas.ReservationConfirmationScreen
+import com.example.proyectofinal.pantallas.ViewAllReservationsScreen
 import com.example.proyectofinal.pantallas.ViewTransportationScreen
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
@@ -52,7 +53,7 @@ fun App(modifier: Modifier = Modifier){
             HomeScreen(albergues = getAlbergues(),
                 aTransport = { nav.navigate(ScreenNames.TransportRequest.route)},
                 aReservation = { nav.navigate(ScreenNames.Reservation.createRoute(it.id)) },
-                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
+                aReservas = { nav.navigate(ScreenNames.ViewAllReservations.route) },
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
                 aNoticias = { nav.navigate(ScreenNames.News.route)},
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
@@ -78,7 +79,10 @@ fun App(modifier: Modifier = Modifier){
                 onReservar = {nav.navigate(ScreenNames.ViewReservation.route)})
         }
         composable(route = ScreenNames.ViewReservation.route){
+                backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: 0
             ReservationConfirmationScreen(
+                id = id,
                 onRegresar = {nav.navigate(ScreenNames.Home.route)},
                 aHome = {nav.navigate(ScreenNames.Home.route)},
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
@@ -86,7 +90,9 @@ fun App(modifier: Modifier = Modifier){
                 aLogin = {nav.navigate(ScreenNames.Login.route)}
             )
         }
-        composable(route = ScreenNames.ViewAllResevations.route){}
+        composable(route = ScreenNames.ViewAllReservations.route){
+            ViewAllReservationsScreen(navController = nav)
+        }
         composable(route = ScreenNames.News.route){
             NewsScreen(
                 aHome = {nav.navigate(ScreenNames.Home.route)},
@@ -96,8 +102,15 @@ fun App(modifier: Modifier = Modifier){
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.Profile.route){}
-        composable(route = ScreenNames.ViewTransport.route){
-            ViewTransportationScreen(onRegresar = {nav.navigate(ScreenNames.Home.route)})
+        composable(route = ScreenNames.ViewTransport.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ){
+                backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            ViewTransportationScreen(
+                id = id,
+                onRegresar = {nav.navigate(ScreenNames.Home.route)}
+            )
         }
     }
 }
