@@ -58,6 +58,11 @@ fun ReservationConfirmationScreen(
                     onClick = { aReservas() }
                 )
                 NavigationDrawerItem(
+                    label = { Text("Noticias") },
+                    selected = false,
+                    onClick = { aNoticias() }
+                )
+                NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },
                     selected = false,
                     onClick = { aLogin() }

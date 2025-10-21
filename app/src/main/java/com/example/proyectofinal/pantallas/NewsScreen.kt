@@ -76,7 +76,7 @@ fun NewsScreen(aHome: () -> Unit = {}, aViaje: () -> Unit = {}, aLogin: () -> Un
             }
         }
     ) {
-        Scaffold(topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Notificaciones") }
+        Scaffold(topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title= "Notificaciones") }
         ) { innerPadding ->
             Column(modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)

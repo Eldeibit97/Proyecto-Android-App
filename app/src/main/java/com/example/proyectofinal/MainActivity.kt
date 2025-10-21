@@ -23,7 +23,7 @@ import com.example.proyectofinal.pantallas.ReservationRequestScreen
 import com.example.proyectofinal.modelos.getAlbergues
 import com.example.proyectofinal.pantallas.NewsScreen
 import com.example.proyectofinal.pantallas.ReservationConfirmationScreen
-import com.example.proyectofinal.pantallas.ViewTransportation
+import com.example.proyectofinal.pantallas.ViewTransportationScreen
 import com.example.proyectofinal.ui.theme.ProyectoFinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +60,7 @@ fun App(modifier: Modifier = Modifier){
         }
         composable(route = ScreenNames.TransportRequest.route){
             ReservaTransporteScreen(avanzar = {nav.navigate(ScreenNames.ViewTransport.route)},
+                aHome = {nav.navigate(ScreenNames.Home.route)},
                 aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
                 aNoticias = { nav.navigate(ScreenNames.News.route) },
@@ -93,12 +94,14 @@ fun App(modifier: Modifier = Modifier){
         composable(route = ScreenNames.News.route){
             NewsScreen(
                 aHome = {nav.navigate(ScreenNames.Home.route)},
+                aReservas = { nav.navigate(ScreenNames.ViewReservation.route) },
                 aViaje = {nav.navigate(ScreenNames.TransportRequest.route)},
+                aNoticias = { nav.navigate(ScreenNames.News.route)},
                 aLogin = {nav.navigate(ScreenNames.Login.route)})
         }
         composable(route = ScreenNames.Profile.route){}
         composable(route = ScreenNames.ViewTransport.route){
-            ViewTransportation(onRegresar = {nav.navigate(ScreenNames.Home.route)})
+            ViewTransportationScreen(onRegresar = {nav.navigate(ScreenNames.Home.route)})
         }
     }
 }
