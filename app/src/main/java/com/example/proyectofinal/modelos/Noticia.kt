@@ -1,18 +1,63 @@
 package com.example.proyectofinal.modelos
 
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
+
 data class Noticia(
-    val id : Int,
-    val titulo : String,
-    val descripcion : String,
-    val cuerpo : String,
-    val tipo : String,
-    val autor : String,
-    val fecha : String,
+    val id: String = "",
+    val titulo: String = "",
+    val descripcion: String = "",
+    val cuerpo: String = "",
+    val tipo: String = "",
+    val autor: String = "",
+    val fecha: String = ""
 )
 
-fun getNoticias(): List<Noticia> = listOf(
-    Noticia(id = 1, titulo = "Noticia 1", descripcion = "Descripción de la noticia 1", cuerpo = "Cuerpo de la noticia 1", tipo = "Aviso", autor = "Autor 1", fecha = "2023-10-10"),
-    Noticia(id = 2, titulo = "Noticia 2", descripcion = "Descripción de la noticia 2", cuerpo = "Cuerpo de la noticia 2", tipo = "Evento",autor = "Autor 2", fecha = "2023-10-11"),
-    Noticia(id = 3, titulo = "Noticia 3", descripcion = "Descripción de la noticia 3", cuerpo = "Cuerpo de la noticia 3", tipo = "Aviso", autor = "Autor 3", fecha = "2023-10-01"),
-    Noticia(id = 4, titulo = "Noticia 4", descripcion = "Descripción de la noticia 4", cuerpo = "Cuerpo de la noticia 4", tipo = "Evento", autor = "Autor 4", fecha = "2023-10-02")
-)
+/**
+ * 🔹 Obtiene todas las noticias desde Firestore (colección "news")
+ * ordenadas por fechaCreacion (de más reciente a más antigua)
+ */
+suspend fun fetchNoticias(): List<Noticia> {
+    val db = FirebaseFirestore.getInstance()
+    val listaNoticias = mutableListOf<Noticia>()
+
+    try {
+        val snapshot = db.collection("news")
+            .orderBy("fechaCreacion", Query.Direction.DESCENDING)
+            .get()
+            .await()
+
+        for (doc in snapshot.documents) {
+            val titulo = doc.getString("titulo") ?: ""
+            val descripcion = doc.getString("descripcion") ?: ""
+            val cuerpo = doc.getString("cuerpo") ?: ""
+            val tipo = doc.getString("tipo") ?: ""
+            val autor = doc.getString("autor") ?: ""
+            val fechaField = doc.get("fechaCreacion")
+
+            val fechaString = when (fechaField) {
+                is Timestamp -> fechaField.toDate().toString()
+                is String -> fechaField
+                else -> "Sin fecha"
+            }
+
+            listaNoticias.add(
+                Noticia(
+                    id = doc.id,
+                    titulo = titulo,
+                    descripcion = descripcion,
+                    cuerpo = cuerpo,
+                    tipo = tipo,
+                    autor = autor,
+                    fecha = fechaString
+                )
+            )
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    return listaNoticias
+}
