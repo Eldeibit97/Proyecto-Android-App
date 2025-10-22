@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -49,50 +47,43 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinal.utils.FirebaseUtils
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterCard(avanzar : () -> Unit =  {}, celular: (Long) -> Unit = {}, nombre: (String) -> Unit = {},
-                 apellido: (String) -> Unit = {}, nacimiento: (Long?) -> Unit = {}, genero: (String) -> Unit = {},
-                 respuesta: (Boolean) -> Unit = {}){
-
-import com.example.proyectofinal.utils.FirebaseUtils
-
-@Preview(showBackground = true)
-@Composable
 fun RegisterCard(
-    avanzar: () -> Unit = {},
-    celular: (Long) -> Unit = {},
-    nombre: (String) -> Unit = {},
-    apellido: (String) -> Unit = {},
-    nacimiento: (String) -> Unit = {},
-    genero: (String) -> Unit = {},
-    respuesta: (Boolean) -> Unit = {}
+    registrar: () -> Unit = {}
 ) {
     var nombre by rememberSaveable { mutableStateOf("") }
     var apellido by rememberSaveable { mutableStateOf("") }
-    var nacimiento by rememberSaveable { mutableStateOf<Long?>(null) }
+    var nacimiento by rememberSaveable { mutableStateOf("") }
     var selGenero by rememberSaveable { mutableStateOf("") }
-    var celular by rememberSaveable { mutableStateOf("") }
-    var avisoRespuesta by rememberSaveable { mutableStateOf(false) }
+    var telefono by rememberSaveable { mutableStateOf("") }
+    var aceptoTerminos by rememberSaveable { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
+    var errorFecha by rememberSaveable { mutableStateOf(false) }
+    var errorTelefono by rememberSaveable { mutableStateOf(false) }
 
-    val datePickerState= rememberDatePickerState()
-    val permitirRegistro by remember { derivedStateOf { validarRegistro(nombre, apellido, nacimiento, selGenero, celular, avisoRespuesta) } }
+    val context = LocalContext.current
+    // Regex para formato de fecha dd/mm/aaaa
+    val regexFecha = Regex("^([0][1-9]|[12][0-9]|3[01])/([0][1-9]|1[0-2])/([1-2][0-9]{3})\$")
+    // 🔹 Regex internacional E.164 (+código y hasta 15 dígitos)
+    val regexTelefono = Regex("^\\+[1-9]\\d{6,14}\$")
+    val datePickerState = rememberDatePickerState()
+    val permitirRegistro by remember { derivedStateOf { validarRegistro(nombre, apellido, nacimiento, selGenero, telefono, aceptoTerminos) } }
 
-    Card (modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()){
-        if(showDatePicker) {
+    Card(modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()) {
+        if (showDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showDatePicker = false },
                 confirmButton = {
                     Button(onClick = {
                         val selectDate = datePickerState.selectedDateMillis
-                        if(selectDate != null) {
-                            nacimiento = selectDate
-                            nacimiento(selectDate)
+                        if (selectDate != null) {
+                            nacimiento = formatDateString(selectDate) ?: ""
                         }
                         showDatePicker = false
                     }) {
@@ -107,29 +98,6 @@ fun RegisterCard(
                 DatePicker(state = datePickerState)
             }
         }
-        Column(modifier = Modifier.padding(16.dp).fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
-            Text(text = "Únete a nuestra familia",
-                fontSize = 18.sp)
-    var telefono by rememberSaveable { mutableStateOf("") }
-    var aceptoTerminos by rememberSaveable { mutableStateOf(false) }
-    var errorFecha by rememberSaveable { mutableStateOf(false) }
-    var errorTelefono by rememberSaveable { mutableStateOf(false) }
-
-    val context = LocalContext.current
-
-    // Regex para formato de fecha dd/mm/aaaa
-    val regexFecha = Regex("^([0][1-9]|[12][0-9]|3[01])/([0][1-9]|1[0-2])/([1-2][0-9]{3})\$")
-
-    // 🔹 Regex internacional E.164 (+código y hasta 15 dígitos)
-    val regexTelefono = Regex("^\\+[1-9]\\d{6,14}\$")
-
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 15.dp)
-            .fillMaxWidth()
-    ) {
         Column(
             modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -154,7 +122,13 @@ fun RegisterCard(
                     value = nombre,
                     onValueChange = { nombre = it },
                     modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = { Icon(Icons.Outlined.Person, contentDescription = "Nombre", modifier = Modifier.size(17.dp)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Person,
+                            contentDescription = "Nombre",
+                            modifier = Modifier.size(17.dp)
+                        )
+                    },
                     label = { Text("Nombre") },
                     shape = RoundedCornerShape(10.dp)
                 )
@@ -167,18 +141,29 @@ fun RegisterCard(
                     value = apellido,
                     onValueChange = { apellido = it },
                     modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = { Icon(Icons.Outlined.Person, contentDescription = "Apellido", modifier = Modifier.size(17.dp)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Person,
+                            contentDescription = "Apellido",
+                            modifier = Modifier.size(17.dp)
+                        )
+                    },
                     label = { Text("Apellido") },
                     shape = RoundedCornerShape(10.dp)
                 )
 
                 Spacer(modifier = Modifier.padding(5.dp))
-                Text(text = "Fecha de nacimiento",
+                Text(
+                    text = "Fecha de nacimiento",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp)
+                    fontSize = 14.sp
+                )
                 OutlinedTextField(
-                    value = nacimiento?.let {formatDateString(it)} ?: "",
-                    onValueChange = {},
+                    value = nacimiento,
+                    onValueChange = {
+                        nacimiento = it
+                        errorFecha = it.isNotEmpty() && !regexFecha.matches(it)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .pointerInput(nacimiento) {
@@ -191,33 +176,26 @@ fun RegisterCard(
                                 }
                             }
                         },
-                    leadingIcon ={Icon(imageVector = Icons.Outlined.CalendarMonth,
-                        contentDescription = "Fecha de nacimiento",
-                        modifier = Modifier.size(17.dp))},
-                    label = { Text(text = "Fecha de nacimiento") },
-                    placeholder = {Text(text="DD/MM/AAAA", fontSize = 15.sp)},
-                    shape = RoundedCornerShape(10.dp)
-                )
-
-                // Fecha de nacimiento
-                Text("Fecha de nacimiento", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = nacimiento,
-                    onValueChange = {
-                        nacimiento = it
-                        errorFecha = it.isNotEmpty() && !regexFecha.matches(it)
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.CalendarMonth,
+                            contentDescription = "Fecha de nacimiento",
+                            modifier = Modifier.size(17.dp)
+                        )
                     },
-                    modifier = Modifier.fillMaxWidth(),
                     isError = errorFecha,
-                    leadingIcon = { Icon(Icons.Outlined.CalendarMonth, contentDescription = "Nacimiento", modifier = Modifier.size(17.dp)) },
-                    label = { Text("Fecha de nacimiento") },
-                    placeholder = { Text("dd/mm/aaaa", fontSize = 15.sp) },
+                    label = { Text(text = "Fecha de nacimiento") },
+                    placeholder = { Text(text = "DD/MM/AAAA", fontSize = 15.sp) },
                     shape = RoundedCornerShape(10.dp)
                 )
                 if (errorFecha) {
-                    Text("Formato inválido. Usa dd/mm/aaaa", color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(start = 8.dp, top = 2.dp))
+                    Text(
+                        "Formato inválido. Usa dd/mm/aaaa",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 8.dp, top = 2.dp)
+                    )
                 }
-
                 Spacer(modifier = Modifier.padding(5.dp))
 
                 // Género
@@ -229,7 +207,6 @@ fun RegisterCard(
                     Row(
                         modifier = Modifier.padding(4.dp).clickable {
                             selGenero = "Masculino"
-                            genero("Masculino")
                         },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -240,7 +217,6 @@ fun RegisterCard(
                     Row(
                         modifier = Modifier.padding(4.dp).clickable {
                             selGenero = "Femenino"
-                            genero("Femenino")
                         },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -262,44 +238,74 @@ fun RegisterCard(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     isError = errorTelefono,
-                    leadingIcon = { Icon(Icons.Outlined.Phone, contentDescription = "Teléfono", modifier = Modifier.size(17.dp)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Phone,
+                            contentDescription = "Teléfono",
+                            modifier = Modifier.size(17.dp)
+                        )
+                    },
                     label = { Text("Teléfono") },
-                    placeholder = { Text("Ejemplo: +521234567890 o +14155552671", fontSize = 13.sp) },
+                    placeholder = {
+                        Text(
+                            "Ejemplo: +521234567890 o +14155552671",
+                            fontSize = 13.sp
+                        )
+                    },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )
                 if (errorTelefono) {
-                    Text("Formato inválido. Usa formato internacional: +(lada)8123456789", color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(start = 8.dp, top = 2.dp))
+                    Text(
+                        "Formato inválido. Usa formato internacional: +(lada)8123456789",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 8.dp, top = 2.dp)
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.padding(10.dp))
-            AvisoPrivacidadModal(respuesta = respuesta, avisoRespuesta = {avisoRespuesta = it})
-            AvisoPrivacidadModal(respuesta = { aceptoTerminos = it })
+            AvisoPrivacidadModal(avisoRespuesta = { aceptoTerminos = it })
             Spacer(modifier = Modifier.padding(6.dp))
-
             // Botón de registro
             Button(
                 onClick = {
                     if (!aceptoTerminos) {
-                        Toast.makeText(context, "Debes aceptar los términos y condiciones para continuar", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "Debes aceptar los términos y condiciones para continuar",
+                            Toast.LENGTH_LONG
+                        ).show()
                         return@Button
                     }
 
                     if (nombre.isBlank() || apellido.isBlank() || nacimiento.isBlank() ||
                         selGenero.isBlank() || telefono.isBlank()
                     ) {
-                        Toast.makeText(context, "Por favor completa todos los campos", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "Por favor completa todos los campos",
+                            Toast.LENGTH_LONG
+                        ).show()
                         return@Button
                     }
 
                     if (!regexFecha.matches(nacimiento)) {
-                        Toast.makeText(context, "La fecha debe tener formato dd/mm/aaaa", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "La fecha debe tener formato dd/mm/aaaa",
+                            Toast.LENGTH_LONG
+                        ).show()
                         return@Button
                     }
 
                     if (!regexTelefono.matches(telefono)) {
-                        Toast.makeText(context, "El número debe estar en formato internacional (+<código><número>)", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "El número debe estar en formato internacional (+<código><número>)",
+                            Toast.LENGTH_LONG
+                        ).show()
                         return@Button
                     }
 
@@ -310,8 +316,12 @@ fun RegisterCard(
                         genero = selGenero,
                         telefono = telefono,
                         onSuccess = {
-                            Toast.makeText(context, "Usuario registrado ✅", Toast.LENGTH_SHORT).show()
-                            avanzar()
+                            Toast.makeText(
+                                context,
+                                "Usuario registrado ✅",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            registrar()
                         },
                         onError = { msg ->
                             Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
@@ -332,8 +342,8 @@ fun RegisterCard(
     }
 }
 
-private fun validarRegistro(nombre: String, apellido: String, nacimiento: Long?, genero: String, celular: String, respuesta: Boolean): Boolean {
-    return (!(nombre.isEmpty() && apellido.isEmpty() && (nacimiento == null) && genero.isEmpty() && celular.isEmpty()) && respuesta)
+private fun validarRegistro(nombre: String, apellido: String, nacimiento: String, genero: String, celular: String, respuesta: Boolean): Boolean {
+    return (nombre.isNotBlank() && apellido.isNotBlank() && nacimiento.isNotBlank() && genero.isNotBlank() && celular.isNotBlank() && respuesta)
 }
 
 private fun formatDateString(millis: Long): String {

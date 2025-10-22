@@ -119,4 +119,3 @@ fun App(modifier: Modifier = Modifier){
         }
     }
 }
-

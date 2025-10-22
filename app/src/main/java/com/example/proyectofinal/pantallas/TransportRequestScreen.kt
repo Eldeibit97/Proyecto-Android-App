@@ -20,11 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +38,6 @@ import kotlinx.coroutines.launch
 fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: () -> Unit = {},
                             aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
                             aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
-    val scrollState = rememberScrollState()
     val context = LocalContext.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -119,7 +114,7 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: () -> Unit = {},
                                 uid = "usuario_no_autenticado",
                                 onSuccess = {
                                     Toast.makeText(context, "Solicitud enviada ✅", Toast.LENGTH_SHORT).show()
-                                    avanzar()
+                                    solicitar()
                                 },
                                 onError = { msg ->
                                     Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
@@ -148,7 +143,6 @@ fun saveTransportRequest(
     onError: (String) -> Unit
 ) {
     val db = FirebaseUtils.db
-
     val solicitud = hashMapOf(
         "origen" to origen,
         "destino" to destino,
@@ -158,7 +152,6 @@ fun saveTransportRequest(
         "timestamp" to System.currentTimeMillis(),
         "uid" to uid
     )
-
     db.collection("transporte")
         .add(solicitud)
         .addOnSuccessListener { onSuccess() }

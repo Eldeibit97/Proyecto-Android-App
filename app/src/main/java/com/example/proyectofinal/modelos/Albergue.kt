@@ -8,6 +8,8 @@ data class Albergue(
     val cuota : Int = 30,
     val disponibilidad : Int = 25,
     val direccion : String = "Av. Eugenio Garza Sada, Tecnologico, Monterrey",
+    val latitud : Double = 0.0,
+    val longitud : Double = 0.0,
     val servicios : List<Servicios> = listOf(Servicios(id = 1, nombre = "Duchas", precio = "10"),
         Servicios(id = 2, nombre = "Desayuno", precio = "15"), Servicios(id = 3, nombre = "Comida", precio = "15"),
         Servicios(id = 4, nombre = "Cena", precio = "10"),Servicios(id = 5, nombre = "Lavanderia", precio = "10"),

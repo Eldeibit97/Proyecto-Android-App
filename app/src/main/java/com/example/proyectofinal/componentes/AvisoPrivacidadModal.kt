@@ -32,7 +32,7 @@ import com.example.proyectofinal.modelos.Aviso_Privacidad
 
 @Preview(showBackground = true)
 @Composable
-fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}, avisoRespuesta: (Boolean) -> Unit = {}){
+fun AvisoPrivacidadModal(avisoRespuesta: (Boolean) -> Unit = {}){
     var showDialog by remember { mutableStateOf(false) }
     var aceptar by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -54,7 +54,7 @@ fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}, avisoRespuesta: (Boo
                     }
                 },
                 containerColor = MaterialTheme.colorScheme.surface,
-                confirmButton = { Button(onClick = { aceptar = true ; respuesta(true) ; avisoRespuesta(true) ; showDialog = false }){ Text(text = "Aceptar") } },
+                confirmButton = { Button(onClick = { aceptar = true ; avisoRespuesta(true) ; showDialog = false }){ Text(text = "Aceptar") } },
                 dismissButton = { Button(onClick = { showDialog = false }){ Text(text = "Cancelar") } },
             )
         }
@@ -63,7 +63,7 @@ fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}, avisoRespuesta: (Boo
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = aceptar, onCheckedChange = { aceptar = it; respuesta(it); avisoRespuesta(it)})
+            Checkbox(checked = aceptar, onCheckedChange = { aceptar = it ; avisoRespuesta(it)})
             Text(
                 text = "Acepto los términos de uso del servicio y politica de privacidad de Caritas de Monterrey.",
                 modifier = Modifier.padding(horizontal = 2.dp),

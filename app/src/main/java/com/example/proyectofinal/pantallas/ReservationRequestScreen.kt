@@ -27,14 +27,9 @@ import kotlinx.coroutines.launch
 @Preview(showBackground = true)
 @Composable
 fun ReservationRequestScreen(
-    albergue: Albergue? = Albergue(),
-    onRegresar: () -> Unit = {},
-    onReservar: () -> Unit = {},
-    aViaje: () -> Unit = {},
-    aHome: () -> Unit = {},
-    aLogin: () -> Unit = {},
-    aReservas: () -> Unit = {},
-    aNoticias: () -> Unit = {}
+    albergue: Albergue? = Albergue(), onRegresar: () -> Unit = {},
+    onReservar: () -> Unit = {}, aViaje: () -> Unit = {}, aHome: () -> Unit = {},
+    aLogin: () -> Unit = {}, aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
     // Estados locales
     var totalPersonas by remember { mutableIntStateOf(0) }
@@ -144,7 +139,7 @@ fun ReservationRequestScreen(
                         Button(
                             onClick = {
                                 if (albergue != null) {
-                                    val nombreAlbergue = albergue.nombre ?: "Sin nombre"
+                                    val nombreAlbergue = albergue.nombre
 
                                     saveReservation(
                                         nombre = nombre,

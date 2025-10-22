@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun LoginCard(avanzar: () -> Unit = {}, celular: (Long) -> Unit = {}){
+fun LoginCard(Login: () -> Unit = {}, celular: (Long) -> Unit = {}){
 
     var celular by remember { mutableStateOf("") }
 
@@ -78,7 +78,7 @@ fun LoginCard(avanzar: () -> Unit = {}, celular: (Long) -> Unit = {}){
                     shape = RoundedCornerShape(10.dp))
             }
             Spacer(modifier = Modifier.padding(5.dp))
-            Button(onClick = avanzar,
+            Button(onClick = Login,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),

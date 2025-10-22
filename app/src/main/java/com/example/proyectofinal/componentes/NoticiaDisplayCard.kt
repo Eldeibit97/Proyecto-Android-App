@@ -57,7 +57,6 @@ fun NoticiaDisplayCard(
         Column(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 18.dp, end = 8.dp)
         ) {
-            // Encabezado: tipo y fecha
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -78,9 +77,6 @@ fun NoticiaDisplayCard(
                         fontSize = 14.sp
                     )
                 }
-                Text(text = "${noticia.hora} · ${noticia.fecha}",
-                    fontWeight = FontWeight(250),
-
                 Text(
                     text = "Publicado: ${noticia.fecha}",
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -112,24 +108,8 @@ fun NoticiaDisplayCard(
                     fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(3.dp))
                 Text(text = noticia.descripcion,
-
-            // Contenido principal
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = noticia.titulo,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = noticia.descripcion,
                     textAlign = TextAlign.Justify,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
+                    modifier = Modifier.fillMaxWidth())
                 AnimatedVisibility(visible = visible) {
                     Text(
                         text = noticia.cuerpo,

@@ -27,7 +27,6 @@ import com.example.proyectofinal.componentes.TopBar
 import com.example.proyectofinal.modelos.PersonalInfo
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewTransportationScreen(

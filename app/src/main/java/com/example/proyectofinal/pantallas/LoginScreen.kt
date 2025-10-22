@@ -38,13 +38,6 @@ import com.example.proyectofinal.componentes.RegisterCard
 @Preview(showBackground = true)
 @Composable
 fun LoginScreen(aHome:() -> Unit = {}) {
-    var celular by remember { mutableStateOf("") }
-    var nombre by remember { mutableStateOf("") }
-    var apellidos by remember { mutableStateOf("") }
-    var nacimiento by rememberSaveable { mutableStateOf<Long?>(null) }
-    var genero by remember { mutableStateOf("") }
-    var apRespuesta by remember { mutableStateOf(false) }
-
     var section by rememberSaveable { mutableStateOf(value = "") }
     var enableB by rememberSaveable { mutableStateOf(value = false) }
     val scrollState = rememberScrollState()
@@ -96,11 +89,9 @@ fun LoginScreen(aHome:() -> Unit = {}) {
         }
         Spacer(modifier = Modifier.padding(4.dp))
         if(section == "register"){
-            RegisterCard(avanzar = aHome, celular = {celular = it.toString()}, nombre = {nombre = it},
-                apellido = {apellidos = it}, nacimiento = {nacimiento = it}, genero = {genero = it},
-                respuesta = {apRespuesta = it})
+            RegisterCard(registrar = aHome)
         }else{
-            LoginCard(avanzar = aHome, celular = {celular = it.toString()})
+            LoginCard(Login = aHome)
         }
         Spacer(modifier = Modifier.padding(18.dp))
         Text(text = "©2025 Caritas de Monterrey - Transformando vidas",
