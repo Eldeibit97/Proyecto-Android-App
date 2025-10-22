@@ -97,8 +97,8 @@ fun HomeScreen(albergues: List<Albergue> = getAlbergues(),
                     items(items = albergues) { albergue ->
                         AlbergueInfoCard(
                             albergue = albergue,
-                            avanzar = aTransport,
-                            reservar = aReservation
+                            aSolicitarViaje = aTransport,
+                            aReservar = aReservation
                         )
                     }
                 }
