@@ -49,6 +49,12 @@ import androidx.compose.ui.window.Dialog
 import com.example.proyectofinal.R
 import com.example.proyectofinal.modelos.Albergue
 import com.example.proyectofinal.modelos.getAlbergues
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MarkerInfoWindow
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 
 @Preview(showBackground = true)
 @Composable
@@ -56,6 +62,14 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                      aSolicitarViaje: () -> Unit = {},
                      aReservar: (Albergue) -> Unit = {}){
     var showDialog by remember { mutableStateOf(false) }
+    // 📍 Coordenadas de los tres albergues
+    val posada = LatLng(albergue.latitud, albergue.longitud)
+
+    // 📍 Posición inicial de la cámara (centrada en Monterrey)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(posada, 11.5f)
+    }
+
     if (showDialog) {
         Dialog(onDismissRequest = { showDialog = false }) {
             Card(shape = RoundedCornerShape(16.dp)) {
@@ -63,13 +77,18 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                     .fillMaxWidth()
                     .padding(start = 15.dp, end = 15.dp, top = 15.dp)
                 ) {
-                    Image(painter = painterResource(id = R.drawable.location),
-                        contentDescription = "Foto del mapa",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
-                        contentScale = ContentScale.Crop
-                    )
+                    GoogleMap(
+                        modifier = Modifier.fillMaxWidth().height(300.dp),
+                        cameraPositionState = cameraPositionState
+                    ) {
+                        // 📍 Marker 1: Posada del Peregrino
+                        MarkerInfoWindow(
+                            state = rememberMarkerState(position = posada),
+                            title = "Posada del Peregrino",
+                            snippet = "Albergue en Monterrey"
+                        )
+                    }
+
                 }
                 Row(modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 8.dp)
@@ -216,7 +235,7 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                     modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.padding(5.dp))
                 Text(text = "Cómo llegar",
-                        fontSize = 18.sp)
+                    fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.padding(all = 2.dp))
             Button(onClick = { aReservar(albergue) },

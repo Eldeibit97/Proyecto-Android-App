@@ -94,7 +94,7 @@ fun LoginScreen(aHome:() -> Unit = {}) {
             LoginCard(Login = aHome)
         }
         Spacer(modifier = Modifier.padding(18.dp))
-        Text(text = "©2025 Caritas de Monterrey - Transformando vidas",
+        Text(text = "©️2025 Caritas de Monterrey - Transformando vidas",
             modifier = Modifier.padding(horizontal = 10.dp),
             fontSize = 14.sp,
             textAlign = TextAlign.Center)
