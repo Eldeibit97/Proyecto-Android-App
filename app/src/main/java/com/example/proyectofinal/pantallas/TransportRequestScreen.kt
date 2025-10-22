@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: () -> Unit = {},
+fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {},
                             aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
                             aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
     val context = LocalContext.current
@@ -112,9 +112,9 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: () -> Unit = {},
                                 personas = personas,
                                 notas = notas,
                                 uid = "usuario_no_autenticado",
-                                onSuccess = {
+                                onSuccess = { createdId ->
                                     Toast.makeText(context, "Solicitud enviada ✅", Toast.LENGTH_SHORT).show()
-                                    solicitar()
+                                    solicitar(createdId)
                                 },
                                 onError = { msg ->
                                     Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
@@ -139,9 +139,10 @@ fun saveTransportRequest(
     personas: String,
     notas: String,
     uid: String,
-    onSuccess: () -> Unit,
+    onSuccess: (Int) -> Unit,
     onError: (String) -> Unit
 ) {
+    val createdId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
     val db = FirebaseUtils.db
     val solicitud = hashMapOf(
         "origen" to origen,
@@ -154,6 +155,6 @@ fun saveTransportRequest(
     )
     db.collection("transporte")
         .add(solicitud)
-        .addOnSuccessListener { onSuccess() }
+        .addOnSuccessListener { onSuccess(createdId) }
         .addOnFailureListener { e -> onError(e.message ?: "Error al enviar solicitud") }
 }
