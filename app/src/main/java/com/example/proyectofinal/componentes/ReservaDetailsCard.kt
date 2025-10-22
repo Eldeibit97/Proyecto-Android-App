@@ -57,7 +57,14 @@ import java.util.TimeZone
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Unit = {}, salida: (Long?) -> Unit = {}, total: (Int) -> Unit = {}){
+fun ReservaDetailsCard(
+    albergue: Albergue? = Albergue(),
+    llegada: (Long?) -> Unit = {},
+    salida: (Long?) -> Unit = {},
+    total: (Int) -> Unit = {},
+    hombresCallback: (Int) -> Unit = {},    // 🔹 Nuevo callback
+    mujeresCallback: (Int) -> Unit = {}     // 🔹 Nuevo callback
+) {
     var personasHombres by rememberSaveable { mutableIntStateOf(0) }
     var personasMujeres by rememberSaveable { mutableIntStateOf(0) }
     var fechaLlegada by remember { mutableStateOf<Long?>(null) }
@@ -66,41 +73,60 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
     var tipoReserva by remember { mutableStateOf(true) }
     var showDatePickerLlegada by remember { mutableStateOf(false) }
     var showDatePickerSalida by remember { mutableStateOf(false) }
+
     val datePickerStateLlegada = rememberDatePickerState()
     val datePickerStateSalida = rememberDatePickerState()
-    val validarTotalPersonas by remember { derivedStateOf { when(tipoReserva){
-        false -> ValidarTotal(albergue = albergue,hombres = personasHombres, mujeres = personasMujeres)
-        else -> false
-    } }}
-    if(validarTotalPersonas){
-        total(personasHombres + personasMujeres)
-    }else{
-        total(1)
+
+    val validarTotalPersonas by remember {
+        derivedStateOf {
+            when (tipoReserva) {
+                false -> ValidarTotal(albergue = albergue, hombres = personasHombres, mujeres = personasMujeres)
+                else -> false
+            }
+        }
     }
+
+    if (tipoReserva) {
+        // Si es individual
+        total(1)
+    } else {
+        // Si es grupal
+        total(personasHombres + personasMujeres)
+    }
+
+
+    // 🔹 Cada vez que cambian, avisamos al componente padre
+    hombresCallback(personasHombres)
+    mujeresCallback(personasMujeres)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 15.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 15.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp)
+        ) {
             Column(modifier = Modifier.padding(vertical = 10.dp)) {
-                // Fechas
                 Text(
                     text = "Selecciona las fechas para reservar",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
-                if(showDatePickerLlegada) {
+
+                // --- Date pickers ---
+                if (showDatePickerLlegada) {
                     DatePickerDialog(
                         onDismissRequest = { showDatePickerLlegada = false },
                         confirmButton = {
                             Button(onClick = {
                                 val selectDate = datePickerStateLlegada.selectedDateMillis
-                                if(selectDate != null) {
+                                if (selectDate != null) {
                                     fechaLlegada = selectDate
                                     llegada(selectDate)
                                 }
@@ -113,18 +139,17 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
                             Button(onClick = { showDatePickerLlegada = false }) {
                                 Text(text = "cancelar")
                             }
-                        }) {
-                        DatePicker(state = datePickerStateLlegada)
-                    }
+                        }
+                    ) { DatePicker(state = datePickerStateLlegada) }
                 }
 
-                if(showDatePickerSalida) {
+                if (showDatePickerSalida) {
                     DatePickerDialog(
                         onDismissRequest = { showDatePickerSalida = false },
                         confirmButton = {
                             Button(onClick = {
                                 val selectDate = datePickerStateSalida.selectedDateMillis
-                                if(selectDate != null) {
+                                if (selectDate != null) {
                                     fechaSalida = selectDate
                                     salida(selectDate)
                                 }
@@ -137,23 +162,20 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
                             Button(onClick = { showDatePickerSalida = false }) {
                                 Text(text = "cancelar")
                             }
-                        }) {
-                        DatePicker(state = datePickerStateSalida)
-                    }
+                        }
+                    ) { DatePicker(state = datePickerStateSalida) }
                 }
+
                 OutlinedTextField(
-                    value = fechaLlegada?.let {formatDateString(it)} ?: "",
+                    value = fechaLlegada?.let { formatDateString(it) } ?: "",
                     onValueChange = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .pointerInput(fechaLlegada) {
                             awaitEachGesture {
                                 awaitFirstDown(pass = PointerEventPass.Initial)
-                                val upEvent =
-                                    waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                                if (upEvent != null) {
-                                    showDatePickerLlegada = true
-                                }
+                                val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                                if (upEvent != null) showDatePickerLlegada = true
                             }
                         },
                     leadingIcon = {
@@ -167,8 +189,10 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
                     placeholder = { Text(text = "DD/MM/AAAA", fontSize = 15.sp) },
                     shape = RoundedCornerShape(10.dp)
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
-                if(!tipoSalida) {
+
+                if (!tipoSalida) {
                     OutlinedTextField(
                         value = fechaSalida?.let { formatDateString(it) } ?: "",
                         onValueChange = {},
@@ -177,11 +201,8 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
                             .pointerInput(fechaSalida) {
                                 awaitEachGesture {
                                     awaitFirstDown(pass = PointerEventPass.Initial)
-                                    val upEvent =
-                                        waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                                    if (upEvent != null) {
-                                        showDatePickerSalida = true
-                                    }
+                                    val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                                    if (upEvent != null) showDatePickerSalida = true
                                 }
                             },
                         leadingIcon = {
@@ -196,108 +217,98 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
                         shape = RoundedCornerShape(10.dp)
                     )
                 }
-                Row(modifier = Modifier.fillMaxWidth(),
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically){
-                    Text(text = "Salida indefinida",
-                        modifier = Modifier.padding(horizontal = 6.dp),
-                        fontSize = 14.sp)
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Salida indefinida", modifier = Modifier.padding(horizontal = 6.dp), fontSize = 14.sp)
                     Switch(checked = tipoSalida, onCheckedChange = { tipoSalida = it })
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Tipo de Reserva",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-                Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween){
-                    Row(modifier = Modifier.padding(horizontal = 14.dp)
-                        .clickable(onClick = { tipoReserva = true}),
-                        verticalAlignment = Alignment.CenterVertically){
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp).clickable(onClick = { tipoReserva = true }),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         RadioButton(selected = tipoReserva, onClick = null)
-                        Text(text = "Individual",
-                            modifier = Modifier.padding(horizontal = 6.dp),
-                            fontSize = 14.sp)
+                        Text(text = "Individual", modifier = Modifier.padding(horizontal = 6.dp), fontSize = 14.sp)
                     }
-                    Row(modifier = Modifier.padding(horizontal = 14.dp)
-                        .clickable(onClick = { tipoReserva = false}),
-                        verticalAlignment = Alignment.CenterVertically){
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp).clickable(onClick = { tipoReserva = false }),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         RadioButton(selected = !tipoReserva, onClick = null)
-                        Text(text = "Grupal",
-                            modifier = Modifier.padding(horizontal = 6.dp),
-                            fontSize = 14.sp)
+                        Text(text = "Grupal", modifier = Modifier.padding(horizontal = 6.dp), fontSize = 14.sp)
                     }
                 }
+
                 Spacer(modifier = Modifier.height(2.dp))
-                if(!tipoReserva) {
-                    Text(
-                        text = "Cantidad de personas",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
-                    )
+
+                if (!tipoReserva) {
+                    Text(text = "Cantidad de personas", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+
                     if (validarTotalPersonas) {
                         Text(
-                            text = "El total de personas excede la capacidad disponible del albergue. Total (${(albergue?.capacidad ?: 60) - (albergue?.disponibilidad ?: 0)})",
+                            text = "El total de personas excede la capacidad disponible del albergue.",
                             modifier = Modifier.padding(6.dp),
-                            fontSize = 16.sp,
+                            fontSize = 15.sp,
                             color = Color.Red
                         )
                     }
+
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Hombres",
-                        fontSize = 14.sp
-                    )
+                    Text(text = "Hombres", fontSize = 14.sp)
                     OutlinedTextField(
-                        value = when(personasHombres){
-                            0 -> ""
-                            else -> personasHombres.toString()
+                        value = if (personasHombres == 0) "" else personasHombres.toString(),
+                        onValueChange = {
+                            personasHombres = it.toIntOrNull() ?: 0
+                            hombresCallback(personasHombres)
                         },
                         isError = validarTotalPersonas,
-                        onValueChange = { personasHombres = it.toIntOrNull() ?: 0 },
                         leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Person,
-                                contentDescription = "Personas",
-                                modifier = Modifier.size(17.dp)
-                            )
+                            Icon(imageVector = Icons.Outlined.Person, contentDescription = "Personas", modifier = Modifier.size(17.dp))
                         },
                         label = { Text(text = "¿Cuántos hombres?") },
-                        placeholder = { Text(text = "", fontSize = 15.sp) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
+
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "Mujeres",
-                        fontSize = 14.sp
-                    )
+
+                    Text(text = "Mujeres", fontSize = 14.sp)
                     OutlinedTextField(
-                        value = when(personasMujeres){
-                            0 -> ""
-                            else -> personasMujeres.toString()
+                        value = if (personasMujeres == 0) "" else personasMujeres.toString(),
+                        onValueChange = {
+                            personasMujeres = it.toIntOrNull() ?: 0
+                            mujeresCallback(personasMujeres)
                         },
-                        onValueChange = { personasMujeres = it.toIntOrNull() ?: 0},
                         isError = validarTotalPersonas,
                         leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Person,
-                                contentDescription = "Personas",
-                                modifier = Modifier.size(17.dp)
-                            )
+                            Icon(imageVector = Icons.Outlined.Person, contentDescription = "Personas", modifier = Modifier.size(17.dp))
                         },
                         label = { Text(text = "¿Cuántas mujeres?") },
-                        placeholder = { Text(text = "", fontSize = 15.sp) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+
                 Spacer(modifier = Modifier.padding(6.dp))
                 Text(
-                    text = "Las fechas de reserva pueden ajustarse según la disponibilidad del albergue. Consulte los términos en recepción.",
+                    text = "Las fechas de reserva pueden ajustarse según disponibilidad del albergue.",
                     modifier = Modifier.padding(horizontal = 12.dp),
                     textAlign = TextAlign.Justify,
                     fontSize = 13.sp
@@ -306,6 +317,7 @@ fun ReservaDetailsCard(albergue: Albergue? = Albergue(), llegada: (Long?) -> Uni
         }
     }
 }
+
 
 private fun ValidarTotal(albergue: Albergue? = Albergue(),hombres: Int, mujeres: Int) : Boolean{
     if(hombres < 0 && mujeres < 0) return false
