@@ -100,7 +100,7 @@ fun LoginScreen(aHome:() -> Unit = {}) {
                 apellido = {apellidos = it}, nacimiento = {nacimiento = it}, genero = {genero = it},
                 respuesta = {apRespuesta = it})
         }else{
-            LoginCard(avanzar = aHome, celular = {celular = it.toString()})
+            LoginCard(avanzar = aHome, celularCallback = { celular = it.toString() })
         }
         Spacer(modifier = Modifier.padding(18.dp))
         Text(text = "©2025 Caritas de Monterrey - Transformando vidas",
