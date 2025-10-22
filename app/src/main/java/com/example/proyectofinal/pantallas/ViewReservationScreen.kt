@@ -71,7 +71,7 @@ fun ReservationConfirmationScreen(
         }
     ){
         Scaffold(
-            topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Confirmación de Reserva") }
+            topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Detalles de Reserva") }
         ) { innerPadding ->
             val scrollState = rememberScrollState()
 

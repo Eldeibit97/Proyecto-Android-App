@@ -40,19 +40,11 @@ fun PrecioServicioCard(albergue: Albergue? = Albergue()){
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.weight(1f))
-                        if(servicio.precio == "Gratis") {
-                            Text(
-                                text = servicio.precio,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }else{
-                            Text(
-                                text = "$${servicio.precio}",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                        Text(
+                            text = if(servicio.precio == "Gratis") servicio.precio else "$${servicio.precio}",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
             }

@@ -16,10 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarToday
-import androidx.compose.material.icons.outlined.FormatListBulleted
-import androidx.compose.material.icons.outlined.Hotel
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +23,6 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -99,12 +94,12 @@ fun ViewAllReservationsScreen (navController: NavController,
                 )
                 NavigationDrawerItem(
                     label = {Text(text = "Reservas")},
-                    selected = false,
+                    selected = true,
                     onClick = { aReservas() }
                 )
                 NavigationDrawerItem(
                     label = { Text("Noticias") },
-                    selected = true,
+                    selected = false,
                     onClick = { aNoticias() }
                 )
                 NavigationDrawerItem(

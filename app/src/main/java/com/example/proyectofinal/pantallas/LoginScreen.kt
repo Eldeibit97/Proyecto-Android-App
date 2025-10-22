@@ -41,7 +41,7 @@ fun LoginScreen(aHome:() -> Unit = {}) {
     var celular by remember { mutableStateOf("") }
     var nombre by remember { mutableStateOf("") }
     var apellidos by remember { mutableStateOf("") }
-    var nacimiento by remember { mutableStateOf("") }
+    var nacimiento by rememberSaveable { mutableStateOf<Long?>(null) }
     var genero by remember { mutableStateOf("") }
     var apRespuesta by remember { mutableStateOf(false) }
 

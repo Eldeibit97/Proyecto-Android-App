@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,7 +32,7 @@ import com.example.proyectofinal.modelos.Aviso_Privacidad
 
 @Preview(showBackground = true)
 @Composable
-fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}){
+fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}, avisoRespuesta: (Boolean) -> Unit = {}){
     var showDialog by remember { mutableStateOf(false) }
     var aceptar by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -52,7 +53,8 @@ fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}){
                         Text(text = Aviso_Privacidad)
                     }
                 },
-                confirmButton = { Button(onClick = { aceptar = true ; showDialog = false }){ Text(text = "Aceptar") } },
+                containerColor = MaterialTheme.colorScheme.surface,
+                confirmButton = { Button(onClick = { aceptar = true ; respuesta(true) ; avisoRespuesta(true) ; showDialog = false }){ Text(text = "Aceptar") } },
                 dismissButton = { Button(onClick = { showDialog = false }){ Text(text = "Cancelar") } },
             )
         }
@@ -61,7 +63,7 @@ fun AvisoPrivacidadModal(respuesta: (Boolean) -> Unit = {}){
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = aceptar, onCheckedChange = { aceptar = it; respuesta(it)})
+            Checkbox(checked = aceptar, onCheckedChange = { aceptar = it; respuesta(it); avisoRespuesta(it)})
             Text(
                 text = "Acepto los términos de uso del servicio y politica de privacidad de Caritas de Monterrey.",
                 modifier = Modifier.padding(horizontal = 2.dp),
