@@ -11,6 +11,13 @@ data class Reserva(
     val numPersonas : Int = 1,
 )
 
+data class TransporteReservation(
+    val id: Int,
+    val origen: String,
+    val destino: String,
+    val fecha: String,
+    val pasajeros: Int,
+)
 fun getReservas(): List<Reserva> = listOf(
     Reserva(id = 1, nombreAlbergue = "Albergue ", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 1000000, fechaLlegada = "2023-01-01", fechaSalida = "2023-01-02", numPersonas = 1),
     Reserva(id = 2, nombreAlbergue = "Albergue 2", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 1000000, fechaLlegada = "2023-01-01", fechaSalida = "2023-01-02", numPersonas = 2),

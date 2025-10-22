@@ -1,12 +1,16 @@
 package com.example.proyectofinal.componentes
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -19,11 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectofinal.R
 import com.example.proyectofinal.modelos.Noticia
 
 @Preview(showBackground = true)
@@ -70,6 +78,8 @@ fun NoticiaDisplayCard(
                         fontSize = 14.sp
                     )
                 }
+                Text(text = "${noticia.hora} · ${noticia.fecha}",
+                    fontWeight = FontWeight(250),
 
                 Text(
                     text = "Publicado: ${noticia.fecha}",
@@ -77,6 +87,31 @@ fun NoticiaDisplayCard(
                     fontSize = 10.sp
                 )
             }
+            Spacer(modifier = Modifier.height(2.dp))
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.profile),
+                    contentDescription = "Foto del autor",
+                    modifier = Modifier
+                        .height(35.dp)
+                        .width(35.dp)
+                        .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Text(text = noticia.autor,
+                    modifier = Modifier.padding(top = 9.dp),
+                    fontSize = 15.sp)
+            }
+            //Spacer(modifier = Modifier.height(4.dp))
+            Column(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalAlignment = Alignment.Start) {
+                Text(text = noticia.titulo,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(3.dp))
+                Text(text = noticia.descripcion,
 
             // Contenido principal
             Column(

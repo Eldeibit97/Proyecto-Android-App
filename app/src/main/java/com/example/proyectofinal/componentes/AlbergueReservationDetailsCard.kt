@@ -124,9 +124,9 @@ fun AlbergueReservationDetailsCard(modifier: Modifier = Modifier,
                     albergue?.servicios?.forEach { servicio ->
                         Card(modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
                             shape = RoundedCornerShape(size = 6.dp),
-                            colors = CardColors(MaterialTheme.colorScheme.background,
+                            colors = CardColors(MaterialTheme.colorScheme.onTertiary,
                                 MaterialTheme.colorScheme.onBackground,
-                                MaterialTheme.colorScheme.background,
+                                MaterialTheme.colorScheme.onTertiary,
                                 MaterialTheme.colorScheme.onBackground),
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground)){
                             Text(text = servicio.nombre,

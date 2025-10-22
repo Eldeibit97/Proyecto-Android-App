@@ -3,6 +3,7 @@ package com.example.proyectofinal.componentes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -30,15 +31,20 @@ fun PrecioServicioCard(albergue: Albergue? = Albergue()){
             Text(text = "Informacion de servicios",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold)
-            Column(modifier = Modifier.padding(vertical = 4.dp)){
+            Column(modifier = Modifier.padding(vertical = 4.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally){
                 albergue?.servicios?.forEach { servicio ->
                     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)){
                         Text(text = servicio.nombre,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold)
-                        Text(text = servicio.precio,
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = if(servicio.precio == "Gratis") servicio.precio else "$${servicio.precio}",
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.SemiBold)
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
             }

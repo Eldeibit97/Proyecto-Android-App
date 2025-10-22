@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReservationConfirmationScreen(
     albergue: Albergue = Albergue(), reserva: Reserva = getReservas()[1], onRegresar: () -> Unit = {},
-    aViaje: () -> Unit = {}, aHome: () -> Unit = {},
+    aViaje: () -> Unit = {}, aHome: () -> Unit = {}, id: Int,
     aLogin: () -> Unit = {}, aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -58,6 +58,11 @@ fun ReservationConfirmationScreen(
                     onClick = { aReservas() }
                 )
                 NavigationDrawerItem(
+                    label = { Text("Noticias") },
+                    selected = false,
+                    onClick = { aNoticias() }
+                )
+                NavigationDrawerItem(
                     label = { Text("Cerrar Sesion") },
                     selected = false,
                     onClick = { aLogin() }
@@ -66,7 +71,7 @@ fun ReservationConfirmationScreen(
         }
     ){
         Scaffold(
-            topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Confirmación de Reserva") }
+            topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Detalles de Reserva") }
         ) { innerPadding ->
             val scrollState = rememberScrollState()
 
@@ -246,7 +251,7 @@ fun ResumenItem(icon: ImageVector, titulo: String, valor: String) {
 @Composable
 fun PreviewReservationConfirmationScreen() {
     ReservationConfirmationScreen(
-
+        id = 1
     )
 }
 

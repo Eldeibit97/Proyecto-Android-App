@@ -10,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -128,12 +127,10 @@ fun ReservationRequestScreen(
                         Button(
                             onClick = onRegresar,
                             shape = RoundedCornerShape(5.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFFFFF),
-                                contentColor = Color(0xFF03A9F4),
-                                disabledContainerColor = Color(0xFF9A9A9A),
-                                disabledContentColor = Color(0xFFFFFFFF)
-                            )
+                            colors = ButtonColors(MaterialTheme.colorScheme.onTertiary,
+                                MaterialTheme.colorScheme.onBackground,
+                                MaterialTheme.colorScheme.onTertiary,
+                                MaterialTheme.colorScheme.onBackground)
                         ) {
                             Text(
                                 text = "Cancelar y regresar",
