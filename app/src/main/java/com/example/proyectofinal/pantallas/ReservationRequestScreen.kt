@@ -6,6 +6,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CarCrash
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Hotel
+import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,7 +50,7 @@ fun ReservationRequestScreen(
         if (cardOriginalVisible) 0f else 1f,
         label = "scale"
     )
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val scope = rememberCoroutineScope()
 
     // Datos del usuario (estos podrían venir de Firebase Auth o un formulario)
@@ -57,11 +63,46 @@ fun ReservationRequestScreen(
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.width(150.dp)) {
                 Text("Opciones", modifier = Modifier.padding(16.dp))
-                NavigationDrawerItem(label = { Text("Home") }, selected = false, onClick = { aHome() })
-                NavigationDrawerItem(label = { Text("Viaje") }, selected = false, onClick = { aViaje() })
-                NavigationDrawerItem(label = { Text("Reservas") }, selected = false, onClick = { aReservas() })
-                NavigationDrawerItem(label = { Text("Noticias") }, selected = false, onClick = { aNoticias() })
-                NavigationDrawerItem(label = { Text("Cerrar Sesión") }, selected = false, onClick = { aLogin() })
+                NavigationDrawerItem(
+                    label = { Text("Home") },
+                    icon = { Icon(imageVector = Icons.Outlined.Home,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    selected = false, onClick = { aHome() },
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Viaje") },
+                    selected = false, onClick = { aViaje() },
+                    icon = { Icon(imageVector = Icons.Outlined.CarCrash,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Reservas") },
+                    selected = false, onClick = { aReservas() },
+                    icon = { Icon(imageVector = Icons.Outlined.Hotel,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Noticias") },
+                    selected = false, onClick = { aNoticias() },
+                    icon = { Icon(imageVector = Icons.Outlined.Newspaper,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Cerrar Sesión") },
+                    selected = false, onClick = { aLogin() },
+                    icon = { Icon(imageVector = Icons.Outlined.Logout,
+                    contentDescription = "Celular",
+                    modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
             }
         }
     ) {

@@ -5,11 +5,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CarCrash
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Hotel
+import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -54,11 +61,46 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.width(150.dp)) {
                 Text("Opciones", modifier = Modifier.padding(16.dp))
-                NavigationDrawerItem(label = { Text("Home") }, selected = false, onClick = { aHome() })
-                NavigationDrawerItem(label = { Text("Viaje") }, selected = true, onClick = { aViaje() })
-                NavigationDrawerItem(label = { Text("Reservas") }, selected = false, onClick = { aReservas() })
-                NavigationDrawerItem(label = { Text("Noticias") }, selected = false, onClick = { aNoticias() })
-                NavigationDrawerItem(label = { Text("Cerrar Sesión") }, selected = false, onClick = { aLogin() })
+                NavigationDrawerItem(
+                    label = { Text("Home") },
+                    icon = { Icon(imageVector = Icons.Outlined.Home,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    selected = false, onClick = { aHome() },
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Viaje") },
+                    selected = true, onClick = { aViaje() },
+                    icon = { Icon(imageVector = Icons.Outlined.CarCrash,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Reservas") },
+                    selected = false, onClick = { aReservas() },
+                    icon = { Icon(imageVector = Icons.Outlined.Hotel,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Noticias") },
+                    selected = false, onClick = { aNoticias() },
+                    icon = { Icon(imageVector = Icons.Outlined.Newspaper,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text("Cerrar Sesión") },
+                    selected = false, onClick = { aLogin() },
+                    icon = { Icon(imageVector = Icons.Outlined.Logout,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
+                )
             }
         }
     ) {
