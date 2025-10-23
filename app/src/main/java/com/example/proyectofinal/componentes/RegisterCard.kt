@@ -246,12 +246,7 @@ fun RegisterCard(
                         )
                     },
                     label = { Text("Teléfono") },
-                    placeholder = {
-                        Text(
-                            "Ejemplo: +521234567890 o +14155552671",
-                            fontSize = 13.sp
-                        )
-                    },
+                    placeholder = { Text(text = "Ejemplo: +521234567890 o +14155552671", fontSize = 13.sp) },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )
