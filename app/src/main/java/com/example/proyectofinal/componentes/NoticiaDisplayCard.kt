@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -88,13 +89,17 @@ fun NoticiaDisplayCard(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-
-                Text(
-                    text = noticia.descripcion,
+                Spacer(modifier = Modifier.padding(6.dp))
+                Text(text = "Descripción",
                     textAlign = TextAlign.Justify,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
+                    fontWeight = FontWeight.Light,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth())
+                Spacer(modifier = Modifier.padding(1.dp))
+                Text(text = noticia.descripcion,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.fillMaxWidth())
+                Spacer(modifier = Modifier.padding(6.dp))
                 AnimatedVisibility(visible = visible) {
                     Text(
                         text = noticia.cuerpo,
