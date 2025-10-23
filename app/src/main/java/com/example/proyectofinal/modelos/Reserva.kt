@@ -19,7 +19,7 @@ data class TransporteReservation(
     val pasajeros: Int,
 )
 fun getReservas(): List<Reserva> = listOf(
-    Reserva(id = 1, nombreAlbergue = "Albergue ", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 1000000, fechaLlegada = "2023-01-01", fechaSalida = "2023-01-02", numPersonas = 1),
-    Reserva(id = 2, nombreAlbergue = "Albergue 2", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 1000000, fechaLlegada = "2023-01-01", fechaSalida = "2023-01-02", numPersonas = 2),
-    Reserva(id = 3, nombreAlbergue = "Albergue 3", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 1, fechaLlegada = "2023-01-01", fechaSalida = "2023-01-02", numPersonas = 3)
+    Reserva(id = 1, nombreAlbergue = "Albergue ", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8),
+    Reserva(id = 2, nombreAlbergue = "Albergue 2", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8),
+    Reserva(id = 3, nombreAlbergue = "Albergue 3", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8)
 )

@@ -58,22 +58,22 @@ fun ViewAllReservationsScreen (navController: NavController,
     val posadas = listOf(
         Reserva(
             id = 1,
-            nombreAlbergue = "Caritas Monterrey",
+            nombreAlbergue = "Posada del Peregrino",
             nombreResponsable = "Juan",
             apellidoResponsable = "Perez",
-            celular = 8123456789,
-            fechaLlegada = "1 Ene 2023",
-            fechaSalida = "2 Ene 2023",
-            numPersonas = 2
+            celular = 8113844318,
+            fechaLlegada = "23/10/2025",
+            fechaSalida = "26/10/2025",
+            numPersonas = 8
         )
     )
     val transportes = listOf(
         TransporteReservation(
             10,
-            "Central Camionera",
-            "Caritas Monterrey",
-            "1 Ene 2023, 08:30 AM",
-            2
+            "Tecnologico de Monterrey",
+            "Posada del Peregrino",
+            "23/10/2025, 19:00",
+            8
         )
     )
 

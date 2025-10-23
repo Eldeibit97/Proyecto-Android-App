@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showBackground = true)
 @Composable
-fun UsuarioReservationDetailsCard(nombre: String = "Ejemplo", telefono: Long = 100000000){
+fun UsuarioReservationDetailsCard(nombre: String = "Juan Perez", telefono: Long = 8113844318){
     Card(modifier = Modifier
         .fillMaxWidth().padding(horizontal = 15.dp)) {
         Column(

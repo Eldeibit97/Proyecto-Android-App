@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalDrawerSheet
@@ -39,6 +39,7 @@ fun HomeScreen(albergues: List<Albergue> = getAlbergues(),
                aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -75,7 +76,8 @@ fun HomeScreen(albergues: List<Albergue> = getAlbergues(),
         Scaffold(
             topBar = { TopBar(onDrawerClick = { scope.launch { drawerState.open() } }, title = "Ubicaciones") }
         ) { innerPadding ->
-            Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            Column(modifier = Modifier.fillMaxSize().padding(innerPadding)
+                .verticalScroll(scrollState)) {
                 MapsCard()
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 2.dp)
@@ -93,14 +95,12 @@ fun HomeScreen(albergues: List<Albergue> = getAlbergues(),
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                 }
-                LazyColumn() {
-                    items(items = albergues) { albergue ->
-                        AlbergueInfoCard(
-                            albergue = albergue,
-                            aSolicitarViaje = aTransport,
-                            aReservar = aReservation
-                        )
-                    }
+                albergues.forEach {  albergue ->
+                    AlbergueInfoCard(
+                        albergue = albergue,
+                        aSolicitarViaje = aTransport,
+                        aReservar = aReservation
+                    )
                 }
             }
         }
