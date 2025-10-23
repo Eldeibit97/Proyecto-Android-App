@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.VerifiedUser
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -96,7 +98,8 @@ fun LoginCard(Login: () -> Unit = {}, celularCallback: (Long) -> Unit = {}) {
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Teléfono (incluye lada, ej. +521234567890)") },
                     placeholder = { Text(text = "+52...", fontSize = 15.sp) },
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(10.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )
             } else {
                 OutlinedTextField(
