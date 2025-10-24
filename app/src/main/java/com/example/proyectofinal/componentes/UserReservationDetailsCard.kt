@@ -14,21 +14,54 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-@Preview(showBackground = true)
 @Composable
-fun UsuarioReservationDetailsCard(nombre: String = "Juan Perez", telefono: Long = 8113844318){
-    Card(modifier = Modifier
-        .fillMaxWidth().padding(horizontal = 15.dp)) {
+fun UsuarioReservationDetailsCard() {
+    // 🔹 Estados locales
+    var nombre by remember { mutableStateOf("Desconocido") }
+    var telefono by remember { mutableStateOf("0") }
+
+    // 🔹 Obtener usuario actual
+    val user = FirebaseAuth.getInstance().currentUser
+    val uid = user?.uid
+
+    // 🔹 Cargar datos de Firestore solo si hay usuario autenticado
+    LaunchedEffect(uid) {
+        if (uid != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(uid).get()
+                .addOnSuccessListener { doc ->
+                    if (doc.exists()) {
+                        nombre = doc.getString("nombre") ?: "Desconocido"
+                        telefono = doc.getString("telefono") ?: "0"
+                    }
+                }
+                .addOnFailureListener {
+                    nombre = "Desconocido"
+                    telefono = "0"
+                }
+        }
+    }
+
+    // 🔹 UI
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp)
+    ) {
         Column(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -38,9 +71,14 @@ fun UsuarioReservationDetailsCard(nombre: String = "Juan Perez", telefono: Long 
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.padding(4.dp))
-            Column(modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(),
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center) {
+                verticalArrangement = Arrangement.Center
+            ) {
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = {},
@@ -54,12 +92,11 @@ fun UsuarioReservationDetailsCard(nombre: String = "Juan Perez", telefono: Long 
                         )
                     },
                     label = { Text(text = "Nombre") },
-                    placeholder = { Text(text = "", fontSize = 15.sp) },
                     shape = RoundedCornerShape(10.dp)
                 )
                 Spacer(modifier = Modifier.padding(5.dp))
                 OutlinedTextField(
-                    value = telefono.toString(),
+                    value = telefono,
                     onValueChange = {},
                     readOnly = true,
                     leadingIcon = {
@@ -70,11 +107,16 @@ fun UsuarioReservationDetailsCard(nombre: String = "Juan Perez", telefono: Long 
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text(text = "Telefono") },
-                    placeholder = { Text(text = "ej. 5212345678", fontSize = 15.sp) },
+                    label = { Text(text = "Teléfono") },
                     shape = RoundedCornerShape(10.dp)
                 )
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewUsuarioReservationDetailsCard() {
+    UsuarioReservationDetailsCard()
 }

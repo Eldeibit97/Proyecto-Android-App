@@ -262,10 +262,7 @@ fun ReservationConfirmationScreen(
     }
 }
 
-@Composable
-fun ResumenItem(icon: ImageVector, titulo: String, valor: String) {
-    TODO("Not yet implemented")
-}
+
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
 @Composable

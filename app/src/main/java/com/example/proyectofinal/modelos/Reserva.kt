@@ -11,15 +11,16 @@ data class Reserva(
     val numPersonas : Int = 1,
 )
 
+fun getReservas(): List<Reserva> = listOf(
+    Reserva(id = 1, nombreAlbergue = "Albergue ", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8),
+    Reserva(id = 2, nombreAlbergue = "Albergue 2", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8),
+    Reserva(id = 3, nombreAlbergue = "Albergue 3", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8)
+)
+
 data class TransporteReservation(
     val id: Int,
     val origen: String,
     val destino: String,
     val fecha: String,
     val pasajeros: Int,
-)
-fun getReservas(): List<Reserva> = listOf(
-    Reserva(id = 1, nombreAlbergue = "Albergue ", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8),
-    Reserva(id = 2, nombreAlbergue = "Albergue 2", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8),
-    Reserva(id = 3, nombreAlbergue = "Albergue 3", nombreResponsable = "Juan", apellidoResponsable = "Perez", celular = 8113844318, fechaLlegada = "23-10-2025", fechaSalida = "26-10-2025", numPersonas = 8)
 )
