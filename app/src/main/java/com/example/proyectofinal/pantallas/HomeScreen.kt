@@ -18,8 +18,10 @@ import androidx.compose.material.icons.outlined.Hotel
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -27,7 +29,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,18 +45,23 @@ import com.example.proyectofinal.componentes.AlbergueInfoCard
 import com.example.proyectofinal.componentes.MapsCard
 import com.example.proyectofinal.componentes.TopBar
 import com.example.proyectofinal.modelos.Albergue
-import com.example.proyectofinal.modelos.getAlbergues
+import com.example.proyectofinal.modelos.fetchAlbergues
 import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(albergues: List<Albergue> = getAlbergues(),
-               aTransport: () -> Unit = {}, aReservation: (Albergue) -> Unit = {},
+fun HomeScreen(aTransport: () -> Unit = {}, aReservation: (Albergue) -> Unit = {},
                aHome: () -> Unit = {}, aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
                aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    var albergues by remember { mutableStateOf<List<Albergue>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    LaunchedEffect(Unit) {
+        albergues = fetchAlbergues()
+        isLoading = false
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -103,28 +116,43 @@ fun HomeScreen(albergues: List<Albergue> = getAlbergues(),
             Column(modifier = Modifier.fillMaxSize().padding(innerPadding)
                 .verticalScroll(scrollState)) {
                 MapsCard()
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 2.dp)
-                ) {
-                    Text(
-                        text = "Ubicaciones disponibles (3)",
-                        modifier = Modifier.padding(5.dp),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = "Selecciona una ubicación para realizar una reserva",
-                        modifier = Modifier.padding(5.dp),
-                        fontSize = 15.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
-                albergues.forEach {  albergue ->
-                    AlbergueInfoCard(
-                        albergue = albergue,
-                        aSolicitarViaje = aTransport,
-                        aReservar = aReservation
-                    )
+                when {
+                    isLoading -> {
+                        CircularProgressIndicator(modifier = Modifier.padding(top = 40.dp)
+                            .size(50.dp)
+                            .align(Alignment.CenterHorizontally))
+                    }
+                    albergues.isEmpty() ->{
+                        Text(
+                            text = "Error al cargar los albergues",
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(top = 40.dp)
+                        )
+                    }else -> {
+                        Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = "Ubicaciones disponibles (${albergues.size})",
+                                modifier = Modifier.padding(5.dp),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "Selecciona una ubicación para realizar una reserva",
+                                modifier = Modifier.padding(5.dp),
+                                fontSize = 15.sp
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+                        albergues.forEach {  albergue ->
+                            AlbergueInfoCard(
+                                albergue = albergue,
+                                aSolicitarViaje = aTransport,
+                                aReservar = aReservation
+                            )
+                        }
+                    }
                 }
             }
         }

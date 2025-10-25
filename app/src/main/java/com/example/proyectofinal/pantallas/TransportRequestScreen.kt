@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.componentes.TopBar
 import com.example.proyectofinal.componentes.TransportCard
 import com.example.proyectofinal.utils.FirebaseUtils
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +53,7 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {
     // 🔹 Estados del formulario
     var origen by remember { mutableStateOf("") }
     var destino by remember { mutableStateOf("") }
-    var momentoInicio by remember { mutableStateOf("Ahora") }
+    var momentoInicio by remember { mutableStateOf("") }
     var personas by remember { mutableStateOf("") }
     var notas by remember { mutableStateOf("") }
 
@@ -126,10 +127,10 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {
                     fontSize = 16.sp,
                     modifier = Modifier.padding(horizontal = 8.dp))
                 Spacer(modifier = Modifier.height(8.dp))
-                TransportCard()
+                TransportCard(origenCallback = {origen = it}, destinoCallback = {destino = it},
+                    momentoCallback = {momentoInicio = it}, personasCallback = {personas = it}, notasCallback = {notas = it})
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // 🔹 Botones
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -147,13 +148,14 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {
 
                     Button(
                         onClick = {
+                            val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: "Usuario no identificado"
                             saveTransportRequest(
                                 origen = origen,
                                 destino = destino,
                                 momentoInicio = momentoInicio,
                                 personas = personas,
                                 notas = notas,
-                                uid = "usuario_no_autenticado",
+                                uid = currentUid,
                                 onSuccess = { createdId ->
                                     Toast.makeText(context, "Solicitud enviada ✅", Toast.LENGTH_SHORT).show()
                                     solicitar(createdId)

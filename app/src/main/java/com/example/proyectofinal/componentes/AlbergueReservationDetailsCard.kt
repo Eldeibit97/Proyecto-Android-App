@@ -34,12 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.R
 import com.example.proyectofinal.modelos.Albergue
-import com.example.proyectofinal.modelos.getAlbergues
 
 @Preview(showBackground = true)
 @Composable
 fun AlbergueReservationDetailsCard(modifier: Modifier = Modifier,
-                                   albergue: Albergue? = getAlbergues()[1],
+                                   albergue: Albergue? = Albergue(),
                                    expand: Boolean = true){
     Card(modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),) {
@@ -83,7 +82,7 @@ fun AlbergueReservationDetailsCard(modifier: Modifier = Modifier,
                         contentDescription = "Celular",
                         modifier = Modifier.size(15.dp))
                     Text(
-                        text = "+52 ${albergue?.celular ?: 0}",
+                        text = if (albergue?.celular == 0L) "no disponible" else "${albergue?.celular}",
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 6.dp))
                 }

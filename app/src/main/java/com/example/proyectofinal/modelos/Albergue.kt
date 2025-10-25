@@ -1,12 +1,17 @@
 package com.example.proyectofinal.modelos
 
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
+
 data class Albergue(
     val id : Int = 0,
     val nombre : String = "Posada del Peregrino",
-    val celular : Long = 528113402208,
+    val celular : Long = 8113402208,
     val capacidad : Int = 60,
     val cuota : Int = 30,
-    val disponibilidad : Int = 52,
+    val disponibilidad : Int = 0,
     val direccion : String = "Franciso G. Sada, Av. Simón Bolívar 190, Deportivo Obispado, Chepevera, 64030 Monterrey, N.L.",
     val latitud : Double = 25.6833433710119,
     val longitud : Double = -100.34547089691362,
@@ -16,8 +21,41 @@ data class Albergue(
         Servicios(id = 6, nombre = "Consulta Medica", precio = "Gratis"), Servicios(id = 7, nombre = "Traslado", precio = "20"))
 )
 
-fun getAlbergues(): List<Albergue> = listOf<Albergue>(
-        Albergue(id = 1,nombre = "Posada del Peregrino", celular = 528113402208, disponibilidad = 30, latitud = 25.6833433710119,longitud = -100.34547089691362, direccion = "Franciso G. Sada, Av. Simón Bolívar 190, Deportivo Obispado, Chepevera, 64030 Monterrey, N.L."),
-        Albergue(id = 2,nombre = "Divina Providencia", celular = 6471270465, disponibilidad = 25,latitud = 25.668389672297707,longitud = -100.30311694417804, direccion = "Florencio Antillón 1223, Centro, 64000 Monterrey, N.L"),
-        Albergue(id = 3,nombre = "Apodaca", celular = 6471270465, disponibilidad = 45, latitud = 25.79156194467012,longitud = -100.13871492023976, direccion = "Av. Miguel Alemán S/N, 66627 N.L.")
-    )
+suspend fun fetchAlbergues(): List<Albergue> {
+    val db = FirebaseFirestore.getInstance()
+    val listaAlbergues = mutableListOf<Albergue>()
+
+    try {
+        val snapshot = db.collection("Albergues")
+            .orderBy("ID", Query.Direction.DESCENDING)
+            .get()
+            .await()
+
+        for (doc in snapshot.documents) {
+            val iD = doc.getLong("ID")?.toInt() ?: 0
+            val nombre = doc.getString("Nombre") ?: ""
+            val celular = doc.getLong("Celular")
+            val capacidad = doc.getLong("Capacidad")?.toInt() ?: 0
+            val cuota = doc.getLong("Cuota")?.toInt() ?: 0
+            val direccion = doc.getString("Dirección") ?: ""
+            val mapa = doc.getGeoPoint("Mapa") ?: GeoPoint(0.0, 0.0)
+
+            listaAlbergues.add(
+                Albergue(
+                    id = iD,
+                    nombre = nombre,
+                    celular = celular ?: 0,
+                    direccion = direccion,
+                    latitud = mapa.latitude,
+                    longitud = mapa.longitude,
+                    capacidad = capacidad,
+                    cuota = cuota,
+                )
+            )
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    return listaAlbergues
+}

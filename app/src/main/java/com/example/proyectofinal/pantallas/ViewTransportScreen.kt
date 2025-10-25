@@ -33,12 +33,13 @@ import com.example.proyectofinal.modelos.PersonalInfo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun ViewTransportationScreen(
     info: PersonalInfo = PersonalInfo(),aHome: () -> Unit = {},
     aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
     aReservas: () -> Unit = {}, aNoticias: () -> Unit = {},
-    onRegresar: () -> Unit = {}, id: Int
+    onRegresar: () -> Unit = {}, id: Int = 1
 ) {
     val scroll = rememberScrollState()
     val personas = 3
@@ -172,7 +173,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.nombre.isBlank()) "—" else info.nombre,
+                                                text = info.nombre.ifBlank { "—" },
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -192,7 +193,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.apellido.isBlank()) "—" else info.apellido,
+                                                text = info.apellido.ifBlank { "—" },
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -212,7 +213,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.telefono.isBlank()) "—" else info.telefono,
+                                                text = info.telefono.ifBlank { "—" },
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -242,7 +243,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.origen.isBlank()) "—" else info.origen,
+                                                text = info.origen.ifBlank { "—" },
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -284,7 +285,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.fecha.isBlank()) "—" else info.fecha,
+                                                text = info.fecha.ifBlank { "—" },
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -305,7 +306,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.hora.isBlank()) "—" else info.hora,
+                                                text = info.hora.ifBlank { "—" },
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -334,56 +335,7 @@ fun ViewTransportationScreen(
                                     }
                                 }
                             }
-                            Spacer(Modifier.height(10.dp))
-                            Text("Chofer", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                             Spacer(Modifier.height(4.dp))
-                            ElevatedCard(
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(10.dp)
-                            ) {
-                                Column(Modifier.padding(12.dp)) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Person,
-                                            contentDescription = null
-                                        )
-                                        Spacer(Modifier.width(10.dp))
-                                        Column {
-                                            Text(
-                                                "Nombre",
-                                                fontSize = 15.sp,
-                                                color = Color.Gray,
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                            Text(
-                                                text = if (info.nombreChofer.isBlank()) "—" else info.nombreChofer,
-                                                fontSize = 20.sp
-                                            )
-                                        }
-                                    }
-                                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Phone,
-                                            contentDescription = null
-                                        )
-                                        Spacer(Modifier.width(10.dp))
-                                        Column {
-                                            Text(
-                                                "Teléfono",
-                                                fontSize = 15.sp,
-                                                color = Color.Gray,
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                            Text(
-                                                text = if (info.telefono.isBlank()) "—" else info.telefono,
-                                                fontSize = 20.sp
-                                            )
-                                        }
-                                    }
-
-                                }
-                            }
                         }
                     }
                 }
@@ -403,15 +355,5 @@ fun ViewTransportationScreen(
                 }
             }
         }
-    }
-}
-
-
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 800)
-@Composable
-fun PreviewViewTransportation() {
-    MaterialTheme {
-        ViewTransportationScreen(id = 1)
     }
 }

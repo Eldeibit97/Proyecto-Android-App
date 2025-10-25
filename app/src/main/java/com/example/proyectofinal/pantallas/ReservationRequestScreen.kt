@@ -176,7 +176,8 @@ fun ReservationRequestScreen(
                             onClick = onRegresar,
                             shape = RoundedCornerShape(5.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.onTertiary
+                                containerColor = MaterialTheme.colorScheme.onTertiary,
+                                contentColor = MaterialTheme.colorScheme.onSurface
                             )
                         ) {
                             Text(

@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.proyectofinal.R
 import com.example.proyectofinal.modelos.Albergue
-import com.example.proyectofinal.modelos.getAlbergues
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -58,7 +56,7 @@ import com.google.maps.android.compose.rememberMarkerState
 
 @Preview(showBackground = true)
 @Composable
-fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
+fun AlbergueInfoCard(albergue: Albergue = Albergue(),
                      aSolicitarViaje: () -> Unit = {},
                      aReservar: (Albergue) -> Unit = {}){
     var showDialog by remember { mutableStateOf(false) }
@@ -84,7 +82,7 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                         // 📍 Marker 1: Posada del Peregrino
                         MarkerInfoWindow(
                             state = rememberMarkerState(position = posada),
-                            title = "Posada del Peregrino",
+                            title = albergue.nombre,
                             snippet = "Albergue en Monterrey"
                         )
                     }
@@ -162,7 +160,7 @@ fun AlbergueInfoCard(albergue: Albergue = getAlbergues()[1],
                 Icon(imageVector = Icons.Outlined.Phone,
                     contentDescription = "Celular",
                     modifier = Modifier.size(15.dp))
-                Text(text = "+52 ${albergue.celular}",
+                Text(text = if (albergue.celular == 0L) "no disponible" else "${albergue.celular}",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 6.dp))
