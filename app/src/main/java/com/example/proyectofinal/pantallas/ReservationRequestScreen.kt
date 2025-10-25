@@ -7,7 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.CarCrash
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Hotel
+import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,69 +27,61 @@ import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.componentes.*
 import com.example.proyectofinal.modelos.Albergue
 import com.example.proyectofinal.utils.FirebaseUtils
+import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun ReservationRequestScreen(
-    albergue: Albergue? = Albergue(),
-    onRegresar: () -> Unit = {},
-    onReservar: () -> Unit = {},
-    aViaje: () -> Unit = {},
-    aHome: () -> Unit = {},
-    aLogin: () -> Unit = {},
-    aReservas: () -> Unit = {},
-    aNoticias: () -> Unit = {}
+    albergue: Albergue? = Albergue(), onRegresar: () -> Unit = {},
+    onReservar: () -> Unit = {}, aViaje: () -> Unit = {}, aHome: () -> Unit = {},
+    aLogin: () -> Unit = {}, aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
-    val context = LocalContext.current
-    val scrollState = rememberScrollState()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-
     // Estados locales
     var totalPersonas by remember { mutableIntStateOf(0) }
     var llegada by remember { mutableStateOf<Long?>(null) }
     var salida by remember { mutableStateOf<Long?>(null) }
-    var hombres by remember { mutableIntStateOf(0) }
-    var mujeres by remember { mutableIntStateOf(0) }
+    var hombres by remember { mutableIntStateOf(0) }   // ✅ ahora dentro del Composable
+    var mujeres by remember { mutableIntStateOf(0) }   // ✅
     var cardOriginalVisible by remember { mutableStateOf(true) }
 
+
+    val context = LocalContext.current
     val persistentCardScale by animateFloatAsState(
         if (cardOriginalVisible) 0f else 1f,
         label = "scale"
     )
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    // 🔹 Datos del usuario autenticado
-    var nombre by remember { mutableStateOf("Desconocido") }
-    var apellido by remember { mutableStateOf("Desconocido") }
-    var celular by remember { mutableStateOf("0") }
-    var uid by remember { mutableStateOf("sin_usuario") }
+    var nombre by remember { mutableStateOf("") }
+    var apellido by remember { mutableStateOf("") }
+    var celular by remember { mutableStateOf("") }
 
-    // 🔹 Cargar datos del usuario autenticado desde Firebase
     LaunchedEffect(Unit) {
-        val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        uid = user?.uid ?: "sin_usuario"
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user?.uid
 
-        if (uid != "sin_usuario") {
+        if (uid != null) {
             val db = FirebaseFirestore.getInstance()
-            db.collection("users").document(uid).get()
-                .addOnSuccessListener { doc ->
-                    if (doc.exists()) {
-                        nombre = doc.getString("nombre") ?: "Desconocido"
-                        apellido = doc.getString("apellido") ?: "Desconocido"
-                        celular = doc.getString("telefono") ?: "0"
-                    }
+            try {
+                val snapshot = db.collection("users").document(uid).get().await()
+                if (snapshot.exists()) {
+                    nombre = snapshot.getString("nombre") ?: ""
+                    apellido = snapshot.getString("apellido") ?: ""
+                    celular = snapshot.getString("telefono") ?: ""
                 }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Error al cargar datos del usuario", Toast.LENGTH_SHORT).show()
-                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -93,28 +89,43 @@ fun ReservationRequestScreen(
                 Text("Opciones", modifier = Modifier.padding(16.dp))
                 NavigationDrawerItem(
                     label = { Text("Home") },
-                    icon = { Icon(Icons.Outlined.Home, null, Modifier.size(17.dp)) },
-                    selected = false, onClick = { aHome() }
+                    icon = { Icon(imageVector = Icons.Outlined.Home,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    selected = false, onClick = { aHome() },
+                    shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Viaje") },
-                    icon = { Icon(Icons.Outlined.CarCrash, null, Modifier.size(17.dp)) },
-                    selected = false, onClick = { aViaje() }
+                    selected = false, onClick = { aViaje() },
+                    icon = { Icon(imageVector = Icons.Outlined.CarCrash,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Reservas") },
-                    icon = { Icon(Icons.Outlined.Hotel, null, Modifier.size(17.dp)) },
-                    selected = false, onClick = { aReservas() }
+                    selected = false, onClick = { aReservas() },
+                    icon = { Icon(imageVector = Icons.Outlined.Hotel,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Noticias") },
-                    icon = { Icon(Icons.Outlined.Newspaper, null, Modifier.size(17.dp)) },
-                    selected = false, onClick = { aNoticias() }
+                    selected = false, onClick = { aNoticias() },
+                    icon = { Icon(imageVector = Icons.Outlined.Newspaper,
+                        contentDescription = "Celular",
+                        modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesión") },
-                    icon = { Icon(Icons.Outlined.Logout, null, Modifier.size(17.dp)) },
-                    selected = false, onClick = { aLogin() }
+                    selected = false, onClick = { aLogin() },
+                    icon = { Icon(imageVector = Icons.Outlined.Logout,
+                    contentDescription = "Celular",
+                    modifier = Modifier.size(17.dp))},
+                    shape = RoundedCornerShape(0.dp)
                 )
             }
         }
@@ -127,6 +138,7 @@ fun ReservationRequestScreen(
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
+                val scrollState = rememberScrollState()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -144,12 +156,12 @@ fun ReservationRequestScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Datos del usuario (desde Firestore)
+                    // Datos del usuario (podrían venir de Firebase)
                     UsuarioReservationDetailsCard()
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Detalles de la reserva
+                    // Tarjeta de detalles de reserva
                     ReservaDetailsCard(
                         albergue = albergue,
                         llegada = { llegada = it },
@@ -175,10 +187,10 @@ fun ReservationRequestScreen(
                         Button(
                             onClick = onRegresar,
                             shape = RoundedCornerShape(5.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.onTertiary,
-                                contentColor = MaterialTheme.colorScheme.onSurface
-                            )
+                            colors = ButtonColors(MaterialTheme.colorScheme.onTertiary,
+                                MaterialTheme.colorScheme.onBackground,
+                                MaterialTheme.colorScheme.onTertiary,
+                                MaterialTheme.colorScheme.onBackground)
                         ) {
                             Text(
                                 text = "Cancelar y regresar",
@@ -193,6 +205,8 @@ fun ReservationRequestScreen(
                             onClick = {
                                 if (albergue != null) {
                                     val nombreAlbergue = albergue.nombre
+                                    val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: "sin_usuario"
+
                                     saveReservation(
                                         nombre = nombre,
                                         apellido = apellido,
@@ -203,7 +217,7 @@ fun ReservationRequestScreen(
                                         numPersonas = totalPersonas,
                                         hombres = hombres,
                                         mujeres = mujeres,
-                                        uid = uid,
+                                        uid = currentUid,
                                         onSuccess = {
                                             Toast.makeText(context, "Reserva guardada ✅", Toast.LENGTH_SHORT).show()
                                             onReservar()
@@ -228,7 +242,7 @@ fun ReservationRequestScreen(
                     }
                 }
 
-                // Tarjeta animada superior
+                // Tarjeta superior animada
                 AlbergueReservationDetailsCard(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -255,7 +269,7 @@ fun saveReservation(
     numPersonas: Int,
     hombres: Int,
     mujeres: Int,
-    uid: String,
+    uid: String = "sin_usuario",
     onSuccess: () -> Unit,
     onError: (String) -> Unit
 ) {

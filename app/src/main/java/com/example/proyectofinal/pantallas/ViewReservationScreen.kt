@@ -28,15 +28,14 @@ import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.componentes.AlbergueReservationDetailsCard
 import com.example.proyectofinal.modelos.Albergue
 import com.example.proyectofinal.modelos.Reserva
-import com.example.proyectofinal.modelos.getReservas
 import com.example.proyectofinal.componentes.TopBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationConfirmationScreen(
-    albergue: Albergue = Albergue(), reserva: Reserva = getReservas()[1], onRegresar: () -> Unit = {},
-    aViaje: () -> Unit = {}, aHome: () -> Unit = {}, id: Int,
+    albergue: Albergue = Albergue(), reserva: Reserva? = Reserva(), onRegresar: () -> Unit = {},
+    aViaje: () -> Unit = {}, aHome: () -> Unit = {},
     aLogin: () -> Unit = {}, aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -132,7 +131,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Nombre", fontSize = 15.sp, color = Color.Gray,fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = reserva.nombreResponsable,
+                                                text = reserva?.nombreResponsable ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -150,7 +149,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Apellido", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = reserva.apellidoResponsable,
+                                                text = reserva?.apellidoResponsable ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -166,7 +165,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Teléfono", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = reserva.celular.toString(),
+                                                text = reserva?.celular.toString(),
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -192,7 +191,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Llegada", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = reserva.fechaLlegada,
+                                                text = reserva?.fechaLlegada ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -208,7 +207,7 @@ fun ReservationConfirmationScreen(
                                         Column {
                                             Text("Salida", fontSize = 15.sp, color = Color.Gray, fontWeight = FontWeight.SemiBold)
                                             Text(
-                                                text = reserva.fechaSalida,
+                                                text = reserva?.fechaSalida ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -233,7 +232,7 @@ fun ReservationConfirmationScreen(
                                         Spacer(Modifier.width(10.dp))
                                         Column {
                                             Text(
-                                                text = reserva.numPersonas.toString(),
+                                                text = reserva?.numPersonas.toString(),
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -263,7 +262,7 @@ fun ReservationConfirmationScreen(
 }
 
 
-
+/**
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
 @Composable
 fun PreviewReservationConfirmationScreen() {
@@ -272,3 +271,4 @@ fun PreviewReservationConfirmationScreen() {
     )
 }
 
+**/

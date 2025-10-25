@@ -33,13 +33,12 @@ import com.example.proyectofinal.modelos.PersonalInfo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun ViewTransportationScreen(
-    info: PersonalInfo = PersonalInfo(),aHome: () -> Unit = {},
+    info: PersonalInfo? = PersonalInfo(),aHome: () -> Unit = {},
     aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
     aReservas: () -> Unit = {}, aNoticias: () -> Unit = {},
-    onRegresar: () -> Unit = {}, id: Int = 1
+    onRegresar: () -> Unit = {}
 ) {
     val scroll = rememberScrollState()
     val personas = 3
@@ -173,7 +172,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = info.nombre.ifBlank { "—" },
+                                                text = info?.nombre?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -193,7 +192,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = info.apellido.ifBlank { "—" },
+                                                text = info?.apellido?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -213,7 +212,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = info.telefono.ifBlank { "—" },
+                                                text = info?.telefono?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -243,7 +242,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = info.origen.ifBlank { "—" },
+                                                text = info?.origen?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -264,7 +263,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = if (info.destino.isBlank()) "—" else info.destino,
+                                                text = info?.destino?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -285,7 +284,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = info.fecha.ifBlank { "—" },
+                                                text = info?.fecha?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -306,7 +305,7 @@ fun ViewTransportationScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = info.hora.ifBlank { "—" },
+                                                text = info?.hora?.ifBlank { "—" } ?: "",
                                                 fontSize = 20.sp
                                             )
                                         }
@@ -357,3 +356,13 @@ fun ViewTransportationScreen(
         }
     }
 }
+
+
+/**
+@Preview(showBackground = true, widthDp = 360, heightDp = 800)
+@Composable
+fun PreviewViewTransportation() {
+    MaterialTheme {
+        ViewTransportationScreen(id = 1)
+    }
+} **/

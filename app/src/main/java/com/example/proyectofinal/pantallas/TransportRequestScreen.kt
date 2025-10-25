@@ -39,11 +39,13 @@ import com.example.proyectofinal.componentes.TransportCard
 import com.example.proyectofinal.utils.FirebaseUtils
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {},
+fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: () -> Unit = {},
                             aViaje: () -> Unit = {}, aLogin: () -> Unit = {},
                             aReservas: () -> Unit = {}, aNoticias: () -> Unit = {}) {
     val context = LocalContext.current
@@ -158,7 +160,7 @@ fun ReservaTransporteScreen(aHome: () -> Unit = {}, solicitar: (Int) -> Unit = {
                                 uid = currentUid,
                                 onSuccess = { createdId ->
                                     Toast.makeText(context, "Solicitud enviada ✅", Toast.LENGTH_SHORT).show()
-                                    solicitar(createdId)
+                                    solicitar()
                                 },
                                 onError = { msg ->
                                     Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
@@ -188,17 +190,41 @@ fun saveTransportRequest(
 ) {
     val createdId = (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
     val db = FirebaseUtils.db
-    val solicitud = hashMapOf(
-        "origen" to origen,
-        "destino" to destino,
-        "momentoInicio" to momentoInicio,
-        "personas" to personas,
-        "notas" to notas,
-        "timestamp" to System.currentTimeMillis(),
-        "uid" to uid
-    )
-    db.collection("transporte")
-        .add(solicitud)
-        .addOnSuccessListener { onSuccess(createdId) }
-        .addOnFailureListener { e -> onError(e.message ?: "Error al enviar solicitud") }
+    val fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
+    // 🔹 Paso 1: Buscar los datos del usuario autenticado
+    db.collection("users").document(uid).get()
+        .addOnSuccessListener { document ->
+            if (document.exists()) {
+                val nombre = document.getString("nombre") ?: "Desconocido"
+                val apellido = document.getString("apellido") ?: "Desconocido"
+                val telefono = document.getString("telefono") ?: "Sin número"
+
+                // 🔹 Paso 2: Crear el objeto de solicitud completo
+                val solicitud = hashMapOf(
+                    "origen" to origen,
+                    "destino" to destino,
+                    "momentoInicio" to momentoInicio,
+                    "personas" to personas,
+                    "notas" to notas,
+                    "timestamp" to fechaHoy,
+                    "uid" to uid,
+                    "nombre" to nombre,
+                    "apellido" to apellido,
+                    "telefono" to telefono
+                )
+
+                // 🔹 Paso 3: Guardar en Firestore
+                db.collection("transporte")
+                    .add(solicitud)
+                    .addOnSuccessListener { onSuccess(createdId) }
+                    .addOnFailureListener { e -> onError(e.message ?: "Error al enviar solicitud") }
+
+            } else {
+                onError("No se encontró información del usuario en la base de datos.")
+            }
+        }
+        .addOnFailureListener { e ->
+            onError("Error al obtener datos del usuario: ${e.message}")
+        }
 }

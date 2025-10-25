@@ -22,6 +22,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Hotel
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Newspaper
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +34,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,44 +51,40 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinal.componentes.TopBar
+import com.example.proyectofinal.modelos.Noticia
+import com.example.proyectofinal.modelos.PersonalInfo
 import kotlinx.coroutines.launch
 import com.example.proyectofinal.modelos.Reserva
-import com.example.proyectofinal.modelos.TransporteReservation
+import com.example.proyectofinal.modelos.fetchNoticias
+import com.example.proyectofinal.modelos.fetchReservas
+import com.example.proyectofinal.modelos.fetchTransporte
 import com.example.proyectofinal.navegacion.ScreenNames
 import com.example.proyectofinal.ui.components.PosadaCard
 import com.example.proyectofinal.ui.components.TransporteCard
 
 @Composable
-fun ViewAllReservationsScreen (navController: NavController,
-                               aHome: () -> Unit = {},
-                               aViaje: () -> Unit = {},
-                               aLogin: () -> Unit = {},
-                               aReservas: () -> Unit = {},
-                               aNoticias: () -> Unit = {}){
+fun ViewAllReservationsScreen(
+    navController: NavController,
+    aHome: () -> Unit = {},
+    aViaje: () -> Unit = {},
+    aLogin: () -> Unit = {},
+    aReservas: () -> Unit = {},
+    aNoticias: () -> Unit = {}
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val posadas = listOf(
-        Reserva(
-            id = 1,
-            nombreAlbergue = "Posada del Peregrino",
-            nombreResponsable = "Juan",
-            apellidoResponsable = "Perez",
-            celular = 8113844318,
-            fechaLlegada = "23/10/2025",
-            fechaSalida = "26/10/2025",
-            numPersonas = 8
-        )
-    )
-    val transportes = listOf(
-        TransporteReservation(
-            10,
-            "Tecnologico de Monterrey",
-            "Posada del Peregrino",
-            "23/10/2025, 19:00",
-            8
-        )
-    )
+    // 🔹 Estados de datos
+    var reservas by remember { mutableStateOf<List<Reserva>>(emptyList()) }
+    var transporte by remember { mutableStateOf<List<PersonalInfo>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    // 🔹 Carga única de datos del usuario autenticado
+    LaunchedEffect(Unit) {
+        reservas = fetchReservas()
+        transporte = fetchTransporte()
+        isLoading = false
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -90,142 +93,145 @@ fun ViewAllReservationsScreen (navController: NavController,
                 Text("Opciones", modifier = Modifier.padding(16.dp))
                 NavigationDrawerItem(
                     label = { Text("Home") },
-                    icon = { Icon(imageVector = Icons.Outlined.Home,
-                        contentDescription = "Celular",
-                        modifier = Modifier.size(17.dp))},
-                    selected = false, onClick = { aHome() },
+                    icon = { Icon(Icons.Outlined.Home, contentDescription = "Home", modifier = Modifier.size(17.dp)) },
+                    selected = false, onClick = aHome,
                     shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Viaje") },
-                    selected = false, onClick = { aViaje() },
-                    icon = { Icon(imageVector = Icons.Outlined.CarCrash,
-                        contentDescription = "Celular",
-                        modifier = Modifier.size(17.dp))},
+                    icon = { Icon(Icons.Outlined.CarCrash, contentDescription = "Viaje", modifier = Modifier.size(17.dp)) },
+                    selected = false, onClick = aViaje,
                     shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Reservas") },
-                    selected = true, onClick = { aReservas() },
-                    icon = { Icon(imageVector = Icons.Outlined.Hotel,
-                        contentDescription = "Celular",
-                        modifier = Modifier.size(17.dp))},
+                    icon = { Icon(Icons.Outlined.Hotel, contentDescription = "Reservas", modifier = Modifier.size(17.dp)) },
+                    selected = true, onClick = aReservas,
                     shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Noticias") },
-                    selected = false, onClick = { aNoticias() },
-                    icon = { Icon(imageVector = Icons.Outlined.Newspaper,
-                        contentDescription = "Celular",
-                        modifier = Modifier.size(17.dp))},
+                    icon = { Icon(Icons.Outlined.Newspaper, contentDescription = "Noticias", modifier = Modifier.size(17.dp)) },
+                    selected = false, onClick = aNoticias,
                     shape = RoundedCornerShape(0.dp)
                 )
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesión") },
-                    selected = false, onClick = { aLogin() },
-                    icon = { Icon(imageVector = Icons.Outlined.Logout,
-                        contentDescription = "Celular",
-                        modifier = Modifier.size(17.dp))},
+                    icon = { Icon(Icons.Outlined.Logout, contentDescription = "Cerrar Sesión", modifier = Modifier.size(17.dp)) },
+                    selected = false, onClick = aLogin,
                     shape = RoundedCornerShape(0.dp)
                 )
             }
         }
     ) {
-        Scaffold(topBar = {
-            TopBar(
-                onDrawerClick = { scope.launch { drawerState.open() } },
-                title = "Reservaciones"
-            )
-        }
+        Scaffold(
+            topBar = {
+                TopBar(
+                    onDrawerClick = { scope.launch { drawerState.open() } },
+                    title = "Reservaciones"
+                )
+            }
         ) { innerPadding ->
-            Column(modifier = Modifier.fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 15.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 15.dp),
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Row(modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = Icons.Outlined.CalendarToday,
-                            contentDescription = "Icono de notificaciones",
-                            modifier = Modifier.size(25.dp),
-                            tint = Color(0xFF00A6FF)
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.CalendarToday,
+                        contentDescription = "Icono de calendario",
+                        modifier = Modifier.size(25.dp),
+                        tint = Color(0xFF00A6FF)
+                    )
+                    Text(
+                        text = "Tus reservaciones",
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "Revisa y gestiona las reservas que has realizado",
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Justify
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.padding(top = 40.dp))
+                } else {
+                    // 🔹 POSADAS
+                    Text(
+                        text = "Posadas",
+                        style = MaterialTheme.typography.titleMedium.copy(fontSize = 22.sp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFFF7FAFE))
+                            .padding(vertical = 6.dp, horizontal = 8.dp)
+                    )
+
+                    if (reservas.isEmpty()) {
+                        Text(
+                            text = "No hay reservas de albergue registradas.",
+                            fontSize = 14.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(top = 16.dp)
                         )
-                        Text(text = "Tus reservaciones",
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold)
-                    }
-                    Spacer(modifier = Modifier.padding(6.dp))
-                    Text(text = "Revisa y gestiona las reservas que has realizado",
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Justify)
-
-                    Spacer(modifier = Modifier.padding(8.dp))
-
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(bottom = 24.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        if (posadas.isNotEmpty()) {
-                            stickyHeader {
-                                // ✅ Header personalizado para sección POSADA
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(Color(0xFFF7FAFE))
-                                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = "Posada",
-                                        style = MaterialTheme.typography.titleSmall.copy(fontSize = 25.sp),
-                                    )
+                    } else {
+                        reservas.forEach { reserva ->
+                            PosadaCard(
+                                reserva = reserva,
+                                modifier = Modifier,
+                                onClick = {
+                                    navController.navigate(ScreenNames.ViewReservation.createRoute(reserva.id))
                                 }
-                            }
-                            items(posadas, key = { it.id }) { reserva ->
-                                PosadaCard(reserva = reserva, onClick = {navController.navigate(
-                                    ScreenNames.ViewReservation.createRoute(reserva.id)
-                                )})
-                            }
-                            item { Spacer(modifier = Modifier.height(8.dp)) }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
+                    }
 
-                        if (transportes.isNotEmpty()) {
-                            stickyHeader {
-                                // ✅ Header personalizado para sección TRANSPORTE
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(Color(0xFFF7FAFE))
-                                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = "Transporte",
-                                        style = MaterialTheme.typography.titleSmall.copy(fontSize = 25.sp),
-                                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // 🔹 TRANSPORTE
+                    Text(
+                        text = "Transporte",
+                        style = MaterialTheme.typography.titleMedium.copy(fontSize = 22.sp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFFF7FAFE))
+                            .padding(vertical = 6.dp, horizontal = 8.dp)
+                    )
+
+                    if (transporte.isEmpty()) {
+                        Text(
+                            text = "No hay reservas de transporte registradas.",
+                            fontSize = 14.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                    } else {
+                        transporte.forEach { viaje ->
+                            TransporteCard(
+                                reserva = viaje,
+                                modifier = Modifier,
+                                onClick = {
+                                    navController.navigate(ScreenNames.ViewTransport.createRoute(viaje.id))
                                 }
-                            }
-                            items(transportes, key = { it.id }) { reserva ->
-                                TransporteCard(reserva = reserva, onClick = { navController.navigate(
-                                    ScreenNames.ViewTransport.createRoute(reserva.id)
-                                ) })
-                            }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewViewAllReservationsScreen() {
-    val nav = rememberNavController()
-    ViewAllReservationsScreen(navController = nav)
 }

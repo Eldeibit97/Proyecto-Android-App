@@ -15,10 +15,7 @@ data class Noticia(
     val fecha: String = ""
 )
 
-/**
- * 🔹 Obtiene todas las noticias desde Firestore (colección "news")
- * ordenadas por fechaCreacion (de más reciente a más antigua)
- */
+
 suspend fun fetchNoticias(): List<Noticia> {
     val db = FirebaseFirestore.getInstance()
     val listaNoticias = mutableListOf<Noticia>()

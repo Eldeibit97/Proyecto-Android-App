@@ -1,5 +1,8 @@
 package com.example.proyectofinal.ui.components
 
+// Este archivo crea las tarjetas que se muestran en la pantalla de reservas. Reservas de albergue y de transporte.
+
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyectofinal.modelos.TransporteReservation
+import com.example.proyectofinal.modelos.PersonalInfo
 import com.example.proyectofinal.modelos.Reserva
 
 @Composable
@@ -66,9 +69,9 @@ fun PosadaCard(
 
 @Composable
 fun TransporteCard(
-    reserva: TransporteReservation,
+    reserva: PersonalInfo,
     modifier: Modifier = Modifier,
-    onClick: (TransporteReservation) -> Unit = {}
+    onClick: (PersonalInfo) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -100,12 +103,13 @@ fun TransporteCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Outlined.People, contentDescription = null, tint = Color.Gray)
                 Spacer(Modifier.width(6.dp))
-                Text("${reserva.pasajeros} pasajero(s)", color = Color.Gray)
+                Text("${reserva.personas} pasajero(s)", color = Color.Gray)
             }
         }
     }
 }
 
+/**
 @Preview(showBackground = true)
 @Composable
 fun PreviewPosadaCard() {
@@ -122,7 +126,7 @@ fun PreviewPosadaCard() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewTransporteCard() {
-    val demo = TransporteReservation(
+    val demo = TransporteConfirmation(
         id = 10,
         origen = "Campus Tec",
         destino = "Posada San Miguel",
@@ -131,3 +135,4 @@ fun PreviewTransporteCard() {
     )
     TransporteCard(reserva = demo)
 }
+**/
