@@ -27,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
@@ -51,6 +52,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyectofinal.modelos.Albergue
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import java.util.TimeZone
 
@@ -62,8 +66,8 @@ fun ReservaDetailsCard(
     llegada: (Long?) -> Unit = {},
     salida: (Long?) -> Unit = {},
     total: (Int) -> Unit = {},
-    hombresCallback: (Int) -> Unit = {},    // 🔹 Nuevo callback
-    mujeresCallback: (Int) -> Unit = {}     // 🔹 Nuevo callback
+    hombresCallback: (Int) -> Unit = {},
+    mujeresCallback: (Int) -> Unit = {}
 ) {
     var personasHombres by rememberSaveable { mutableIntStateOf(0) }
     var personasMujeres by rememberSaveable { mutableIntStateOf(0) }
@@ -73,9 +77,24 @@ fun ReservaDetailsCard(
     var tipoReserva by remember { mutableStateOf(true) }
     var showDatePickerLlegada by remember { mutableStateOf(false) }
     var showDatePickerSalida by remember { mutableStateOf(false) }
-
-    val datePickerStateLlegada = rememberDatePickerState()
-    val datePickerStateSalida = rememberDatePickerState()
+    val today = remember { LocalDate.now() }
+    val datePickerStateLlegada = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+            val date = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+            return date.isEqual(today) || date.isAfter(today)
+        }
+    })
+    val datePickerStateSalida = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+            val date = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+            val llegadaDate = fechaLlegada?.let {
+                Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+            }
+            return llegadaDate?.let { date.isAfter(it) } ?: false
+        }
+    })
 
     val validarTotalPersonas by remember {
         derivedStateOf {
@@ -87,18 +106,10 @@ fun ReservaDetailsCard(
     }
 
     if (tipoReserva) {
-        // Si es individual
         total(1)
     } else {
-        // Si es grupal
         total(personasHombres + personasMujeres)
     }
-
-
-    // 🔹 Cada vez que cambian, avisamos al componente padre
-    hombresCallback(personasHombres)
-    mujeresCallback(personasMujeres)
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,7 +130,6 @@ fun ReservaDetailsCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // --- Date pickers ---
                 if (showDatePickerLlegada) {
                     DatePickerDialog(
                         onDismissRequest = { showDatePickerLlegada = false },

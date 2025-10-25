@@ -50,10 +50,6 @@ fun RegisterCard(
     var aceptoTerminos by rememberSaveable { mutableStateOf(false) }
 
     var showDatePicker by remember { mutableStateOf(false) }
-    var errorFecha by rememberSaveable { mutableStateOf(false) }
-    var errorTelefono by rememberSaveable { mutableStateOf(false) }
-
-    // 🔹 Variables de verificación por OTP
     var verificationId by remember { mutableStateOf<String?>(null) }
     var code by remember { mutableStateOf("") }
     var codeSent by remember { mutableStateOf(false) }
@@ -61,8 +57,6 @@ fun RegisterCard(
     val context = LocalContext.current
     val activity = context as? Activity
     val auth = FirebaseAuth.getInstance()
-
-    val regexFecha = Regex("^([0][1-9]|[12][0-9]|3[01])/([0][1-9]|1[0-2])/([1-2][0-9]{3})$")
     val regexTelefono = Regex("^\\+[1-9]\\d{6,14}$")
 
     val permitirRegistro by remember {
@@ -70,9 +64,8 @@ fun RegisterCard(
             validarRegistro(nombre, apellido, nacimiento, selGenero, telefono, aceptoTerminos)
         }
     }
-
-    // 📅 DatePicker
-    val datePickerState = rememberDatePickerState()
+    val year = Calendar.getInstance().get(Calendar.YEAR)
+    val datePickerState = rememberDatePickerState(yearRange = year - 100..year-10)
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
@@ -90,8 +83,6 @@ fun RegisterCard(
             DatePicker(state = datePickerState)
         }
     }
-
-    // 🧩 Interfaz de registro
     Card(modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -100,18 +91,83 @@ fun RegisterCard(
             Text("Únete a nuestra familia", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.padding(8.dp))
 
-            // Campos de entrada
-            UserInputFields(
-                nombre, { nombre = it },
-                apellido, { apellido = it },
-                nacimiento, { nacimiento = it },
-                selGenero, { selGenero = it },
-                telefono, { telefono = it },
-                errorTelefono, { errorTelefono = it },
-                errorFecha, { errorFecha = it },
-                showDatePicker, { showDatePicker = it }
-            )
+            Column(modifier = Modifier.fillMaxWidth()) {
+                // Nombre
+                Text("Nombre", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Nombre") },
+                    leadingIcon = { Icon(Icons.Outlined.Person, null) },
+                    shape = RoundedCornerShape(10.dp)
+                )
 
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                // Apellido
+                Text("Apellido", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = apellido,
+                    onValueChange = {apellido = it},
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Apellido") },
+                    leadingIcon = { Icon(Icons.Outlined.Person, null) },
+                    shape = RoundedCornerShape(10.dp)
+                )
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                // Fecha de nacimiento
+                Text("Fecha de nacimiento", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = nacimiento,
+                    onValueChange = { nacimiento = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                awaitFirstDown(pass = PointerEventPass.Initial)
+                                val up = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                                if (up != null) showDatePicker = true
+                            }
+                        },
+                    label = { Text("Fecha de nacimiento") },
+                    placeholder = { Text("DD/MM/AAAA") },
+                    leadingIcon = { Icon(Icons.Outlined.CalendarMonth, null) },
+                    shape = RoundedCornerShape(10.dp)
+                )
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                // Género
+                Text("Género", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(modifier = Modifier.clickable { selGenero = "Masculino" }, verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = selGenero == "Masculino", onClick = null)
+                        Text("Masculino")
+                    }
+                    Row(modifier = Modifier.clickable { selGenero = "Femenino" }, verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = selGenero == "Femenino", onClick = null)
+                        Text("Femenino")
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                // Teléfono
+                Text("Número de teléfono", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = telefono,
+                    onValueChange = { telefono = it },
+                    isError = telefono.isNotBlank() && !Regex(regexTelefono.toString()).matches(telefono),
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Teléfono (+52...)") },
+                    leadingIcon = { Icon(Icons.Outlined.Phone, null) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    shape = RoundedCornerShape(10.dp)
+                )
+            }
             Spacer(modifier = Modifier.padding(10.dp))
             AvisoPrivacidadModal(avisoRespuesta = { aceptoTerminos = it })
             Spacer(modifier = Modifier.padding(6.dp))
@@ -185,98 +241,6 @@ fun RegisterCard(
     }
 }
 
-@Composable
-fun UserInputFields(
-    nombre: String, onNombre: (String) -> Unit,
-    apellido: String, onApellido: (String) -> Unit,
-    nacimiento: String, onNacimiento: (String) -> Unit,
-    genero: String, onGenero: (String) -> Unit,
-    telefono: String, onTelefono: (String) -> Unit,
-    errorTelefono: Boolean, onErrorTelefono: (Boolean) -> Unit,
-    errorFecha: Boolean, onErrorFecha: (Boolean) -> Unit,
-    showDatePicker: Boolean, onShowDatePicker: (Boolean) -> Unit
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        // Nombre
-        Text("Nombre", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-        OutlinedTextField(
-            value = nombre,
-            onValueChange = onNombre,
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Nombre") },
-            leadingIcon = { Icon(Icons.Outlined.Person, null) },
-            shape = RoundedCornerShape(10.dp)
-        )
-
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        // Apellido
-        Text("Apellido", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-        OutlinedTextField(
-            value = apellido,
-            onValueChange = onApellido,
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Apellido") },
-            leadingIcon = { Icon(Icons.Outlined.Person, null) },
-            shape = RoundedCornerShape(10.dp)
-        )
-
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        // Fecha de nacimiento
-        Text("Fecha de nacimiento", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-        OutlinedTextField(
-            value = nacimiento,
-            onValueChange = onNacimiento,
-            modifier = Modifier
-                .fillMaxWidth()
-                .pointerInput(Unit) {
-                    awaitEachGesture {
-                        awaitFirstDown(pass = PointerEventPass.Initial)
-                        val up = waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                        if (up != null) onShowDatePicker(true)
-                    }
-                },
-            label = { Text("Fecha de nacimiento") },
-            placeholder = { Text("DD/MM/AAAA") },
-            leadingIcon = { Icon(Icons.Outlined.CalendarMonth, null) },
-            shape = RoundedCornerShape(10.dp)
-        )
-
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        // Género
-        Text("Género", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Row(modifier = Modifier.clickable { onGenero("Masculino") }, verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = genero == "Masculino", onClick = null)
-                Text("Masculino")
-            }
-            Row(modifier = Modifier.clickable { onGenero("Femenino") }, verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = genero == "Femenino", onClick = null)
-                Text("Femenino")
-            }
-        }
-
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        // Teléfono
-        Text("Número de teléfono", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-        OutlinedTextField(
-            value = telefono,
-            onValueChange = {
-                onTelefono(it)
-                onErrorTelefono(it.isNotEmpty() && !Regex("^\\+[1-9]\\d{6,14}$").matches(it))
-            },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Teléfono (+52...)") },
-            leadingIcon = { Icon(Icons.Outlined.Phone, null) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            shape = RoundedCornerShape(10.dp)
-        )
-    }
-}
-
 private fun validarRegistro(
     nombre: String, apellido: String, nacimiento: String,
     genero: String, celular: String, respuesta: Boolean
@@ -287,7 +251,7 @@ private fun validarRegistro(
 
 private fun formatDateString(millis: Long): String {
     val date = Date(millis)
-    val format = SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault()).apply {
+    val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
     return format.format(date)
