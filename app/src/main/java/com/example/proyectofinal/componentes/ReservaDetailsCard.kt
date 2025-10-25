@@ -63,20 +63,22 @@ import java.util.TimeZone
 @Composable
 fun ReservaDetailsCard(
     albergue: Albergue? = Albergue(),
-    llegada: (Long?) -> Unit = {},
-    salida: (Long?) -> Unit = {},
+    llegada: (String) -> Unit = {},
+    salida: (String) -> Unit = {},
     total: (Int) -> Unit = {},
     hombresCallback: (Int) -> Unit = {},
     mujeresCallback: (Int) -> Unit = {}
 ) {
     var personasHombres by rememberSaveable { mutableIntStateOf(0) }
     var personasMujeres by rememberSaveable { mutableIntStateOf(0) }
-    var fechaLlegada by remember { mutableStateOf<Long?>(null) }
-    var fechaSalida by remember { mutableStateOf<Long?>(null) }
+    var fechaLlegada by remember { mutableStateOf("") }
+    var fechaSalida by remember { mutableStateOf("") }
     var tipoSalida by remember { mutableStateOf(false) }
     var tipoReserva by remember { mutableStateOf(true) }
     var showDatePickerLlegada by remember { mutableStateOf(false) }
     var showDatePickerSalida by remember { mutableStateOf(false) }
+    var milli by remember { mutableStateOf<Long?>(null) }
+    val llegadaLong by remember { derivedStateOf { asignarMilli(milli) }}
     val today = remember { LocalDate.now() }
     val datePickerStateLlegada = rememberDatePickerState(
         selectableDates = object : SelectableDates {
@@ -89,7 +91,7 @@ fun ReservaDetailsCard(
         selectableDates = object : SelectableDates {
         override fun isSelectableDate(utcTimeMillis: Long): Boolean {
             val date = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate()
-            val llegadaDate = fechaLlegada?.let {
+            val llegadaDate = llegadaLong?.let {
                 Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
             }
             return llegadaDate?.let { date.isAfter(it) } ?: false
@@ -99,7 +101,7 @@ fun ReservaDetailsCard(
     val validarTotalPersonas by remember {
         derivedStateOf {
             when (tipoReserva) {
-                false -> ValidarTotal(albergue = albergue, hombres = personasHombres, mujeres = personasMujeres)
+                false -> validarTotal(albergue = albergue, hombres = personasHombres, mujeres = personasMujeres)
                 else -> false
             }
         }
@@ -107,6 +109,10 @@ fun ReservaDetailsCard(
 
     if (tipoReserva) {
         total(1)
+        personasHombres = 0
+        personasMujeres = 0
+        hombresCallback(personasHombres)
+        mujeresCallback(personasMujeres)
     } else {
         total(personasHombres + personasMujeres)
     }
@@ -137,8 +143,9 @@ fun ReservaDetailsCard(
                             Button(onClick = {
                                 val selectDate = datePickerStateLlegada.selectedDateMillis
                                 if (selectDate != null) {
-                                    fechaLlegada = selectDate
-                                    llegada(selectDate)
+                                    milli = selectDate
+                                    fechaLlegada = formatDateString(selectDate)
+                                    llegada(fechaLlegada)
                                 }
                                 showDatePickerLlegada = false
                             }) {
@@ -160,8 +167,8 @@ fun ReservaDetailsCard(
                             Button(onClick = {
                                 val selectDate = datePickerStateSalida.selectedDateMillis
                                 if (selectDate != null) {
-                                    fechaSalida = selectDate
-                                    salida(selectDate)
+                                    fechaSalida = formatDateString(selectDate)
+                                    salida(fechaSalida)
                                 }
                                 showDatePickerSalida = false
                             }) {
@@ -177,7 +184,7 @@ fun ReservaDetailsCard(
                 }
 
                 OutlinedTextField(
-                    value = fechaLlegada?.let { formatDateString(it) } ?: "",
+                    value = fechaLlegada,
                     onValueChange = {},
                     modifier = Modifier
                         .fillMaxWidth()
@@ -204,7 +211,7 @@ fun ReservaDetailsCard(
 
                 if (!tipoSalida) {
                     OutlinedTextField(
-                        value = fechaSalida?.let { formatDateString(it) } ?: "",
+                        value = fechaSalida,
                         onValueChange = {},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -328,8 +335,11 @@ fun ReservaDetailsCard(
     }
 }
 
-
-private fun ValidarTotal(albergue: Albergue? = Albergue(),hombres: Int, mujeres: Int) : Boolean{
+private fun asignarMilli(milli: Long?): Long?{
+    val llegadaLong = milli
+    return llegadaLong
+}
+private fun validarTotal(albergue: Albergue? = Albergue(), hombres: Int, mujeres: Int) : Boolean{
     if(hombres < 0 && mujeres < 0) return false
     val total = hombres + mujeres
     return total !in 0..((albergue?.capacidad ?: 60)-(albergue?.disponibilidad ?: 0))

@@ -33,8 +33,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
@@ -45,10 +43,10 @@ fun ReservationRequestScreen(
 ) {
     // Estados locales
     var totalPersonas by remember { mutableIntStateOf(0) }
-    var llegada by remember { mutableStateOf<Long?>(null) }
-    var salida by remember { mutableStateOf<Long?>(null) }
-    var hombres by remember { mutableIntStateOf(0) }   // ✅ ahora dentro del Composable
-    var mujeres by remember { mutableIntStateOf(0) }   // ✅
+    var llegada by remember { mutableStateOf("") }
+    var salida by remember { mutableStateOf("") }
+    var hombres by remember { mutableIntStateOf(0) }
+    var mujeres by remember { mutableIntStateOf(0) }
     var cardOriginalVisible by remember { mutableStateOf(true) }
 
 
@@ -63,6 +61,7 @@ fun ReservationRequestScreen(
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
     var celular by remember { mutableStateOf("") }
+    var genero by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         val user = FirebaseAuth.getInstance().currentUser
@@ -76,6 +75,7 @@ fun ReservationRequestScreen(
                     nombre = snapshot.getString("nombre") ?: ""
                     apellido = snapshot.getString("apellido") ?: ""
                     celular = snapshot.getString("telefono") ?: ""
+                    genero = snapshot.getString("genero") ?: ""
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -153,7 +153,6 @@ fun ReservationRequestScreen(
                         albergue = albergue,
                         expand = cardOriginalVisible
                     )
-
                     Spacer(modifier = Modifier.height(12.dp))
 
                     // Datos del usuario (podrían venir de Firebase)
@@ -264,8 +263,8 @@ fun saveReservation(
     apellido: String,
     celular: String,
     albergueNombre: String,
-    fechaLlegada: Long?,
-    fechaSalida: Long?,
+    fechaLlegada: String,
+    fechaSalida: String,
     numPersonas: Int,
     hombres: Int,
     mujeres: Int,
@@ -279,8 +278,8 @@ fun saveReservation(
         "albergue" to albergueNombre,
         "apellido" to apellido,
         "celular" to celular,
-        "fechaLlegada" to (fechaLlegada ?: "No especificada"),
-        "fechaSalida" to (fechaSalida ?: "No especificada"),
+        "fechaLlegada" to fechaLlegada,
+        "fechaSalida" to fechaSalida.ifBlank { "No especificada" },
         "hombres" to hombres,
         "mujeres" to mujeres,
         "nombre" to nombre,
